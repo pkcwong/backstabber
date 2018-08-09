@@ -18,7 +18,8 @@
     "react-mounter": "^1.2.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.16.0",
+    "storm-react-diagrams": "^5.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.53",
