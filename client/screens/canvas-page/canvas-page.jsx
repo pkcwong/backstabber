@@ -19,13 +19,9 @@ class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			model: new DiagramModel()
-		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
-		this.engine.setDiagramModel(this.state.model);
 	}
 
 	render() {
