@@ -40,6 +40,7 @@ class Component extends React.Component {
 	}
 
 	componentDidMount() {
+		/* TODO demo code */
 		const node1 = new DefaultNodeModel('Function Node 1');
 		node1.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
 		node1.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
@@ -50,6 +51,12 @@ class Component extends React.Component {
 		this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
 	}
 
+	/**
+	 * Creates a model graph
+	 * @param nodes node components
+	 * @param links node links
+	 * @returns {DiagramModel} a diagram model
+	 */
 	createModel = (nodes, links) => {
 		let model = new DiagramModel();
 		nodes.forEach((item) => {
@@ -61,6 +68,11 @@ class Component extends React.Component {
 		return model;
 	};
 
+	/**
+	 * Initializes a model with listeners
+	 * @param model
+	 * @returns {*} original model instance
+	 */
 	configModel = (model) => {
 		model.setGridSize(0);
 		model.clearListeners();
