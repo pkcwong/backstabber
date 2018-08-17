@@ -14,6 +14,7 @@ import {
 import { ReactDiagramsAction } from "../../redux/actions/react-diagrams-action";
 import { styles } from "./styles";
 import "./srd.css";
+import { ConstantNode } from "../../../shared/lib/functions";
 
 class Component extends React.Component {
 
@@ -49,6 +50,11 @@ class Component extends React.Component {
 		node2.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
 		node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 		this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
+		/* TODO demo functions */
+		const constSix = new ConstantNode(6);
+		console.log(constSix);
+		constSix.execute();
+		console.log(constSix);
 	}
 
 	/**

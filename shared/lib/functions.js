@@ -8,21 +8,25 @@ class BasicNode {
 					[current]: undefined
 				});
 			}, {}),
-			execute: args.execute
+			execute: args.execute,
+			output: args.output.reduce((accumulator, current) => {
+				return Object.assign({}, accumulator, {
+					[current]: undefined
+				});
+			}, {})
 		};
 		this.observers = [];
-		this.output = {};
 	}
 
 	execute() {
-		this.output = this.instance.execute({
+		this.instance.output = this.instance.execute({
 			props: this.instance.props,
 			input: this.instance.input
 		});
 		this.observers.forEach((item) => {
-			item(this.output);
+			item(this.instance.output);
 		});
-		return this.output;
+		return this.instance.output;
 	}
 
 	ready() {
@@ -44,6 +48,9 @@ export class ConstantNode extends BasicNode {
 				constant: constant
 			},
 			input: [],
+			output: [
+				'value'
+			],
 			execute: (instance) => {
 				return {
 					value: instance.props.constant
