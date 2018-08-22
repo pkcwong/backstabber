@@ -14,7 +14,9 @@ import {
 import { ReactDiagramsAction } from "../../redux/actions/react-diagrams-action";
 import { styles } from "./styles";
 import "./srd.css";
-import { ConstantNode } from "../../../shared/lib/functions";
+import { NullNode } from "../../../shared/lib/null-node";
+import { StringNode } from "../../../shared/lib/string-node";
+import { JsonNode } from "../../../shared/lib/json-node";
 
 class Component extends React.Component {
 
@@ -51,10 +53,20 @@ class Component extends React.Component {
 		node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 		this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
 		/* TODO demo functions */
-		const constSix = new ConstantNode(6);
-		console.log(constSix);
-		constSix.execute();
-		console.log(constSix);
+		let myNullNode = new NullNode();
+		let myJsonNode = new JsonNode();
+		let myKey = new StringNode('framework');
+		let myValue = new StringNode('MeteorJS');
+		myNullNode.sendOnReady(myNullNode.getOutboundPort('value'), myJsonNode.getInboundPort('json'));
+		myKey.sendOnReady(myKey.getOutboundPort('string'), myJsonNode.getInboundPort('key'));
+		myValue.sendOnReady(myValue.getOutboundPort('string'), myJsonNode.getInboundPort('value'));
+		let nodes = [myNullNode, myJsonNode, myKey, myValue];
+		nodes.filter((node) => {
+			return node.ready();
+		}).forEach((node) => {
+			node.execute();
+		});
+		console.log(myJsonNode.instance.output.json);
 	}
 
 	/**
