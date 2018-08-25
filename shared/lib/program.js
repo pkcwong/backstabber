@@ -11,6 +11,9 @@ export class Program {
 	}
 
 	execute(args = {}) {
+		this.nodes.forEach((node) => {
+			node.reset();
+		});
 		this.nodes.filter((node) => {
 			return (node instanceof EntryNode);
 		}).forEach((node) => {

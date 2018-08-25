@@ -5,21 +5,28 @@ export class BasicNode {
 
 	constructor(args) {
 		this.args = args;
+		this.reset();
+		this.observers = [];
+	}
+
+	/**
+	 * Resets the Node to initial state.
+	 */
+	reset() {
 		this.instance = {
-			props: args.props,
-			input: args.input.reduce((accumulator, current) => {
+			props: this.args.props,
+			input: this.args.input.reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
 					[current]: undefined
 				});
 			}, {}),
-			execute: args.execute,
-			output: args.output.reduce((accumulator, current) => {
+			execute: this.args.execute,
+			output: this.args.output.reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
 					[current]: undefined
 				});
 			}, {})
 		};
-		this.observers = [];
 	}
 
 	/**

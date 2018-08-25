@@ -69,6 +69,9 @@ class Component extends React.Component {
 		let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myValue];
 		let myProgram = new Program(nodes);
 		console.log(myProgram.execute());
+		console.log(myProgram.execute());
+		console.log(myProgram.execute());
+		console.log(myProgram.execute());
 	}
 
 	/**
