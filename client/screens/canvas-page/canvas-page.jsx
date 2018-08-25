@@ -20,6 +20,7 @@ import { JsonAssignNode } from "../../../shared/lib/json-assign-node";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
 import { Program } from "../../../shared/lib/program";
+import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
 
 class Component extends React.Component {
 
@@ -55,23 +56,27 @@ class Component extends React.Component {
 		node2.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
 		node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 		this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
-		/* TODO demo functions */
+		/* TODO construct a program */
 		let myEntryNode = new EntryNode();
 		let myReturnNode = new ReturnNode();
 		let myNullNode = new NullNode();
 		let myJsonNode = new JsonAssignNode();
 		let myKey = new StringNode('framework');
-		let myValue = new StringNode('MeteorJS');
+		let myJsonCollpaseNode = new JsonCollapseNode();
+		let myUserInput = new StringNode('userInput');
+		myEntryNode.sendOnReady(myEntryNode.getOutboundPort('props'), myJsonCollpaseNode.getInboundPort('json'));
+		myUserInput.sendOnReady(myUserInput.getOutboundPort('string'), myJsonCollpaseNode.getInboundPort('key'));
+		myJsonCollpaseNode.sendOnReady(myJsonCollpaseNode.getOutboundPort('value'), myJsonNode.getInboundPort('value'));
 		myNullNode.sendOnReady(myNullNode.getOutboundPort('value'), myJsonNode.getInboundPort('json'));
 		myKey.sendOnReady(myKey.getOutboundPort('string'), myJsonNode.getInboundPort('key'));
-		myValue.sendOnReady(myValue.getOutboundPort('string'), myJsonNode.getInboundPort('value'));
 		myJsonNode.sendOnReady(myJsonNode.getOutboundPort('json'), myReturnNode.getInboundPort('result'));
-		let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myValue];
+		let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myJsonCollpaseNode, myUserInput];
 		let myProgram = new Program(nodes);
-		console.log(myProgram.execute());
-		console.log(myProgram.execute());
-		console.log(myProgram.execute());
-		console.log(myProgram.execute());
+		/* TODO demo program */
+		console.log(myProgram.execute({userInput: 'MeteorJS'}));
+		console.log(myProgram.execute({userInput: 'AngularJS'}));
+		console.log(myProgram.execute({userInput: 'ReactJS'}));
+		console.log(myProgram.execute({userInput: 'VueJS'}));
 	}
 
 	/**

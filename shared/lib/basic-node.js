@@ -34,7 +34,6 @@ export class BasicNode {
 	 * @returns {*}
 	 */
 	execute() {
-		console.log(this.args.meta.label + " executed");
 		let result = this.instance.execute(this.instance.props, this.instance.input);
 		Object.keys(this.instance.output).forEach((key) => {
 			this.instance.output[key] = result[key];

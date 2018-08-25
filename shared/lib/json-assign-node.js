@@ -8,7 +8,7 @@ export class JsonAssignNode extends BasicNode {
 	constructor() {
 		super({
 			meta: {
-				label: 'Json'
+				label: 'Json Assign'
 			},
 			props: {},
 			input: [
