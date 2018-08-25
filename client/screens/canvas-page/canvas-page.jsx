@@ -62,21 +62,21 @@ class Component extends React.Component {
 		let myNullNode = new NullNode();
 		let myJsonNode = new JsonAssignNode();
 		let myKey = new StringNode('framework');
-		let myJsonCollpaseNode = new JsonCollapseNode();
+		let myJsonCollapseNode = new JsonCollapseNode();
 		let myUserInput = new StringNode('userInput');
-		myEntryNode.sendOnReady(myEntryNode.getOutboundPort('props'), myJsonCollpaseNode.getInboundPort('json'));
-		myUserInput.sendOnReady(myUserInput.getOutboundPort('string'), myJsonCollpaseNode.getInboundPort('key'));
-		myJsonCollpaseNode.sendOnReady(myJsonCollpaseNode.getOutboundPort('value'), myJsonNode.getInboundPort('value'));
+		myEntryNode.sendOnReady(myEntryNode.getOutboundPort('props'), myJsonCollapseNode.getInboundPort('json'));
+		myUserInput.sendOnReady(myUserInput.getOutboundPort('string'), myJsonCollapseNode.getInboundPort('key'));
+		myJsonCollapseNode.sendOnReady(myJsonCollapseNode.getOutboundPort('value'), myJsonNode.getInboundPort('value'));
 		myNullNode.sendOnReady(myNullNode.getOutboundPort('value'), myJsonNode.getInboundPort('json'));
 		myKey.sendOnReady(myKey.getOutboundPort('string'), myJsonNode.getInboundPort('key'));
 		myJsonNode.sendOnReady(myJsonNode.getOutboundPort('json'), myReturnNode.getInboundPort('result'));
-		let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myJsonCollpaseNode, myUserInput];
+		let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myJsonCollapseNode, myUserInput];
 		let myProgram = new Program(nodes);
 		/* TODO demo program */
-		console.log(myProgram.execute({userInput: 'MeteorJS'}));
-		console.log(myProgram.execute({userInput: 'AngularJS'}));
-		console.log(myProgram.execute({userInput: 'ReactJS'}));
-		console.log(myProgram.execute({userInput: 'VueJS'}));
+		(async () => {
+			console.log(await myProgram.execute({userInput: 'MeteorJS'}));
+			console.log(await myProgram.execute({userInput: 'ReactJS'}));
+		})();
 	}
 
 	/**

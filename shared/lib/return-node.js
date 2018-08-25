@@ -21,6 +21,17 @@ export class ReturnNode extends BasicNode {
 				});
 			}
 		});
+		this.callback = null;
+	}
+
+	registerCallback(callback) {
+		this.callback = () => {
+			callback(this.instance.input.result);
+		}
+	}
+
+	execute() {
+		this.callback(this.instance.input.result);
 	}
 
 }
