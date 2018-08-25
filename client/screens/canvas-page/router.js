@@ -1,11 +1,10 @@
 import { mount } from 'react-mounter';
 import { store } from "../../redux/store";
-import { IndexPage } from "./index-page";
+import { CanvasPage } from "./canvas-page";
 
-FlowRouter.route('/', {
+FlowRouter.route('/canvas', {
 	action: (params) => {
-		document.title = 'meteor-react-starter';
-		mount(IndexPage, {
+		mount(CanvasPage, {
 			store: store,
 			params: params
 		});
