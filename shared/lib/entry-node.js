@@ -16,9 +16,11 @@ export class EntryNode extends BasicNode {
 				'props'
 			],
 			execute: (props, input) => {
-				return {
-					props: props
-				};
+				return new Promise((resolve, reject) => {
+					resolve({
+						props: props
+					});
+				});
 			}
 		});
 	}
