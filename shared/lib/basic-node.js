@@ -1,3 +1,6 @@
+/**
+ * A BasicNode represents one command of a program.
+ */
 export class BasicNode {
 
 	constructor(args) {

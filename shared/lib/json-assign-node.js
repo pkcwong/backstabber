@@ -3,7 +3,7 @@ import { BasicNode } from "./basic-node";
 /**
  * A JSON builder that constructs a new JSON object based on a key/value pair and an old JSON.
  */
-export class JsonNode extends BasicNode {
+export class JsonAssignNode extends BasicNode {
 
 	constructor() {
 		super({
