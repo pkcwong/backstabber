@@ -16,7 +16,9 @@ export class ReturnNode extends BasicNode {
 			],
 			output: [],
 			execute: (props, input) => {
-				return {};
+				return new Promise((resolve, reject) => {
+					resolve({});
+				});
 			}
 		});
 	}

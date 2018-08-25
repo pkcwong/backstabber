@@ -20,29 +20,31 @@ export class JsonAssignNode extends BasicNode {
 				'json'
 			],
 			execute: (props, input) => {
-				if (input['json'] !== null) {
-					if (input['key'] !== null) {
-						return {
-							json: Object.assign({}, input['json'], {
-								[input['key']]: input['value']
-							})
-						};
+				return new Promise((resolve, reject) => {
+					if (input['json'] !== null) {
+						if (input['key'] !== null) {
+							resolve({
+								json: Object.assign({}, input['json'], {
+									[input['key']]: input['value']
+								})
+							});
+						} else {
+							resolve({
+								json: Object.assign({}, input['json'])
+							});
+						}
 					} else {
-						return {
-							json: Object.assign({}, input['json'])
+						if (input['key'] !== null) {
+							resolve({
+								json: Object.assign({}, {
+									[input['key']]: input['value']
+								})
+							});
+						} else {
+							resolve({});
 						}
 					}
-				} else {
-					if (input['key'] !== null) {
-						return {
-							json: Object.assign({}, {
-								[input['key']]: input['value']
-							})
-						};
-					} else {
-						return {};
-					}
-				}
+				});
 			}
 		});
 	}

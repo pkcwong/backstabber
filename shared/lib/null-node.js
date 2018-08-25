@@ -16,9 +16,11 @@ export class NullNode extends BasicNode {
 				'value'
 			],
 			execute: (props, input) => {
-				return {
-					value: null
-				};
+				return new Promise((resolve, reject) => {
+					resolve({
+						value: null
+					});
+				});
 			}
 		});
 	}

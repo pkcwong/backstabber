@@ -34,14 +34,14 @@ export class BasicNode {
 	 * @returns {*}
 	 */
 	execute() {
-		let result = this.instance.execute(this.instance.props, this.instance.input).then((result)=>{console.log(result)});
-		Object.keys(this.instance.output).forEach((key) => {
-			this.instance.output[key] = result[key];
+		this.instance.execute(this.instance.props, this.instance.input).then((result) => {
+			Object.keys(this.instance.output).forEach((key) => {
+				this.instance.output[key] = result[key];
+			});
+			this.observers.forEach((item) => {
+				item();
+			});
 		});
-		this.observers.forEach((item) => {
-			item();
-		});
-		return this.instance.output;
 	}
 
 	/**

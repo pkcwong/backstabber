@@ -18,9 +18,11 @@ export class StringNode extends BasicNode {
 				'string'
 			],
 			execute: (props, input) => {
-				return {
-					string: props['string']
-				};
+				return new Promise((resolve, reject) => {
+					resolve({
+						string: props['string']
+					});
+				});
 			}
 		});
 	}

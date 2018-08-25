@@ -16,9 +16,11 @@ export class JsonCollapseNode extends BasicNode {
 				'value'
 			],
 			execute: (props, input) => {
-				return {
-					value: input['json'][input['key']]
-				}
+				return new Promise((resolve, reject) => {
+					resolve({
+						value: input['json'][input['key']]
+					});
+				});
 			}
 		});
 	}
