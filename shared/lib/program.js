@@ -10,8 +10,8 @@ export class Program {
 		this.nodes = nodes;
 	}
 
-	async execute(args = {}) {
-		return await new Promise((resolve, reject) => {
+	execute(args = {}) {
+		return new Promise((resolve, reject) => {
 			this.nodes.forEach((node) => {
 				node.reset();
 			});
