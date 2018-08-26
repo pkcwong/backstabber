@@ -12,7 +12,12 @@ export class ReturnNode extends BasicNode {
 			},
 			props: {},
 			input: [
-				'result'
+				{
+					port: 'result',
+					meta: {
+						label: 'result'
+					}
+				}
 			],
 			output: [],
 			execute: (props, input) => {

@@ -17,13 +17,13 @@ export class BasicNode {
 			props: this.args.props,
 			input: this.args.input.reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
-					[current]: undefined
+					[current['port']]: undefined
 				});
 			}, {}),
 			execute: this.args.execute,
 			output: this.args.output.reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
-					[current]: undefined
+					[current['port']]: undefined
 				});
 			}, {})
 		};
