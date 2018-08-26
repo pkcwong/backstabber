@@ -13,7 +13,12 @@ export class EntryNode extends BasicNode {
 			props: props,
 			input: [],
 			output: [
-				'props'
+				{
+					port: 'props',
+					meta: {
+						label: 'props'
+					}
+				}
 			],
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {

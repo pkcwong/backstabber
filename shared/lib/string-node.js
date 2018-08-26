@@ -15,7 +15,12 @@ export class StringNode extends BasicNode {
 			},
 			input: [],
 			output: [
-				'string'
+				{
+					port: 'string',
+					meta: {
+						label: 'string'
+					}
+				}
 			],
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {

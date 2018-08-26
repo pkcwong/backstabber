@@ -17,13 +17,13 @@ export class BasicNode {
 			props: this.args.props,
 			input: this.args.input.reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
-					[current]: undefined
+					[current['port']]: undefined
 				});
 			}, {}),
 			execute: this.args.execute,
 			output: this.args.output.reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
-					[current]: undefined
+					[current['port']]: undefined
 				});
 			}, {})
 		};
@@ -34,12 +34,15 @@ export class BasicNode {
 	 * @returns {*}
 	 */
 	execute() {
-		this.instance.execute(this.instance.props, this.instance.input).then((result) => {
-			Object.keys(this.instance.output).forEach((key) => {
-				this.instance.output[key] = result[key];
-			});
-			this.observers.forEach((item) => {
-				item();
+		return new Promise((resolve, reject) => {
+			this.instance.execute(this.instance.props, this.instance.input).then((result) => {
+				Object.keys(this.instance.output).forEach((key) => {
+					this.instance.output[key] = result[key];
+				});
+				this.observers.forEach((item) => {
+					item();
+				});
+				resolve(result);
 			});
 		});
 	}

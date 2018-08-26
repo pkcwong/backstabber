@@ -13,7 +13,12 @@ export class NullNode extends BasicNode {
 			props: {},
 			input: [],
 			output: [
-				'value'
+				{
+					port: 'value',
+					meta: {
+						label: 'value'
+					}
+				}
 			],
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
