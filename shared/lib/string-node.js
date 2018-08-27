@@ -13,15 +13,14 @@ export class StringNode extends BasicNode {
 			props: {
 				string: string
 			},
-			input: [],
-			output: [
-				{
-					port: 'string',
+			input: {},
+			output: {
+				string: {
 					meta: {
 						label: 'string'
 					}
 				}
-			],
+			},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					resolve({
