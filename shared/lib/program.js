@@ -10,6 +10,11 @@ export class Program {
 		this.nodes = nodes;
 	}
 
+	/**
+	 * Executes a Program
+	 * @param args
+	 * @returns {Promise<any>}
+	 */
 	execute(args = {}) {
 		return new Promise((resolve, reject) => {
 			this.nodes.forEach((node) => {
@@ -33,6 +38,27 @@ export class Program {
 				node.execute();
 			});
 		});
+	}
+
+	/**
+	 * Serializes a Program to its JSON representation
+	 * @returns {{nodes: *}}
+	 */
+	serialize() {
+		return {
+			/* TODO serialize to JSON */
+			nodes: this.nodes
+		};
+	}
+
+	/**
+	 * Parses a JSON to create a Program
+	 * @param json
+	 * @returns {Program}
+	 */
+	static deserialize(json) {
+		/* TODO parse JSON to Program */
+		return new Program(json['nodes']);
 	}
 
 }
