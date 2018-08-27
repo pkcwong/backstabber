@@ -11,18 +11,17 @@ export class ReturnNode extends BasicNode {
 				label: 'Return'
 			},
 			props: {},
-			input: [
-				{
-					port: 'result',
+			input: {
+				result: {
 					meta: {
 						label: 'result'
 					}
 				}
-			],
-			output: [],
+			},
+			output: {},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
-					resolve({});
+					resolve(null);
 				});
 			}
 		});
