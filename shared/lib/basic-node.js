@@ -75,11 +75,12 @@ export class BasicNode {
 	 * Receives data on an input port and executes on ready
 	 * @param port
 	 * @param data
+	 * @param propagate
 	 */
-	receive(port, data) {
+	receive(port, data, propagate = true) {
 		if (this.instance.input[port] === undefined) {
 			this.instance.input[port] = data;
-			if (this.ready()) {
+			if (propagate && this.ready()) {
 				this.execute();
 			}
 		}
