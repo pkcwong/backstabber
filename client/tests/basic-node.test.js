@@ -6,22 +6,22 @@ const mock = () => {
 			label: 'Repeater Node'
 		},
 		props: {},
-		input: [
-			{
+		input: {
+			value: {
 				port: 'value',
 				meta: {
 					label: 'value'
 				}
 			}
-		],
-		output: [
-			{
+		},
+		output: {
+			value: {
 				port: 'value',
 				meta: {
 					label: 'value'
 				}
 			}
-		],
+		},
 		execute: (props, input) => {
 			return new Promise((resolve, reject) => {
 				resolve({

@@ -11,34 +11,30 @@ export class JsonAssignNode extends BasicNode {
 				label: 'Json Assign'
 			},
 			props: {},
-			input: [
-				{
-					port: 'json',
+			input: {
+				json: {
 					meta: {
 						label: 'json'
 					}
 				},
-				{
-					port: 'key',
+				key: {
 					meta: {
 						label: 'key'
 					}
 				},
-				{
-					port: 'value',
+				value: {
 					meta: {
 						label: 'value'
 					}
 				}
-			],
-			output: [
-				{
-					port: 'json',
+			},
+			output: {
+				json: {
 					meta: {
 						label: 'json'
 					}
 				}
-			],
+			},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					if (input['json'] !== null) {

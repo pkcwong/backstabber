@@ -15,15 +15,15 @@ export class BasicNode {
 	reset() {
 		this.instance = {
 			props: this.args.props,
-			input: this.args.input.reduce((accumulator, current) => {
+			input: Object.keys(this.args.input).reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
-					[current['port']]: undefined
+					[current]: undefined
 				});
 			}, {}),
 			execute: this.args.execute,
-			output: this.args.output.reduce((accumulator, current) => {
+			output: Object.keys(this.args.output).reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
-					[current['port']]: undefined
+					[current]: undefined
 				});
 			}, {})
 		};
