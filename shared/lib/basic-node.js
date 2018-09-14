@@ -7,6 +7,7 @@ export class BasicNode {
 		this.args = args;
 		this.reset();
 		this.observers = [];
+        this.id = '_' + Math.random().toString(36).substr(2, 9);
 	}
 
 	/**
