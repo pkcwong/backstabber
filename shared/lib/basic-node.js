@@ -1,14 +1,16 @@
+import { ObjectID } from 'bson';
+
 /**
  * A BasicNode represents one command of a program.
  */
 export class BasicNode {
 
-    constructor(args) {
-        this.args = args;
-        this.reset();
-        this.observers = [];
-        this._id = '_' + Math.random().toString(36).substr(2, 9);
-    }
+	constructor(args) {
+		this.args = args;
+		this.reset();
+		this.observers = [];
+		this._id = new ObjectID().toHexString();
+	}
 
 	/**
 	 * Resets the Node to initial state.
@@ -109,11 +111,4 @@ export class BasicNode {
 		});
 	}
 
-	getID(){
-		return this._id;
-	}
-
-	modifyID(id){
-		this._id = id;
-	}
 }
