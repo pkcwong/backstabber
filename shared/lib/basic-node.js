@@ -10,13 +10,6 @@ export class BasicNode {
         this.id = '_' + Math.random().toString(36).substr(2, 9);
     }
 
-    constructor(args, id) {
-        this.args = args;
-        this.reset();
-        this.observers = [];
-        this.id = id;
-    }
-
 	/**
 	 * Resets the Node to initial state.
 	 */
@@ -116,4 +109,11 @@ export class BasicNode {
 		});
 	}
 
+	getID(){
+		return this.id;
+	}
+
+	modifyID(id){
+		this.id = id;
+	} 
 }
