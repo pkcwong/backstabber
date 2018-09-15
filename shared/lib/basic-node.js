@@ -3,12 +3,19 @@
  */
 export class BasicNode {
 
-	constructor(args) {
-		this.args = args;
-		this.reset();
-		this.observers = [];
+    constructor(args) {
+        this.args = args;
+        this.reset();
+        this.observers = [];
         this.id = '_' + Math.random().toString(36).substr(2, 9);
-	}
+    }
+
+    constructor(args, id) {
+        this.args = args;
+        this.reset();
+        this.observers = [];
+        this.id = id;
+    }
 
 	/**
 	 * Resets the Node to initial state.
