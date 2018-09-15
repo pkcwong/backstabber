@@ -7,7 +7,7 @@ export class BasicNode {
         this.args = args;
         this.reset();
         this.observers = [];
-        this.id = '_' + Math.random().toString(36).substr(2, 9);
+        this._id = '_' + Math.random().toString(36).substr(2, 9);
     }
 
 	/**
@@ -110,10 +110,10 @@ export class BasicNode {
 	}
 
 	getID(){
-		return this.id;
+		return this._id;
 	}
 
 	modifyID(id){
-		this.id = id;
-	} 
+		this._id = id;
+	}
 }
