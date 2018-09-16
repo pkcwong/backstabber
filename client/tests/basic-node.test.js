@@ -33,6 +33,10 @@ const mock = () => {
 };
 
 describe('BasicNode', () => {
+	it('should generate an _id', function () {
+		let myBasicNode = mock();
+		expect(typeof myBasicNode._id === 'string' || myBasicNode._id instanceof String).toEqual(true);
+	});
 	it('should handle execution', async () => {
 		let myBasicNode = mock();
 		myBasicNode.instance.input['value'] = Math.PI;

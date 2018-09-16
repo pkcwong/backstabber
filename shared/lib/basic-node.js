@@ -1,3 +1,5 @@
+import { ObjectID } from 'bson';
+
 /**
  * A BasicNode represents one command of a program.
  */
@@ -7,6 +9,7 @@ export class BasicNode {
 		this.args = args;
 		this.reset();
 		this.observers = [];
+		this._id = new ObjectID().toHexString();
 	}
 
 	/**
