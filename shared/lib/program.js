@@ -1,5 +1,6 @@
 import { EntryNode } from "./entry-node";
 import { ReturnNode } from "./return-node";
+import {BasicNode} from "./basic-node";
 
 /**
  * A program is a array of BasicNode
@@ -33,6 +34,25 @@ export class Program {
 				node.execute();
 			});
 		});
+	}
+
+	jsonify(node){
+		return{
+			class: node.constructor.name,
+			_id: node.getID(),
+			observers: node.getObservers(),
+			args: node.getArgs()
+		}
+	}
+
+	nodify(json){
+		var node;
+		if(json.class == "BasicNode"){
+			node = new BasicNode(json.args);
+			node.modifyID(json._id);
+			node.modifyObservers(json.observers);
+		}
+		return node;
 	}
 
 }

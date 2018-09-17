@@ -111,4 +111,25 @@ export class BasicNode {
 		});
 	}
 
+    getID(){
+        return this._id;
+    }
+
+    modifyID(id){
+        this._id = id;
+    }
+
+    getObservers(){
+        return this.observers;
+    }
+
+    modifyObservers(observers){
+        this.observers = observers;
+    }
+
+    getArgs(){
+		return this.args;
+	}
+
+
 }
