@@ -7,6 +7,10 @@ export class JsonAssignNode extends BasicNode {
 
 	constructor() {
 		super({
+			cache: {
+				class: JsonAssignNode.name,
+				args: arguments
+			},
 			meta: {
 				label: 'Json Assign'
 			},

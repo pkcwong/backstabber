@@ -7,6 +7,10 @@ export class NullNode extends BasicNode {
 
 	constructor() {
 		super({
+			cache: {
+				class: NullNode.name,
+				args: arguments
+			},
 			meta: {
 				label: 'Null'
 			},

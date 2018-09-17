@@ -7,6 +7,10 @@ export class EntryNode extends BasicNode {
 
 	constructor(props = {}) {
 		super({
+			cache: {
+				class: EntryNode.name,
+				args: arguments
+			},
 			meta: {
 				label: 'Entry'
 			},

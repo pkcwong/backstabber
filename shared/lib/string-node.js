@@ -7,6 +7,10 @@ export class StringNode extends BasicNode {
 
 	constructor(string) {
 		super({
+			cache: {
+				class: StringNode.name,
+				args: arguments
+			},
 			meta: {
 				label: 'String'
 			},

@@ -7,6 +7,10 @@ export class ArrayPushNode extends BasicNode {
 
 	constructor() {
 		super({
+			cache: {
+				class: ArrayPushNode.name,
+				args: arguments
+			},
 			meta: {
 				label: 'Array Push'
 			},

@@ -4,6 +4,10 @@ export class ArrayMapNode extends BasicNode {
 
 	constructor() {
 		super({
+			cache: {
+				class: ArrayMapNode.name,
+				args: arguments
+			},
 			meta: {
 				label: 'Array Map'
 			},
