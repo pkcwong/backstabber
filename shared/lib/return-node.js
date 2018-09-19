@@ -7,6 +7,10 @@ export class ReturnNode extends BasicNode {
 
 	constructor() {
 		super({
+			cache: {
+				class: ReturnNode.name,
+				args: arguments
+			},
 			meta: {
 				label: 'Return'
 			},

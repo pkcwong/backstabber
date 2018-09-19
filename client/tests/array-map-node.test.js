@@ -10,9 +10,11 @@ const mock0 = () => {
 const mock1 = () => {
 	let myEntryNode = new EntryNode();
 	let myReturnNode = new ReturnNode();
-	myEntryNode.sendOnReady(() => {
-		return myEntryNode.getOutboundPort('props')() * 2;
-	}, myReturnNode.getInboundPort('result'));
+	myEntryNode.sendOnReady(Object.assign({}, myEntryNode.getOutboundPort('props'), {
+		func: (() => {
+			return myEntryNode.getOutboundPort('props').func() * 2
+		})
+	}), myReturnNode.getInboundPort('result'));
 	return new Program([
 		myEntryNode,
 		myReturnNode

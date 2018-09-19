@@ -4,6 +4,10 @@ export class JsonCollapseNode extends BasicNode {
 
 	constructor() {
 		super({
+			cache: {
+				class: JsonCollapseNode.name,
+				args: arguments
+			},
 			meta: {
 				label: 'Json Collapse'
 			},

@@ -17,6 +17,7 @@ export class BasicNode {
 	 */
 	reset() {
 		this.instance = {
+			cache: this.args.cache,
 			props: this.args.props,
 			input: Object.keys(this.args.input).reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
@@ -43,7 +44,7 @@ export class BasicNode {
 					this.instance.output[key] = result[key];
 				});
 				this.observers.forEach((item) => {
-					item();
+					item.func();
 				});
 				resolve(result);
 			});
@@ -68,9 +69,13 @@ export class BasicNode {
 	sendOnReady(output, input) {
 		this.observers = [
 			...this.observers,
-			(() => {
-				input(output());
-			})
+			{
+				_id: input._id,
+				port: input.port,
+				func: (() => {
+					input.func(output.func());
+				})
+			}
 		];
 	}
 
@@ -95,9 +100,13 @@ export class BasicNode {
 	 * @returns {Function}
 	 */
 	getInboundPort(port) {
-		return ((output) => {
-			this.receive(port, output);
-		});
+		return {
+			_id: this._id,
+			port: port,
+			func: ((output) => {
+				this.receive(port, output);
+			})
+		};
 	}
 
 	/**
@@ -106,9 +115,31 @@ export class BasicNode {
 	 * @returns {function(): *}
 	 */
 	getOutboundPort(port) {
-		return (() => {
-			return this.instance.output[port];
-		});
+		return {
+			_id: this._id,
+			port: port,
+			func: (() => {
+				return this.instance.output[port];
+			})
+		};
+	}
+
+	/**
+	 * Serializes a BasicNode
+	 * @returns {{_id: (string|*), class: *, args: *, observers: {_id: *, port: *}[]}}
+	 */
+	serialize() {
+		return {
+			_id: this._id,
+			class: this.instance.cache.class,
+			args: this.instance.cache.args,
+			observers: this.observers.map((item) => {
+				return {
+					_id: item._id,
+					port: item.port
+				};
+			})
+		}
 	}
 
 }
