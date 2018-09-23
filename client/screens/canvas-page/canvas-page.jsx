@@ -34,29 +34,31 @@ class Component extends React.Component {
 
 	render() {
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
-		return <React.Fragment>
-			<NavBar>
-				<Navbar.Header>
-					<Navbar.Brand>
-						<a href="#home">React-Bootstrap</a>
-					</Navbar.Brand>
-				</Navbar.Header>
-			</NavBar>
-			<div
-				style={
-					{
-						background: "black",
-						minHeight: "82vh"
+		return (
+			<React.Fragment>
+				<Navbar>
+					<Navbar.Header>
+						<Navbar.Brand>
+							<a href="#home">React-Bootstrap</a>
+						</Navbar.Brand>
+					</Navbar.Header>
+				</Navbar>
+				<div
+					style={
+						{
+							background: "black",
+							minHeight: "82vh"
+						}
 					}
-				}
-			>
-				<DiagramWidget
-					allowLooseLinks={false}
-					maxNumberPointsPerLink={0}
-					diagramEngine={this.engine}
-				/>
-			</div>
-		</React.Fragment>;
+				>
+					<DiagramWidget
+						allowLooseLinks={false}
+						maxNumberPointsPerLink={0}
+						diagramEngine={this.engine}
+					/>
+				</div>
+			</React.Fragment>
+		);
 	}
 
 	componentDidMount() {
@@ -87,8 +89,12 @@ class Component extends React.Component {
 		let myProgram = new Program(nodes);
 		/* TODO demo program */
 		(async () => {
-			console.log(await myProgram.execute({userInput: 'MeteorJS'}));
-			console.log(await myProgram.execute({userInput: 'ReactJS'}));
+			console.log(await myProgram.execute({
+				userInput: 'MeteorJS'
+			}));
+			console.log(await myProgram.execute({
+				userInput: 'ReactJS'
+			}));
 		})();
 	}
 
