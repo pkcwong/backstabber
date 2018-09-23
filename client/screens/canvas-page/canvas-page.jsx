@@ -21,6 +21,7 @@ import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
 import { Program } from "../../../shared/lib/program";
 import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
+import { Navbar, Glyphicon, ListGroup, ListGroupItem, Panel } from 'react-bootstrap';
 
 class Component extends React.Component {
 
@@ -33,9 +34,21 @@ class Component extends React.Component {
 
 	render() {
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
-		return (
+		return <React.Fragment>
+			<NavBar>
+				<Navbar.Header>
+					<Navbar.Brand>
+						<a href="#home">React-Bootstrap</a>
+					</Navbar.Brand>
+				</Navbar.Header>
+			</NavBar>
 			<div
-				style={styles.canvas}
+				style={
+					{
+						background: "black",
+						minHeight: "82vh"
+					}
+				}
 			>
 				<DiagramWidget
 					allowLooseLinks={false}
@@ -43,7 +56,7 @@ class Component extends React.Component {
 					diagramEngine={this.engine}
 				/>
 			</div>
-		);
+		</React.Fragment>;
 	}
 
 	componentDidMount() {
