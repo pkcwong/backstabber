@@ -21,7 +21,6 @@ import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
 import { Program } from "../../../shared/lib/program";
 import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
-import { Navbar, Glyphicon, ListGroup, ListGroupItem, Panel } from 'react-bootstrap';
 
 class Component extends React.Component {
 
@@ -36,27 +35,71 @@ class Component extends React.Component {
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
 		return (
 			<React.Fragment>
-				<Navbar>
-					<Navbar.Header>
-						<Navbar.Brand>
-							<a href="#home">React-Bootstrap</a>
-						</Navbar.Brand>
-					</Navbar.Header>
-				</Navbar>
-				<div
-					style={
-						{
-							background: "black",
-							minHeight: "82vh"
-						}
+				<div style={
+					{
+						minHeight: "7vh",
+						background: "#22313F",
+						display: "flex",
+						flexDirection: "row",
 					}
-				>
-					<DiagramWidget
-						allowLooseLinks={false}
-						maxNumberPointsPerLink={0}
-						diagramEngine={this.engine}
-					/>
+				}>
+					<div>
+						<img style={
+							{
+								height: "6vh",
+								marginLeft: "2vh",
+								marginTop: "0.5vh"
+							}
+						}
+						     src={"/res/img/BackStabber_logo.png"}
+						/>
+					</div>
+					<div style={
+						{
+							marginTop: "1vh",
+							color: "white",
+							paddingLeft: "2vw",
+							fontSize: "3vh",
+							color: "#ECECEC",
+							fontStyle: "italic"
+						}
+					}>
+						Welcome to BackStabber
+					</div>
 				</div>
+				<div style={
+					{
+						display: "flex",
+						flexDirection: "row",
+						height: "93vh",
+						margin: "0",
+						padding: "0"
+					}
+				}>
+					<div style={
+						{
+							width: "10vw",
+							background: "#ECECEC",
+						}
+					}>
+
+					</div>
+					<div
+						style={
+							{
+								background: "black",
+								width: "90vw"
+							}
+						}
+					>
+						{/*<DiagramWidget*/}
+							{/*allowLooseLinks={false}*/}
+							{/*maxNumberPointsPerLink={0}*/}
+							{/*diagramEngine={this.engine}*/}
+						{/*/>*/}
+					</div>
+				</div>
+
 			</React.Fragment>
 		);
 	}
