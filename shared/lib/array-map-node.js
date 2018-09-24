@@ -37,7 +37,9 @@ export class ArrayMapNode extends BasicNode {
 					for (let i = 0; i !== input['array'].length; i++) {
 						result.push(await input['function'].execute(input['array'][i]));
 					}
-					resolve(result);
+					resolve({
+						array: result
+					});
 				});
 			}
 		});

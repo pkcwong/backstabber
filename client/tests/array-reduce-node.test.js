@@ -1,10 +1,10 @@
 import { EntryNode } from "../../shared/lib/entry-node";
 import { ReturnNode } from "../../shared/lib/return-node";
 import { Program } from "../../shared/lib/program";
-import { ArrayMapNode } from "../../shared/lib/array-map-node";
+import { ArrayReduceNode } from "../../shared/lib/array-reduce-node";
 
 const mock0 = () => {
-	return new ArrayMapNode();
+	return new ArrayReduceNode();
 };
 
 const mock1 = () => {
@@ -12,7 +12,7 @@ const mock1 = () => {
 	let myReturnNode = new ReturnNode();
 	myEntryNode.sendOnReady(Object.assign({}, myEntryNode.getOutboundPort('props'), {
 		func: (() => {
-			return myEntryNode.getOutboundPort('props').func() * 2
+			return myEntryNode.getOutboundPort('props').func()['accumulator'] +  myEntryNode.getOutboundPort('props').func()['current'];
 		})
 	}), myReturnNode.getInboundPort('result'));
 	return new Program([
@@ -21,24 +21,20 @@ const mock1 = () => {
 	]);
 };
 
-describe('ArrayMapNode', () => {
-	it('should multiply elements', async () => {
+describe('ArrayReduceNode', () => {
+	it('should sum array elements', async () => {
 		let myProgram = mock1();
-		let myArrayMapNode = mock0();
-		myArrayMapNode.receive('array', [
+		let myArrayReduceNode = mock0();
+		myArrayReduceNode.receive('array', [
 			1,
 			2,
 			3,
 			4
 		], false);
-		myArrayMapNode.receive('function', myProgram);
-		expect(await myArrayMapNode.execute()).toEqual({
-			array: [
-				2,
-				4,
-				6,
-				8
-			]
+		myArrayReduceNode.receive('init', 100);
+		myArrayReduceNode.receive('function', myProgram);
+		expect(await myArrayReduceNode.execute()).toEqual({
+			result: 110
 		});
 	});
 });
