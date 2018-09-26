@@ -23,6 +23,7 @@ import { Program } from "../../../shared/lib/program";
 import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
+import Lodash from 'lodash';
 
 class Component extends React.Component {
 
@@ -46,27 +47,27 @@ class Component extends React.Component {
 					}
 				}>
 					<div>
-						<img style={
-							{
-								height: "6vh",
-								marginLeft: "2vh",
-								marginTop: "0.5vh"
-							}
-						}
-						     src={"/res/img/BackStabber_logo.png"}
-						/>
+						{/*<img style={*/}
+							{/*{*/}
+								{/*height: "6vh",*/}
+								{/*marginLeft: "2vh",*/}
+								{/*marginTop: "0.5vh"*/}
+							{/*}*/}
+						{/*}*/}
+						     {/*src={"/res/img/BackStabber_logo.png"}*/}
+						{/*/>*/}
 					</div>
 					<div style={
 						{
 							marginTop: "1vh",
 							color: "white",
-							paddingLeft: "2vw",
+							paddingLeft: "1.3vw",
 							fontSize: "3vh",
 							color: "#ECECEC",
 							fontStyle: "italic"
 						}
 					}>
-						Welcome to BackStabber
+						Welcome to <b>B</b>ack<b>S</b>tabber
 					</div>
 				</div>
 				<div style={
@@ -81,16 +82,19 @@ class Component extends React.Component {
 					<div style={
 						{
 							width: "10vw",
-							background: "#ECECEC",
+							background: "#22313F",
+							// borderColor: "white",
+							borderStyle: "solid",
+							// borderWidth: "1vh"
 						}
 					}>
 						<TrayWidget style={
 							{
-								padding: "10pt"
+								margin: "10pt"
 							}
 						}>
-							<TrayItemWidget model={{ type: 'in' }} name="In Node" color="peru" />
-							<TrayItemWidget model={{ type: 'out' }} name="Out Node" color="hotpink" />
+							<TrayItemWidget model={{ type: 'in' }} name="Function 1 node" color="peru" />
+							<TrayItemWidget model={{ type: 'out' }} name="Function 2 node" color="hotpink" />
 						</TrayWidget>
 
 					</div>
@@ -106,36 +110,22 @@ class Component extends React.Component {
 							className="diagram-layer"
 							onDrop={event => {
 								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
-								// var nodesCount = _.keys(
-								// 	this.props.app
-								// 		.getDiagramEngine()
-								// 		.getDiagramModel()
-								// 		.getNodes()
-								// ).length;
-
-								var node = null;
+								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
+								let node = null;
+								console.log(nodesCount);
 								if (data.type === "in") {
-									// node = new DefaultNodeModel("Node " + (nodesCount + 1), "rgb(192,255,0)");
-									// node.addInPort("In");
-									const node1 = new DefaultNodeModel('Function Node 1');
-									node1.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
-									node1.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
-									this.props.store.dispatch(ReactDiagramsAction.addNode(node1));
+									node = new DefaultNodeModel('Function Node 1');
+									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
+									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 								} else {
-									// node = new DefaultNodeModel("Node " + (nodesCount + 1), "rgb(0,192,255)");
-									// node.addOutPort("Out");
-									const node2 = new DefaultNodeModel('Function Node 2');
-									node2.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
-									node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
-									this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
+									node = new DefaultNodeModel('Function Node 2');
+									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
+									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 								}
-								var points = this.props.app.getDiagramEngine().getRelativeMousePoint(event);
+								var points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								this.props.app
-									.getDiagramEngine()
-									.getDiagramModel()
-									.addNode(node);
+								this.props.store.dispatch(ReactDiagramsAction.addNode(node));
 								this.forceUpdate();
 							}}
 							onDragOver={event => {
