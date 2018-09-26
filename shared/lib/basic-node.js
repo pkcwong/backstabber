@@ -33,6 +33,14 @@ export class BasicNode {
 		};
 	}
 
+	setID(id){
+		this._id = id;
+	}
+
+	setObservers(observers){
+		this.observers = observers;
+	}
+
 	/**
 	 * Executes the Node and send outputs to observers
 	 * @returns {*}
@@ -131,8 +139,8 @@ export class BasicNode {
 	serialize() {
 		return {
 			_id: this._id,
-			class: this.instance.cache.class,
-			args: this.instance.cache.args,
+			class: this.class,
+			args: this.args,
 			observers: this.observers.map((item) => {
 				return {
 					_id: item._id,
@@ -140,6 +148,18 @@ export class BasicNode {
 				};
 			})
 		}
+	}
+
+	/*
+	 * Deserializes a Json
+	 *
+	 */
+	deserialize(json){
+        var bNode;
+            bNode = new BasicNode(json.args);
+            bNode.setID(json._id);
+            bNode.setObservers(json.observers);
+		return bNode;
 	}
 
 }
