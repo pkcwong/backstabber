@@ -21,6 +21,8 @@ import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
 import { Program } from "../../../shared/lib/program";
 import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
+import TrayWidget from './components/TrayWidget';
+import TrayItemWidget from './components/TrayItemWidget';
 
 class Component extends React.Component {
 
@@ -82,6 +84,14 @@ class Component extends React.Component {
 							background: "#ECECEC",
 						}
 					}>
+						<TrayWidget style={
+							{
+								padding: "10pt"
+							}
+						}>
+							<TrayItemWidget model={{ type: 'in' }} name="In Node" color="peru" />
+							<TrayItemWidget model={{ type: 'out' }} name="Out Node" color="hotpink" />
+						</TrayWidget>
 
 					</div>
 					<div
@@ -92,11 +102,54 @@ class Component extends React.Component {
 							}
 						}
 					>
-						{/*<DiagramWidget*/}
-							{/*allowLooseLinks={false}*/}
-							{/*maxNumberPointsPerLink={0}*/}
-							{/*diagramEngine={this.engine}*/}
-						{/*/>*/}
+						<div
+							className="diagram-layer"
+							onDrop={event => {
+								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
+								// var nodesCount = _.keys(
+								// 	this.props.app
+								// 		.getDiagramEngine()
+								// 		.getDiagramModel()
+								// 		.getNodes()
+								// ).length;
+
+								var node = null;
+								if (data.type === "in") {
+									// node = new DefaultNodeModel("Node " + (nodesCount + 1), "rgb(192,255,0)");
+									// node.addInPort("In");
+									const node1 = new DefaultNodeModel('Function Node 1');
+									node1.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
+									node1.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
+									this.props.store.dispatch(ReactDiagramsAction.addNode(node1));
+								} else {
+									// node = new DefaultNodeModel("Node " + (nodesCount + 1), "rgb(0,192,255)");
+									// node.addOutPort("Out");
+									const node2 = new DefaultNodeModel('Function Node 2');
+									node2.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
+									node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
+									this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
+								}
+								var points = this.props.app.getDiagramEngine().getRelativeMousePoint(event);
+								node.x = points.x;
+								node.y = points.y;
+								this.props.app
+									.getDiagramEngine()
+									.getDiagramModel()
+									.addNode(node);
+								this.forceUpdate();
+							}}
+							onDragOver={event => {
+								event.preventDefault();
+							}}
+						>
+							<DiagramWidget
+							allowLooseLinks={false}
+							maxNumberPointsPerLink={0}
+							diagramEngine={this.engine}
+							/>
+							{/*<DiagramWidget className="srd-demo-canvas" diagramEngine={this.props.app.getDiagramEngine()} />*/}
+						</div>
+
 					</div>
 				</div>
 
@@ -105,40 +158,40 @@ class Component extends React.Component {
 	}
 
 	componentDidMount() {
-		/* TODO demo code */
-		const node1 = new DefaultNodeModel('Function Node 1');
-		node1.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
-		node1.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
-		this.props.store.dispatch(ReactDiagramsAction.addNode(node1));
-		const node2 = new DefaultNodeModel('Function Node 2');
-		node2.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
-		node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
-		this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
+		// /* TODO demo code */
+		// const node1 = new DefaultNodeModel('Function Node 1');
+		// node1.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
+		// node1.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
+		// this.props.store.dispatch(ReactDiagramsAction.addNode(node1));
+		// const node2 = new DefaultNodeModel('Function Node 2');
+		// node2.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
+		// node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
+		// this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
 		/* TODO construct a program */
-		let myEntryNode = new EntryNode();
-		let myReturnNode = new ReturnNode();
-		let myNullNode = new NullNode();
-		let myJsonNode = new JsonAssignNode();
-		let myKey = new StringNode('framework');
-		let myJsonCollapseNode = new JsonCollapseNode();
-		let myUserInput = new StringNode('userInput');
-		myEntryNode.sendOnReady(myEntryNode.getOutboundPort('props'), myJsonCollapseNode.getInboundPort('json'));
-		myUserInput.sendOnReady(myUserInput.getOutboundPort('string'), myJsonCollapseNode.getInboundPort('key'));
-		myJsonCollapseNode.sendOnReady(myJsonCollapseNode.getOutboundPort('value'), myJsonNode.getInboundPort('value'));
-		myNullNode.sendOnReady(myNullNode.getOutboundPort('value'), myJsonNode.getInboundPort('json'));
-		myKey.sendOnReady(myKey.getOutboundPort('string'), myJsonNode.getInboundPort('key'));
-		myJsonNode.sendOnReady(myJsonNode.getOutboundPort('json'), myReturnNode.getInboundPort('result'));
-		let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myJsonCollapseNode, myUserInput];
-		let myProgram = new Program(nodes);
-		/* TODO demo program */
-		(async () => {
-			console.log(await myProgram.execute({
-				userInput: 'MeteorJS'
-			}));
-			console.log(await myProgram.execute({
-				userInput: 'ReactJS'
-			}));
-		})();
+		// let myEntryNode = new EntryNode();
+		// let myReturnNode = new ReturnNode();
+		// let myNullNode = new NullNode();
+		// let myJsonNode = new JsonAssignNode();
+		// let myKey = new StringNode('framework');
+		// let myJsonCollapseNode = new JsonCollapseNode();
+		// let myUserInput = new StringNode('userInput');
+		// myEntryNode.sendOnReady(myEntryNode.getOutboundPort('props'), myJsonCollapseNode.getInboundPort('json'));
+		// myUserInput.sendOnReady(myUserInput.getOutboundPort('string'), myJsonCollapseNode.getInboundPort('key'));
+		// myJsonCollapseNode.sendOnReady(myJsonCollapseNode.getOutboundPort('value'), myJsonNode.getInboundPort('value'));
+		// myNullNode.sendOnReady(myNullNode.getOutboundPort('value'), myJsonNode.getInboundPort('json'));
+		// myKey.sendOnReady(myKey.getOutboundPort('string'), myJsonNode.getInboundPort('key'));
+		// myJsonNode.sendOnReady(myJsonNode.getOutboundPort('json'), myReturnNode.getInboundPort('result'));
+		// let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myJsonCollapseNode, myUserInput];
+		// let myProgram = new Program(nodes);
+		// /* TODO demo program */
+		// (async () => {
+		// 	console.log(await myProgram.execute({
+		// 		userInput: 'MeteorJS'
+		// 	}));
+		// 	console.log(await myProgram.execute({
+		// 		userInput: 'ReactJS'
+		// 	}));
+		// })();
 	}
 
 	/**
