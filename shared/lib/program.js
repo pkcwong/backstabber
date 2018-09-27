@@ -50,4 +50,14 @@ export class Program {
 		});
 	}
 
+	/**
+	 * Deserialize json to Program
+	 * @param json
+	 * @returns {Program}
+	 */
+	static deserialize(json) {
+		// TODO deserialize
+		return new Program([]);
+	}
+
 }

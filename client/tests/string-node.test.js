@@ -34,4 +34,9 @@ describe('StringNode', () => {
 		expect(json[0].observers[0].outbound).toEqual('string');
 		expect(json[0].observers[0].inbound).toEqual('result');
 	});
+	it('should deserialize', async () => {
+		let myProgram = mock();
+		let deserialized = Program.deserialize(JSON.parse(JSON.stringify(myProgram.serialize())));
+		expect(await myProgram.execute()).toEqual(await deserialized.execute());
+	});
 });
