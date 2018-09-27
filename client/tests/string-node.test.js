@@ -27,5 +27,10 @@ describe('StringNode', () => {
 			'args',
 			'observers'
 		]);
+		expect(json[0]._id).toEqual(expect.anything());
+		expect(json[0].class).toEqual(StringNode.name);
+		expect(json[0].args[0]).toEqual('hello world');
+		expect(json[0].observers.length).toEqual(1);
+		expect(json[0].observers[0].port).toEqual('result');
 	});
 });
