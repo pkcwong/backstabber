@@ -75,6 +75,7 @@ export class Program {
 						node.map((input) => {
 							if(input._id === ob._id){
 								item.sendOnReady(item.getOutboundPort(ob.outbound), input.getInboundPort(ob.inbound));
+								
 							}
 						})
 					})
