@@ -31,6 +31,7 @@ describe('StringNode', () => {
 		expect(json[0].class).toEqual(StringNode.name);
 		expect(json[0].args[0]).toEqual('hello world');
 		expect(json[0].observers.length).toEqual(1);
-		expect(json[0].observers[0].port).toEqual('result');
+		expect(json[0].observers[0].outbound).toEqual('string');
+		expect(json[0].observers[0].inbound).toEqual('result');
 	});
 });

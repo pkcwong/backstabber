@@ -71,7 +71,8 @@ export class BasicNode {
 			...this.observers,
 			{
 				_id: input._id,
-				port: input.port,
+				outbound: output.port,
+				inbound: input.port,
 				func: (() => {
 					input.func(output.func());
 				})
@@ -136,7 +137,8 @@ export class BasicNode {
 			observers: this.observers.map((item) => {
 				return {
 					_id: item._id,
-					port: item.port
+					outbound: item.outbound,
+					inbound: item.inbound
 				};
 			})
 		}
