@@ -59,6 +59,34 @@ export class Program {
 	static deserialize(json) {
 		var node = [];
         json.map((item) => {
+            if(item.class === 'ArrayMapNode'){
+                node.push(new ArrayMapNode());
+                node[node.length - 1]._id = item._id;
+            }
+            if(item.class === 'ArrayPushNode'){
+                node.push(new ArrayPushNode());
+                node[node.length - 1]._id = item._id;
+            }
+            if(item.class === 'ArrayReduceNode'){
+                node.push(new ArrayReduceNode());
+                node[node.length - 1]._id = item._id;
+            }
+            if(item.class === 'EntryNode'){
+                node.push(new EntryNode());
+                node[node.length - 1]._id = item._id;
+            }
+            if(item.class === 'JsonAssignNode'){
+                node.push(new JsonAssignNode());
+                node[node.length - 1]._id = item._id;
+            }
+            if(item.class === 'JsonCollapseNode'){
+                node.push(new JsonCollapseNode());
+                node[node.length - 1]._id = item._id;
+            }
+            if(item.class === 'NullNode'){
+                node.push(new NullNode());
+                node[node.length - 1]._id = item._id;
+            }
             if(item.class === 'ReturnNode'){
                 node.push(new ReturnNode());
                 node[node.length - 1]._id = item._id;
@@ -75,7 +103,7 @@ export class Program {
 						node.map((input) => {
 							if(input._id === ob._id){
 								item.sendOnReady(item.getOutboundPort(ob.outbound), input.getInboundPort(ob.inbound));
-								
+
 							}
 						})
 					})
