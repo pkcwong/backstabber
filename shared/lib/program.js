@@ -1,5 +1,6 @@
 import { EntryNode } from "./entry-node";
 import { ReturnNode } from "./return-node";
+import { StringNode } from "./string-node";
 
 /**
  * A program is a array of BasicNode
@@ -56,8 +57,31 @@ export class Program {
 	 * @returns {Program}
 	 */
 	static deserialize(json) {
-		// TODO deserialize
-		return new Program([]);
+		var node = [];
+        json.map((item) => {
+            if(item.class === 'ReturnNode'){
+                node.push(new ReturnNode());
+                node[node.length - 1]._id = item._id;
+            }
+            if(item.class === 'StringNode'){
+                node.push(new StringNode(item.args[0]));
+                node[node.length - 1]._id = item._id;
+            }
+        });
+		node.map((item) => {
+			json.map((nodes) => {
+				if(item._id === nodes._id){
+					nodes.observers.map(ob => {
+						node.map((input) => {
+							if(input._id === ob._id){
+								item.sendOnReady(item.getOutboundPort(ob.outbound), input.getInboundPort(ob.inbound));
+							}
+						})
+					})
+				}
+			})
+		});
+		return new Program(node);
 	}
 
 }
