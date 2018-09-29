@@ -7,57 +7,57 @@ import { StringNode } from "./string-node";
  */
 export class Program {
 
-	constructor(nodes) {
-		this.nodes = nodes;
-	}
+    constructor(nodes) {
+        this.nodes = nodes;
+    }
 
-	/**
-	 * Executes the program
-	 * @param args
-	 * @returns {Promise<any>}
-	 */
-	execute(args = {}) {
-		return new Promise((resolve, reject) => {
-			this.nodes.forEach((node) => {
-				node.reset();
-			});
-			this.nodes.filter((node) => {
-				return (node instanceof EntryNode);
-			}).forEach((node) => {
-				node.instance.props = args;
-			});
-			this.nodes.filter((node) => {
-				return (node instanceof ReturnNode);
-			}).forEach((node) => {
-				node.registerCallback((result) => {
-					resolve(result);
-				});
-			});
-			this.nodes.filter((node) => {
-				return node.ready();
-			}).forEach((node) => {
-				node.execute();
-			});
-		});
-	}
+    /**
+     * Executes the program
+     * @param args
+     * @returns {Promise<any>}
+     */
+    execute(args = {}) {
+        return new Promise((resolve, reject) => {
+            this.nodes.forEach((node) => {
+                node.reset();
+            });
+            this.nodes.filter((node) => {
+                return (node instanceof EntryNode);
+            }).forEach((node) => {
+                node.instance.props = args;
+            });
+            this.nodes.filter((node) => {
+                return (node instanceof ReturnNode);
+            }).forEach((node) => {
+                node.registerCallback((result) => {
+                    resolve(result);
+                });
+            });
+            this.nodes.filter((node) => {
+                return node.ready();
+            }).forEach((node) => {
+                node.execute();
+            });
+        });
+    }
 
-	/**
-	 * Serializes a program to JSON
-	 * @returns {*}
-	 */
-	serialize() {
-		return this.nodes.map((node) => {
-			return node.serialize();
-		});
-	}
+    /**
+     * Serializes a program to JSON
+     * @returns {*}
+     */
+    serialize() {
+        return this.nodes.map((node) => {
+            return node.serialize();
+        });
+    }
 
-	/**
-	 * Deserialize json to Program
-	 * @param json
-	 * @returns {Program}
-	 */
-	static deserialize(json) {
-		var node = [];
+    /**
+     * Deserialize json to Program
+     * @param json
+     * @returns {Program}
+     */
+    static deserialize(json) {
+        var node = [];
         json.map((item) => {
             if(item.class === 'ArrayMapNode'){
                 node.push(new ArrayMapNode());
@@ -96,21 +96,21 @@ export class Program {
                 node[node.length - 1]._id = item._id;
             }
         });
-		node.map((item) => {
-			json.map((nodes) => {
-				if(item._id === nodes._id){
-					nodes.observers.map(ob => {
-						node.map((input) => {
-							if(input._id === ob._id){
-								item.sendOnReady(item.getOutboundPort(ob.outbound), input.getInboundPort(ob.inbound));
+        node.map((item) => {
+            json.map((nodes) => {
+                if(item._id === nodes._id){
+                    nodes.observers.map(ob => {
+                        node.map((input) => {
+                            if(input._id === ob._id){
+                                item.sendOnReady(item.getOutboundPort(ob.outbound), input.getInboundPort(ob.inbound));
 
-							}
-						})
-					})
-				}
-			})
-		});
-		return new Program(node);
-	}
+                            }
+                        })
+                    })
+                }
+            })
+        });
+        return new Program(node);
+    }
 
 }
