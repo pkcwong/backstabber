@@ -1,5 +1,11 @@
 import { EntryNode } from "./entry-node";
 import { ReturnNode } from "./return-node";
+import { ArrayMapNode } from "./array-map-node";
+import { ArrayPushNode } from "./array-push-node";
+import { ArrayReduceNode } from "./array-reduce-node";
+import { JsonAssignNode } from "./json-assign-node";
+import { JsonCollapseNode } from "./json-collapse-node";
+import { NullNode } from "./null-node";
 import { StringNode } from "./string-node";
 
 /**
@@ -7,110 +13,102 @@ import { StringNode } from "./string-node";
  */
 export class Program {
 
-    constructor(nodes) {
-        this.nodes = nodes;
-    }
+	constructor(nodes) {
+		this.nodes = nodes;
+	}
 
-    /**
-     * Executes the program
-     * @param args
-     * @returns {Promise<any>}
-     */
-    execute(args = {}) {
-        return new Promise((resolve, reject) => {
-            this.nodes.forEach((node) => {
-                node.reset();
-            });
-            this.nodes.filter((node) => {
-                return (node instanceof EntryNode);
-            }).forEach((node) => {
-                node.instance.props = args;
-            });
-            this.nodes.filter((node) => {
-                return (node instanceof ReturnNode);
-            }).forEach((node) => {
-                node.registerCallback((result) => {
-                    resolve(result);
-                });
-            });
-            this.nodes.filter((node) => {
-                return node.ready();
-            }).forEach((node) => {
-                node.execute();
-            });
-        });
-    }
+	/**
+	 * Executes the program
+	 * @param args
+	 * @returns {Promise<any>}
+	 */
+	execute(args = {}) {
+		return new Promise((resolve, reject) => {
+			this.nodes.forEach((node) => {
+				node.reset();
+			});
+			this.nodes.filter((node) => {
+				return (node instanceof EntryNode);
+			}).forEach((node) => {
+				node.instance.props = args;
+			});
+			this.nodes.filter((node) => {
+				return (node instanceof ReturnNode);
+			}).forEach((node) => {
+				node.registerCallback((result) => {
+					resolve(result);
+				});
+			});
+			this.nodes.filter((node) => {
+				return node.ready();
+			}).forEach((node) => {
+				node.execute();
+			});
+		});
+	}
 
-    /**
-     * Serializes a program to JSON
-     * @returns {*}
-     */
-    serialize() {
-        return this.nodes.map((node) => {
-            return node.serialize();
-        });
-    }
+	/**
+	 * Serializes a program to JSON
+	 * @returns {*}
+	 */
+	serialize() {
+		return this.nodes.map((node) => {
+			return node.serialize();
+		});
+	}
 
-    /**
-     * Deserialize json to Program
-     * @param json
-     * @returns {Program}
-     */
-    static deserialize(json) {
-        var node = [];
-        json.map((item) => {
-            if(item.class === 'ArrayMapNode'){
-                node.push(new ArrayMapNode());
-                node[node.length - 1]._id = item._id;
-            }
-            if(item.class === 'ArrayPushNode'){
-                node.push(new ArrayPushNode());
-                node[node.length - 1]._id = item._id;
-            }
-            if(item.class === 'ArrayReduceNode'){
-                node.push(new ArrayReduceNode());
-                node[node.length - 1]._id = item._id;
-            }
-            if(item.class === 'EntryNode'){
-                node.push(new EntryNode());
-                node[node.length - 1]._id = item._id;
-            }
-            if(item.class === 'JsonAssignNode'){
-                node.push(new JsonAssignNode());
-                node[node.length - 1]._id = item._id;
-            }
-            if(item.class === 'JsonCollapseNode'){
-                node.push(new JsonCollapseNode());
-                node[node.length - 1]._id = item._id;
-            }
-            if(item.class === 'NullNode'){
-                node.push(new NullNode());
-                node[node.length - 1]._id = item._id;
-            }
-            if(item.class === 'ReturnNode'){
-                node.push(new ReturnNode());
-                node[node.length - 1]._id = item._id;
-            }
-            if(item.class === 'StringNode'){
-                node.push(new StringNode(item.args[0]));
-                node[node.length - 1]._id = item._id;
-            }
-        });
-        node.map((item) => {
-            json.map((nodes) => {
-                if(item._id === nodes._id){
-                    nodes.observers.map(ob => {
-                        node.map((input) => {
-                            if(input._id === ob._id){
-                                item.sendOnReady(item.getOutboundPort(ob.outbound), input.getInboundPort(ob.inbound));
-
-                            }
-                        })
-                    })
-                }
-            })
-        });
-        return new Program(node);
-    }
+	/**
+	 * Deserialize json to Program
+	 * @param json
+	 * @returns {Program}
+	 */
+	static deserialize(json) {
+		let map = json.reduce((accumulator, current) => {
+			let constructor = null;
+			switch (current.class) {
+				case 'ArrayMapNode':
+					constructor = ArrayMapNode;
+					break;
+				case 'ArrayPushNode':
+					constructor = ArrayPushNode;
+					break;
+				case 'ArrayReduceNode':
+					constructor = ArrayReduceNode;
+					break;
+				case 'EntryNode':
+					constructor = EntryNode;
+					break;
+				case 'JsonAssignNode':
+					constructor = JsonAssignNode;
+					break;
+				case 'JsonCollapseNode':
+					constructor = JsonCollapseNode;
+					break;
+				case 'NullNode':
+					constructor = NullNode;
+					break;
+				case 'ReturnNode':
+					constructor = ReturnNode;
+					break;
+				case 'StringNode':
+					constructor = StringNode;
+					break;
+			}
+			let node = new constructor(...Object.keys(current.args).map((key) => {
+				return current.args[key];
+			}));
+			node._id = current._id;
+			accumulator[current._id] = node;
+			return accumulator;
+		}, {});
+		return new Program(Object.keys(map).map((item) => {
+			json.find((element) => {
+				return (element._id === item);
+			}).observers.forEach((observer) => {
+				map[item].sendOnReady(map[item].getOutboundPort(observer.outbound), map[observer._id].getInboundPort(observer.inbound));
+			});
+			return map[item];
+		}));
+	}
 
 }
