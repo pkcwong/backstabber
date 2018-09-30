@@ -1,5 +1,12 @@
 import { EntryNode } from "./entry-node";
 import { ReturnNode } from "./return-node";
+import { ArrayMapNode } from "./array-map-node";
+import { ArrayPushNode } from "./array-push-node";
+import { ArrayReduceNode } from "./array-reduce-node";
+import { JsonAssignNode } from "./json-assign-node";
+import { JsonCollapseNode } from "./json-collapse-node";
+import { NullNode } from "./null-node";
+import { StringNode } from "./string-node";
 
 /**
  * A program is a array of BasicNode
@@ -48,6 +55,60 @@ export class Program {
 		return this.nodes.map((node) => {
 			return node.serialize();
 		});
+	}
+
+	/**
+	 * Deserialize json to Program
+	 * @param json
+	 * @returns {Program}
+	 */
+	static deserialize(json) {
+		let map = json.reduce((accumulator, current) => {
+			let constructor = null;
+			switch (current.class) {
+				case 'ArrayMapNode':
+					constructor = ArrayMapNode;
+					break;
+				case 'ArrayPushNode':
+					constructor = ArrayPushNode;
+					break;
+				case 'ArrayReduceNode':
+					constructor = ArrayReduceNode;
+					break;
+				case 'EntryNode':
+					constructor = EntryNode;
+					break;
+				case 'JsonAssignNode':
+					constructor = JsonAssignNode;
+					break;
+				case 'JsonCollapseNode':
+					constructor = JsonCollapseNode;
+					break;
+				case 'NullNode':
+					constructor = NullNode;
+					break;
+				case 'ReturnNode':
+					constructor = ReturnNode;
+					break;
+				case 'StringNode':
+					constructor = StringNode;
+					break;
+			}
+			let node = new constructor(...Object.keys(current.args).map((key) => {
+				return current.args[key];
+			}));
+			node._id = current._id;
+			accumulator[current._id] = node;
+			return accumulator;
+		}, {});
+		return new Program(Object.keys(map).map((item) => {
+			json.find((element) => {
+				return (element._id === item);
+			}).observers.forEach((observer) => {
+				map[item].sendOnReady(map[item].getOutboundPort(observer.outbound), map[observer._id].getInboundPort(observer.inbound));
+			});
+			return map[item];
+		}));
 	}
 
 }
