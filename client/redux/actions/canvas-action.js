@@ -1,8 +1,8 @@
-export class ReactDiagramsAction {
+export class CanvasAction {
 
 	static addNode = (node) => {
 		return {
-			type: 'ReactDiagrams/ADD_NODE',
+			type: 'Canvas/ADD_NODE',
 			payload: {
 				node: node
 			}
@@ -11,7 +11,7 @@ export class ReactDiagramsAction {
 
 	static addLink = (link) => {
 		return {
-			type: 'ReactDiagrams/ADD_LINK',
+			type: 'Canvas/ADD_LINK',
 			payload: {
 				link: link
 			}

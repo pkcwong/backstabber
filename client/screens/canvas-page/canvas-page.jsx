@@ -11,7 +11,7 @@ import {
 	DefaultNodeModel,
 	DefaultPortModel
 } from 'storm-react-diagrams';
-import { ReactDiagramsAction } from "../../redux/actions/react-diagrams-action";
+import { CanvasAction } from "../../redux/actions/canvas-action";
 import { styles } from "./styles";
 import "./srd.css";
 import { NullNode } from "../../../shared/lib/null-node";
@@ -48,19 +48,18 @@ class Component extends React.Component {
 				}>
 					<div>
 						{/*<img style={*/}
-							{/*{*/}
-								{/*height: "6vh",*/}
-								{/*marginLeft: "2vh",*/}
-								{/*marginTop: "0.5vh"*/}
-							{/*}*/}
+						{/*{*/}
+						{/*height: "6vh",*/}
+						{/*marginLeft: "2vh",*/}
+						{/*marginTop: "0.5vh"*/}
 						{/*}*/}
-						     {/*src={"/res/img/BackStabber_logo.png"}*/}
+						{/*}*/}
+						{/*src={"/res/img/BackStabber_logo.png"}*/}
 						{/*/>*/}
 					</div>
 					<div style={
 						{
 							marginTop: "1vh",
-							color: "white",
 							paddingLeft: "1.3vw",
 							fontSize: "3vh",
 							color: "#ECECEC",
@@ -93,8 +92,8 @@ class Component extends React.Component {
 								margin: "10pt"
 							}
 						}>
-							<TrayItemWidget model={{ type: 'in' }} name="Function 1 node" color="peru" />
-							<TrayItemWidget model={{ type: 'out' }} name="Function 2 node" color="hotpink" />
+							<TrayItemWidget model={{ type: 'in' }} name="Function 1 node" color="peru"/>
+							<TrayItemWidget model={{ type: 'out' }} name="Function 2 node" color="hotpink"/>
 						</TrayWidget>
 
 					</div>
@@ -112,7 +111,7 @@ class Component extends React.Component {
 								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
 								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let node = null;
-								console.log(nodesCount);
+								//console.log(nodesCount);
 								if (data.type === "in") {
 									node = new DefaultNodeModel('Function Node 1');
 									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
@@ -125,7 +124,7 @@ class Component extends React.Component {
 								var points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								this.props.store.dispatch(ReactDiagramsAction.addNode(node));
+								this.props.store.dispatch(CanvasAction.addNode(node));
 								this.forceUpdate();
 							}}
 							onDragOver={event => {
@@ -133,9 +132,9 @@ class Component extends React.Component {
 							}}
 						>
 							<DiagramWidget
-							allowLooseLinks={false}
-							maxNumberPointsPerLink={0}
-							diagramEngine={this.engine}
+								allowLooseLinks={false}
+								maxNumberPointsPerLink={0}
+								diagramEngine={this.engine}
 							/>
 							{/*<DiagramWidget className="srd-demo-canvas" diagramEngine={this.props.app.getDiagramEngine()} />*/}
 						</div>
@@ -249,7 +248,7 @@ const Tracker = withTracker(() => {
 
 export const CanvasPage = connect((store) => {
 	return {
-		nodes: store['ReactDiagramsReducer']['nodes'],
-		links: store['ReactDiagramsReducer']['links']
+		nodes: store['CanvasReducer']['nodes'],
+		links: store['CanvasReducer']['links']
 	};
 })(Tracker);
