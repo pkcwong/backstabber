@@ -24,6 +24,7 @@ import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
+import { sketches_db } from "../../../shared/collections/sketches";
 
 class Component extends React.Component {
 
@@ -156,7 +157,7 @@ class Component extends React.Component {
 		// node2.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
 		// node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 		// this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
-		/* TODO construct a program */
+		// /* TODO construct a program */
 		// let myEntryNode = new EntryNode();
 		// let myReturnNode = new ReturnNode();
 		// let myNullNode = new NullNode();
@@ -172,6 +173,7 @@ class Component extends React.Component {
 		// myJsonNode.sendOnReady(myJsonNode.getOutboundPort('json'), myReturnNode.getInboundPort('result'));
 		// let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myJsonCollapseNode, myUserInput];
 		// let myProgram = new Program(nodes);
+		// this.props.dispatch(CanvasAction.create(myProgram, null));
 		// /* TODO demo program */
 		// (async () => {
 		// 	console.log(await myProgram.execute({
@@ -235,9 +237,12 @@ class Component extends React.Component {
 }
 
 const Tracker = withTracker(() => {
+	Meteor.subscribe('sketches_db');
 	return {
 		Meteor: {
-			collection: {},
+			collection: {
+				sketches: sketches_db.find().fetch()
+			},
 			user: Meteor.user(),
 			userId: Meteor.userId(),
 			status: Meteor.status(),

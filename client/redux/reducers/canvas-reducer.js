@@ -5,7 +5,7 @@ const initialState = {
 
 export const CanvasReducer = (state = initialState, action) => {
 	switch (action['type']) {
-		case 'Canvas/INIT': {
+		case 'Canvas/RESET': {
 			return initialState;
 		}
 		case 'Canvas/ADD_NODE': {
@@ -17,6 +17,10 @@ export const CanvasReducer = (state = initialState, action) => {
 			return Object.assign({}, state, {
 				links: [...state.links, action['payload']['link']]
 			});
+		}
+		case 'Canvas/LOAD-COMPLETE': {
+			// TODO parse into react diagram nodes
+			return state;
 		}
 		default: {
 			return state;
