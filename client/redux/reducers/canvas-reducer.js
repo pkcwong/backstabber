@@ -3,20 +3,24 @@ const initialState = {
 	links: []
 };
 
-export const ReactDiagramsReducer = (state = initialState, action) => {
+export const CanvasReducer = (state = initialState, action) => {
 	switch (action['type']) {
-		case 'ReactDiagrams/INIT': {
+		case 'Canvas/RESET': {
 			return initialState;
 		}
-		case 'ReactDiagrams/ADD_NODE': {
+		case 'Canvas/ADD_NODE': {
 			return Object.assign({}, state, {
 				nodes: [...state.nodes, action['payload']['node']]
 			});
 		}
-		case 'ReactDiagrams/ADD_LINK': {
+		case 'Canvas/ADD_LINK': {
 			return Object.assign({}, state, {
 				links: [...state.links, action['payload']['link']]
 			});
+		}
+		case 'Canvas/LOAD-COMPLETE': {
+			// TODO parse into react diagram nodes
+			return state;
 		}
 		default: {
 			return state;

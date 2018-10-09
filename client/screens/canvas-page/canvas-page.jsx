@@ -11,7 +11,7 @@ import {
 	DefaultNodeModel,
 	DefaultPortModel
 } from 'storm-react-diagrams';
-import { ReactDiagramsAction } from "../../redux/actions/react-diagrams-action";
+import { CanvasAction } from "../../redux/actions/canvas-action";
 import { styles } from "./styles";
 import "./srd.css";
 import { NullNode } from "../../../shared/lib/null-node";
@@ -24,6 +24,7 @@ import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
+import { sketches_db } from "../../../shared/collections/sketches";
 
 class Component extends React.Component {
 
@@ -48,19 +49,18 @@ class Component extends React.Component {
 				}>
 					<div>
 						{/*<img style={*/}
-							{/*{*/}
-								{/*height: "6vh",*/}
-								{/*marginLeft: "2vh",*/}
-								{/*marginTop: "0.5vh"*/}
-							{/*}*/}
+						{/*{*/}
+						{/*height: "6vh",*/}
+						{/*marginLeft: "2vh",*/}
+						{/*marginTop: "0.5vh"*/}
 						{/*}*/}
-						     {/*src={"/res/img/BackStabber_logo.png"}*/}
+						{/*}*/}
+						{/*src={"/res/img/BackStabber_logo.png"}*/}
 						{/*/>*/}
 					</div>
 					<div style={
 						{
 							marginTop: "1vh",
-							color: "white",
 							paddingLeft: "1.3vw",
 							fontSize: "3vh",
 							color: "#ECECEC",
@@ -93,8 +93,8 @@ class Component extends React.Component {
 								margin: "10pt"
 							}
 						}>
-							<TrayItemWidget model={{ type: 'in' }} name="Function 1 node" color="peru" />
-							<TrayItemWidget model={{ type: 'out' }} name="Function 2 node" color="hotpink" />
+							<TrayItemWidget model={{ type: 'in' }} name="Function 1 node" color="peru"/>
+							<TrayItemWidget model={{ type: 'out' }} name="Function 2 node" color="hotpink"/>
 						</TrayWidget>
 
 					</div>
@@ -112,7 +112,7 @@ class Component extends React.Component {
 								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
 								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let node = null;
-								console.log(nodesCount);
+								//console.log(nodesCount);
 								if (data.type === "in") {
 									node = new DefaultNodeModel('Function Node 1');
 									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
@@ -125,7 +125,7 @@ class Component extends React.Component {
 								var points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								this.props.store.dispatch(ReactDiagramsAction.addNode(node));
+								this.props.store.dispatch(CanvasAction.addNode(node));
 								this.forceUpdate();
 							}}
 							onDragOver={event => {
@@ -133,9 +133,9 @@ class Component extends React.Component {
 							}}
 						>
 							<DiagramWidget
-							allowLooseLinks={false}
-							maxNumberPointsPerLink={0}
-							diagramEngine={this.engine}
+								allowLooseLinks={false}
+								maxNumberPointsPerLink={0}
+								diagramEngine={this.engine}
 							/>
 							{/*<DiagramWidget className="srd-demo-canvas" diagramEngine={this.props.app.getDiagramEngine()} />*/}
 						</div>
@@ -157,7 +157,7 @@ class Component extends React.Component {
 		// node2.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
 		// node2.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 		// this.props.store.dispatch(ReactDiagramsAction.addNode(node2));
-		/* TODO construct a program */
+		// /* TODO construct a program */
 		// let myEntryNode = new EntryNode();
 		// let myReturnNode = new ReturnNode();
 		// let myNullNode = new NullNode();
@@ -173,6 +173,7 @@ class Component extends React.Component {
 		// myJsonNode.sendOnReady(myJsonNode.getOutboundPort('json'), myReturnNode.getInboundPort('result'));
 		// let nodes = [myEntryNode, myReturnNode, myNullNode, myJsonNode, myKey, myJsonCollapseNode, myUserInput];
 		// let myProgram = new Program(nodes);
+		// this.props.dispatch(CanvasAction.create(myProgram, null));
 		// /* TODO demo program */
 		// (async () => {
 		// 	console.log(await myProgram.execute({
@@ -236,9 +237,12 @@ class Component extends React.Component {
 }
 
 const Tracker = withTracker(() => {
+	Meteor.subscribe('sketches_db');
 	return {
 		Meteor: {
-			collection: {},
+			collection: {
+				sketches: sketches_db.find().fetch()
+			},
 			user: Meteor.user(),
 			userId: Meteor.userId(),
 			status: Meteor.status(),
@@ -249,7 +253,7 @@ const Tracker = withTracker(() => {
 
 export const CanvasPage = connect((store) => {
 	return {
-		nodes: store['ReactDiagramsReducer']['nodes'],
-		links: store['ReactDiagramsReducer']['links']
+		nodes: store['CanvasReducer']['nodes'],
+		links: store['CanvasReducer']['links']
 	};
 })(Tracker);

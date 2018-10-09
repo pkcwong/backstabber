@@ -4,9 +4,10 @@ import { all, call, fork } from 'redux-saga/effects';
 import { LoggerReducer } from "./reducers/logger-reducer";
 import { CounterReducer } from "./reducers/counter-reducer";
 import { FilesReducer } from "./reducers/files-reducer";
-import { ReactDiagramsReducer } from "./reducers/react-diagrams-reducer";
+import { CanvasReducer } from "./reducers/canvas-reducer";
 import { LoggerSaga } from "./sagas/logger-saga";
 import { FilesSaga } from "./sagas/files-saga";
+import { CanvasSaga } from "./sagas/canvas-saga";
 
 const saga = createSagaMiddleware();
 
@@ -14,14 +15,15 @@ export const store = createStore(combineReducers({
 	LoggerReducer: LoggerReducer,
 	CounterReducer: CounterReducer,
 	FilesReducer: FilesReducer,
-	ReactDiagramsReducer: ReactDiagramsReducer
+	CanvasReducer: CanvasReducer
 }), applyMiddleware(saga));
 
 saga.run(function* () {
 	yield all([
 		call(LoggerSaga),
 		...[
-			FilesSaga
+			FilesSaga,
+			CanvasSaga
 		].map(fork)
 	]);
 });
