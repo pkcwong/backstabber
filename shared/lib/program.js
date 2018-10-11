@@ -64,37 +64,18 @@ export class Program {
 	 */
 	static deserialize(json) {
 		let map = json.reduce((accumulator, current) => {
-			let constructor = null;
-			switch (current.class) {
-				case 'ArrayMapNode':
-					constructor = ArrayMapNode;
-					break;
-				case 'ArrayPushNode':
-					constructor = ArrayPushNode;
-					break;
-				case 'ArrayReduceNode':
-					constructor = ArrayReduceNode;
-					break;
-				case 'EntryNode':
-					constructor = EntryNode;
-					break;
-				case 'JsonAssignNode':
-					constructor = JsonAssignNode;
-					break;
-				case 'JsonCollapseNode':
-					constructor = JsonCollapseNode;
-					break;
-				case 'NullNode':
-					constructor = NullNode;
-					break;
-				case 'ReturnNode':
-					constructor = ReturnNode;
-					break;
-				case 'StringNode':
-					constructor = StringNode;
-					break;
-			}
-			let node = new constructor(...Object.keys(current.args).map((key) => {
+			let constructor = {
+				ArrayMapNode,
+				ArrayPushNode,
+				ArrayReduceNode,
+				EntryNode,
+				JsonAssignNode,
+				JsonCollapseNode,
+				NullNode,
+				ReturnNode,
+				StringNode
+			};
+			let node = new constructor[current.class](...Object.keys(current.args).map((key) => {
 				return current.args[key];
 			}));
 			node._id = current._id;
