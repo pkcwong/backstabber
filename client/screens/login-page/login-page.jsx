@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Button, Glyphicon, ListGroup, ListGroupItem, Panel } from 'react-bootstrap';
-import { styles } from "./styles";
+import { styles } from "../index-page/styles";
 
 class Component extends React.Component {
 
@@ -38,32 +37,6 @@ class Component extends React.Component {
 									Welcome to BackStabber!
 								</h1>
 							</div>
-							<div>
-
-							</div>
-							<Button bsStyle="success" style={
-								{
-									marginTop: "2vh",
-									height: "5vh"
-								}
-							}>
-								Sign up/ Login
-							</Button>
-						</div>
-						<p>
-							A Web Service that uses our visual programming language that we develope to help you create your own backend.
-						</p>
-						<div
-							style={styles.hyperlink}
-						>
-							<a
-								href='https://github.com/pkcwong/backstabber'
-							>
-								{'GitHub Repository\t'}
-								<Glyphicon
-									glyph='new-window'
-								/>
-							</a>
 						</div>
 					</div>
 				</div>
@@ -88,7 +61,7 @@ const Tracker = withTracker(() => {
 	};
 })(Component);
 
-export const IndexPage = connect((store) => {
+export const LoginPage = connect((store) => {
 	return {
 		logs: store['LoggerReducer']['logs'],
 		counter: store['CounterReducer']['counter']

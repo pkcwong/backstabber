@@ -1,8 +1,9 @@
 export const styles = {
 	page: {
-		margin: '2%'
+		padding: '2%',
+		paddingTop: "0.2%",
 	},
 	hyperlink: {
-		'textAlign': 'right'
+		'textAlign': 'left'
 	}
 };
