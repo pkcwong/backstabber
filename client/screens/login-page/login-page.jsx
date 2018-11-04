@@ -34,7 +34,7 @@ class Component extends React.Component {
 								}
 							}>
 								<h1>
-									Welcome to BackStabber!
+									Login!
 								</h1>
 							</div>
 						</div>
@@ -61,9 +61,4 @@ const Tracker = withTracker(() => {
 	};
 })(Component);
 
-export const LoginPage = connect((store) => {
-	return {
-		logs: store['LoggerReducer']['logs'],
-		counter: store['CounterReducer']['counter']
-	};
-})(Tracker);
+export const LoginPage = Tracker;

@@ -46,6 +46,10 @@ class Component extends React.Component {
 									marginTop: "2vh",
 									height: "5vh"
 								}
+							} onClick={
+								()=>{
+									FlowRouter.go('/login');
+								}
 							}>
 								Sign up/ Login
 							</Button>
@@ -88,9 +92,4 @@ const Tracker = withTracker(() => {
 	};
 })(Component);
 
-export const IndexPage = connect((store) => {
-	return {
-		logs: store['LoggerReducer']['logs'],
-		counter: store['CounterReducer']['counter']
-	};
-})(Tracker);
+export const IndexPage = Tracker;
