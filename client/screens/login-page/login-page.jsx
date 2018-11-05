@@ -40,13 +40,100 @@ class Component extends React.Component {
 							{
 								flexGrow: "4",
 								background: "#ffeaa7",
-								fontSize: "300%",
-								textAlign: "center",
-								paddingTop: "3%"
 							}
 						}>
-							Create Account
+							<div style={
+								{
+									textAlign: "center",
+									fontSize: "300%",
+									paddingTop: "5%"
+								}
+							}>
+								Create Account
+							</div>
+							<div>
+								<Form>
+									<div style={
+										{
+											paddingTop: "10%",
+											paddingLeft: "8%",
+											width: "40%",
+											fontSize: "100%",
+										}
+									}>
+										First Name:
+										<FormControl
+											id="first_name"
+											type="text"
+											placeholder="First Name"
+										/>
+									</div>
+									<div style={
+										{
+											paddingTop: "2%",
+											width: "50%",
+											paddingLeft: "8%",
+											fontSize: "100%",
+										}
+									}>
+										Last Name:
+										<FormControl
+											id="last_name"
+											type="text"
+											placeholder="Last Name"
+										/>
+									</div>
+									<div style={
+										{
+											paddingTop: "2%",
+											width: "60%",
+											paddingLeft: "8%",
+											fontSize: "100%",
+										}
+									}>
+										Username:
+										<FormControl
+											id="create_user_name"
+											type="text"
+											placeholder="Create a username"
+										/>
+									</div>
+									<div style={
+										{
+											paddingTop: "2%",
+											width: "80%",
+											paddingLeft: "8%",
+											fontSize: "100%",
+										}
+									}>
+										Password:
+										<FormControl
+											id="create_password"
+											type="password"
+											placeholder="Password"
+										/>
+									</div>
+									<div style={
+										{
+											paddingLeft: "8%",
+											paddingTop: "5%"
+										}
+									}>
+										<Button
+											style={
+												{
+
+												}
+											} onClick={
+											()=>{
+												// Todo: Create account
+											}
+										}>Create an Account</Button>
+									</div>
+								</Form>
+							</div>
 						</div>
+
 						<div style={
 							{
 								flexGrow: "2",
@@ -103,7 +190,7 @@ class Component extends React.Component {
 											width: "90%"
 										}
 									}>
-										<Checkbox>
+										<Checkbox id="rememberme">
 											Remember Me
 										</Checkbox>
 									</div>
@@ -114,7 +201,6 @@ class Component extends React.Component {
 										}
 									}>
 										<Button
-											id="rememberme"
 											style={
 											{
 												width: "80%"
@@ -130,7 +216,6 @@ class Component extends React.Component {
 											}
 										}>Login</Button>
 									</div>
-
 								</Form>
 							</div>
 						</div>
