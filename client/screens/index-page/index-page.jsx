@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Button, Glyphicon} from 'react-bootstrap';
+import { Button, Glyphicon } from 'react-bootstrap';
 import { styles } from "./styles";
 
 class Component extends React.Component {
@@ -16,8 +16,7 @@ class Component extends React.Component {
 			<React.Fragment>
 				<div style={
 					{
-						minHeight: "100vh",
-						// background: "#EFE2BA"
+						minHeight: "100vh"
 					}
 				}>
 					<div
@@ -35,7 +34,7 @@ class Component extends React.Component {
 								}
 							}>
 								<h1>
-									Welcome to BackStabber!
+									{this.props.strings['welcome']}
 								</h1>
 							</div>
 							<div>
@@ -47,15 +46,15 @@ class Component extends React.Component {
 									height: "5vh"
 								}
 							} onClick={
-								()=>{
+								() => {
 									FlowRouter.go('/login');
 								}
 							}>
-								Sign up/ Login
+								{this.props.strings['login_txt']}
 							</Button>
 						</div>
 						<p>
-							A Web Service that uses our visual programming language that we develope to help you create your own backend.
+							{this.props.strings['brief']}
 						</p>
 						<div
 							style={styles.hyperlink}
@@ -63,7 +62,7 @@ class Component extends React.Component {
 							<a
 								href='https://github.com/pkcwong/backstabber'
 							>
-								{'GitHub Repository\t'}
+								{this.props.strings['github'] + '\t'}
 								<Glyphicon
 									glyph='new-window'
 								/>
@@ -71,7 +70,6 @@ class Component extends React.Component {
 						</div>
 					</div>
 				</div>
-
 			</React.Fragment>
 		);
 	}
@@ -92,4 +90,9 @@ const Tracker = withTracker(() => {
 	};
 })(Component);
 
-export const IndexPage = Tracker;
+export const IndexPage = connect((store) => {
+	return {
+		logs: store['LoggerReducer']['logs'],
+		strings: store['LocaleReducer']['strings']
+	};
+})(Tracker);
