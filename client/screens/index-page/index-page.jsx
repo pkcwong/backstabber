@@ -2,9 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Glyphicon, ListGroup, ListGroupItem, Panel } from 'react-bootstrap';
+import { Button, Glyphicon } from 'react-bootstrap';
 import { styles } from "./styles";
-import { LocaleAction } from "../../redux/actions/locale-action";
 
 class Component extends React.Component {
 
@@ -15,114 +14,65 @@ class Component extends React.Component {
 	render() {
 		return (
 			<React.Fragment>
-				<div
-					style={styles.page}
-				>
-					<h1>
-						{this.props.strings['welcome']}
-					</h1>
-					<p>
-						{this.props.strings['brief']}
-					</p>
-					<Panel
-						bsStyle="primary"
+				<div style={
+					{
+						minHeight: "100vh"
+					}
+				}>
+					<div
+						style={styles.page}
 					>
-						<Panel.Heading>
-							{this.props.strings['bundled-packages']}
-						</Panel.Heading>
-						<Panel.Body>
-							<div
-								style={styles.hyperlink}
-							>
-								<a
-									href='https://github.com/pkcwong/meteor-react-starter'
-								>
-									{this.props.strings['github'] + '\t'}
-									<Glyphicon
-										glyph='new-window'
-									/>
-								</a>
-							</div>
-							<p>
-								{this.props.strings['list-libraries']}
-							</p>
-							<ListGroupItem>
-								{this.props.strings['meteor']}
-							</ListGroupItem>
-							<ListGroupItem>
-								{this.props.strings['react-meteor-data']}
-							</ListGroupItem>
-							<ListGroupItem>
-								{this.props.strings['restivus']}
-							</ListGroupItem>
-							<ListGroupItem>
-								{this.props.strings['bootstrap']}
-							</ListGroupItem>
-							<ListGroupItem>
-								{this.props.strings['redux']}
-							</ListGroupItem>
-						</Panel.Body>
-					</Panel>
-					<Panel
-						bsStyle="success"
-					>
-						<Panel.Heading>
-							{this.props.strings['users-collection']}
-						</Panel.Heading>
-						<Panel.Body>
-							<p>
-								{this.props.strings['demo-documents']}
-							</p>
-							<ListGroup>
+						<div style={
+							{
+								display: "flex",
+								flexDirection: "row",
+							}
+						}>
+							<div style={
 								{
-									this.props.Meteor.collection.users.map((item, index) => {
-										return (
-											<React.Fragment
-												key={index}
-											>
-												<ListGroupItem>
-													{JSON.stringify(item)}
-												</ListGroupItem>
-											</React.Fragment>
-										)
-									})
+									flexGrow: "1"
 								}
-							</ListGroup>
-						</Panel.Body>
-					</Panel>
-					<Panel
-						bsStyle="success"
-					>
-						<Panel.Heading>
-							{this.props.strings['http-rest']}
-						</Panel.Heading>
-						<Panel.Body>
-							<p>
-								{this.props.strings['demo-rest']}
-							</p>
-							<ListGroup>
-								<ListGroupItem
-									onClick={() => {
-										window.location = '/api/meteor'
-									}}
-								>
-									<Glyphicon
-										glyph='send'
-									/>
-									{'\t' + this.props.strings['version']}
-								</ListGroupItem>
-							</ListGroup>
-						</Panel.Body>
-					</Panel>
+							}>
+								<h1>
+									{this.props.strings['welcome']}
+								</h1>
+							</div>
+							<div>
+
+							</div>
+							<Button bsStyle="success" style={
+								{
+									marginTop: "2vh",
+									height: "5vh"
+								}
+							} onClick={
+								() => {
+									FlowRouter.go('/login');
+								}
+							}>
+								{this.props.strings['login_txt']}
+							</Button>
+						</div>
+						<p>
+							{this.props.strings['brief']}
+						</p>
+						<div
+							style={styles.hyperlink}
+						>
+							<a
+								href='https://github.com/pkcwong/backstabber'
+							>
+								{this.props.strings['github'] + '\t'}
+								<Glyphicon
+									glyph='new-window'
+								/>
+							</a>
+						</div>
+					</div>
 				</div>
 			</React.Fragment>
 		);
 	}
-
-	componentDidMount() {
-		this.props.dispatch(LocaleAction.set('en'));
-	}
-
 }
 
 const Tracker = withTracker(() => {
