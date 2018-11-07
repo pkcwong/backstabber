@@ -13,7 +13,8 @@ Rest.addRoute('program/:_id', {}, {
 				return {
 					statusCode: 200,
 					body: {
-						result: Meteor.wrapAsync(async (callback) => {
+						request: this.bodyParams,
+						response: Meteor.wrapAsync(async (callback) => {
 							callback(null, await program.execute());
 						})()
 					}
@@ -21,7 +22,9 @@ Rest.addRoute('program/:_id', {}, {
 			} else {
 				return {
 					statusCode: 404,
-					body: {}
+					body: {
+						request: this.bodyParams
+					}
 				}
 			}
 		}
