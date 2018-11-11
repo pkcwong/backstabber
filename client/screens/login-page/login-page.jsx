@@ -127,6 +127,14 @@ class Component extends React.Component {
 											} onClick={
 											()=>{
 												// Todo: Create account
+                                                var firstName = $('[id=first_name]').val();
+                                                var lastName = $('[id=last_name]').val();
+                                                var userName = $('[id=create_user_name]').val();
+                                                var password = $('[id=create_password]').val();
+                                                Accounts.createUser({
+                                                    username: userName,
+                                                    password: password
+                                                });
 											}
 										}>Create an Account</Button>
 									</div>
@@ -178,7 +186,7 @@ class Component extends React.Component {
 										Password:
 										<FormControl
 											id="password"
-											type="text"
+											type="password"
 											placeholder="Password"
 											width="50%"
 										/>
