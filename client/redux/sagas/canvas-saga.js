@@ -41,7 +41,11 @@ export const CanvasSaga = function* () {
 				program: action['payload']['program'],
 				canvas: action['payload']['canvas']
 			});
-			yield put(CanvasAction.load(res));
+			yield call((payload) => {
+				action.callback(payload);
+			}, {
+				_id: res
+			});
 		} catch (err) {
 			console.error(err);
 		}
