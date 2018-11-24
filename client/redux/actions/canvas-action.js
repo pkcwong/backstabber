@@ -4,6 +4,7 @@ export class CanvasAction {
 	static ADD_NODE = 'Canvas/ADD_NODE';
 	static ADD_LINK = 'Canvas/ADD_LINK';
 	static LOAD = 'Canvas/LOAD';
+	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
 
 	/**
@@ -45,21 +46,34 @@ export class CanvasAction {
 			payload: {
 				_id: _id
 			}
-		}
+		};
+	};
+
+	static _LOAD_COMPLETE = (sketch) => {
+		return {
+			type: CanvasAction.LOAD_COMPLETE,
+			payload: {
+				meta: sketch['meta'],
+				program: sketch['program'],
+				canvas: sketch['canvas'],
+				tokens: sketch['tokens'],
+				logs: sketch['logs']
+			}
+		};
 	};
 
 	/**
 	 * Stores a new sketch into database
 	 * @param program
-	 * @param position
+	 * @param canvas
 	 * @returns {{type: string, payload: {program: *, position: *}}}
 	 */
-	static create = (program, position) => {
+	static create = (program, canvas) => {
 		return {
 			type: CanvasAction.CREATE,
 			payload: {
 				program: program.serialize(),
-				position: position
+				canvas: canvas
 			}
 		};
 	};
