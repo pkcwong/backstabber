@@ -76,7 +76,7 @@ export class Program {
 				NullNode,
 				ReturnNode,
 				StringNode,
-				BoolNode
+				BoolNode,
 				NumberNode
 			};
 			let node = new constructor[current.class](...Object.keys(current.args).map((key) => {
