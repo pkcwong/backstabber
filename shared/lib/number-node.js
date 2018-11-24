@@ -5,7 +5,7 @@ import { BasicNode } from "./basic-node";
  */
 export class NumberNode extends BasicNode {
 
-    constructor(string) {
+    constructor(number) {
         super({
             cache: {
                 class: NumberNode.name,
