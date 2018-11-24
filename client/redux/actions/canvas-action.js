@@ -1,18 +1,24 @@
 export class CanvasAction {
 
+	static RESET = 'Canvas/RESET';
+	static ADD_NODE = 'Canvas/ADD_NODE';
+	static ADD_LINK = 'Canvas/ADD_LINK';
+	static LOAD = 'Canvas/LOAD';
+	static CREATE = 'Canvas/CREATE';
+
 	/**
 	 * Resets the canvas
 	 * @returns {{type: string}}
 	 */
 	static reset = () => {
 		return {
-			type: 'Canvas/RESET'
+			type: CanvasAction.RESET
 		};
 	};
 
 	static addNode = (node) => {
 		return {
-			type: 'Canvas/ADD_NODE',
+			type: CanvasAction.ADD_NODE,
 			payload: {
 				node: node
 			}
@@ -21,11 +27,25 @@ export class CanvasAction {
 
 	static addLink = (link) => {
 		return {
-			type: 'Canvas/ADD_LINK',
+			type: CanvasAction.ADD_LINK,
 			payload: {
 				link: link
 			}
 		};
+	};
+
+	/**
+	 * Loads a sketch from database.
+	 * @param _id
+	 * @returns {{type: string, payload: {_id: *}}}
+	 */
+	static load = (_id) => {
+		return {
+			type: CanvasAction.LOAD,
+			payload: {
+				_id: _id
+			}
+		}
 	};
 
 	/**
@@ -36,7 +56,7 @@ export class CanvasAction {
 	 */
 	static create = (program, position) => {
 		return {
-			type: 'Canvas/CREATE',
+			type: CanvasAction.CREATE,
 			payload: {
 				program: program.serialize(),
 				position: position
