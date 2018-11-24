@@ -7,6 +7,7 @@ import { JsonAssignNode } from "./json-assign-node";
 import { JsonCollapseNode } from "./json-collapse-node";
 import { NullNode } from "./null-node";
 import { StringNode } from "./string-node";
+import { BoolNode } from "./bool-node";
 import { NumberNode } from "./number-node";
 
 /**
@@ -75,6 +76,7 @@ export class Program {
 				NullNode,
 				ReturnNode,
 				StringNode,
+				BoolNode,
 				NumberNode
 			};
 			let node = new constructor[current.class](...Object.keys(current.args).map((key) => {
