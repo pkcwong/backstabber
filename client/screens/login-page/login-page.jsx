@@ -52,6 +52,7 @@ class Component extends React.Component {
 								Create Account
 							</div>
 							<div>
+
 								<Form>
 									<div style={
 										{
@@ -119,24 +120,29 @@ class Component extends React.Component {
 											paddingTop: "5%"
 										}
 									}>
-										<Button
-											style={
-												{
+                                        <Button
+                                            style={
+                                                {
 
-												}
-											} onClick={
-											()=>{
-												// Todo: Create account
+                                                }
+                                            } onClick={
+                                            ()=>{
+                                                // Todo: Create account
                                                 var firstName = $('[id=first_name]').val();
                                                 var lastName = $('[id=last_name]').val();
                                                 var userName = $('[id=create_user_name]').val();
                                                 var password = $('[id=create_password]').val();
                                                 Accounts.createUser({
                                                     username: userName,
-                                                    password: password
+                                                    password: password,
+                                                    profile: {
+                                                        firstname: firstName,
+                                                        lastname: lastName
+                                                    }
+                                                }, (callback)=>{
                                                 });
-											}
-										}>Create an Account</Button>
+                                            }
+                                        }>Create an Account</Button>
 									</div>
 								</Form>
 							</div>
