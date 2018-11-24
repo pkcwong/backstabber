@@ -7,6 +7,7 @@ import { JsonAssignNode } from "./json-assign-node";
 import { JsonCollapseNode } from "./json-collapse-node";
 import { NullNode } from "./null-node";
 import { StringNode } from "./string-node";
+import { BoolNode } from "./bool-node";
 
 /**
  * A program is a array of BasicNode
@@ -73,7 +74,8 @@ export class Program {
 				JsonCollapseNode,
 				NullNode,
 				ReturnNode,
-				StringNode
+				StringNode,
+				BoolNode
 			};
 			let node = new constructor[current.class](...Object.keys(current.args).map((key) => {
 				return current.args[key];
