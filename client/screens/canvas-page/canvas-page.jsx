@@ -95,6 +95,27 @@ class Component extends React.Component {
 						}>
 							<TrayItemWidget model={{ type: 'Entry' }} name="Entry" color="Green"/>
 							<TrayItemWidget model={{ type: 'String' }} name="String" color="peru"/>
+							{
+								[
+									EntryNode,
+									StringNode,
+									ReturnNode
+								].map((item, index) => {
+									return (
+										<React.Fragment
+											key={index}
+										>
+											<TrayItemWidget
+												model={{
+													type: item.name
+												}}
+												name={item.name}
+												color='Green'
+											/>
+										</React.Fragment>
+									)
+								})
+							}
 						</TrayWidget>
 
 					</div>
@@ -124,7 +145,10 @@ class Component extends React.Component {
 								var points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								this.props.store.dispatch(CanvasAction.addNode(node, EntryNode));
+								// TODO: request user initializations
+								let params = null;
+								this.props.store.dispatch(CanvasAction.addNode(node, EntryNode, params));
+								// TODO: forceUpdate is discouraged
 								this.forceUpdate();
 							}}
 							onDragOver={event => {
