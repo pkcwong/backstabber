@@ -93,8 +93,8 @@ class Component extends React.Component {
 								margin: "10pt"
 							}
 						}>
-							<TrayItemWidget model={{ type: 'in' }} name="Function 1 node" color="peru"/>
-							<TrayItemWidget model={{ type: 'out' }} name="Function 2 node" color="hotpink"/>
+							<TrayItemWidget model={{ type: 'Entry' }} name="Entry" color="Green"/>
+							<TrayItemWidget model={{ type: 'String' }} name="String" color="peru"/>
 						</TrayWidget>
 
 					</div>
@@ -113,19 +113,18 @@ class Component extends React.Component {
 								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let node = null;
 								//console.log(nodesCount);
-								if (data.type === "in") {
-									node = new DefaultNodeModel('Function Node 1');
-									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
+								if (data.type === "Entry") {
+									node = new DefaultNodeModel('Entry');
 									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 								} else {
-									node = new DefaultNodeModel('Function Node 2');
+									node = new DefaultNodeModel('String');
 									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
 									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 								}
 								var points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								this.props.store.dispatch(CanvasAction.addNode(node));
+								this.props.store.dispatch(CanvasAction.addNode(node, EntryNode));
 								this.forceUpdate();
 							}}
 							onDragOver={event => {
