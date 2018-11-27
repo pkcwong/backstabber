@@ -11,19 +11,12 @@ export class StringNode extends BasicNode {
 				class: StringNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'String'
-			},
 			props: {
 				string: string
 			},
 			input: {},
 			output: {
-				string: {
-					meta: {
-						label: 'string'
-					}
-				}
+				string: ''
 			},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {

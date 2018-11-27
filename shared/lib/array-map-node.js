@@ -8,28 +8,15 @@ export class ArrayMapNode extends BasicNode {
 				class: ArrayMapNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Array Map'
-			},
 			props: {},
 			input: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				},
-				function: {
-					meta: {
-						label: 'function'
-					}
-				}
+				array: [],
+				function: (() => {
+					return null;
+				})
 			},
 			output: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				}
+				array: []
 			},
 			execute: (props, input) => {
 				return new Promise(async (resolve, reject) => {

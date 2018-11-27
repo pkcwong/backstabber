@@ -11,28 +11,13 @@ export class ArrayPushNode extends BasicNode {
 				class: ArrayPushNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Array Push'
-			},
 			props: {},
 			input: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				},
-				value: {
-					meta: {
-						label: 'value'
-					}
-				}
+				array: [],
+				value: null
 			},
 			output: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				}
+				array: []
 			},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {

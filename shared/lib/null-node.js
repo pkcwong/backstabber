@@ -11,17 +11,10 @@ export class NullNode extends BasicNode {
 				class: NullNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Null'
-			},
 			props: {},
 			input: {},
 			output: {
-				value: {
-					meta: {
-						label: 'value'
-					}
-				}
+				value: null
 			},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {

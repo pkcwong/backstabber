@@ -11,19 +11,12 @@ export class NumberNode extends BasicNode {
                 class: NumberNode.name,
                 args: arguments
             },
-            meta: {
-                label: 'Number'
-            },
             props: {
                 number: number
             },
             input: {},
             output: {
-                number: {
-                    meta: {
-                        label: 'number'
-                    }
-                }
+                number: 0
             },
             execute: (props, input) => {
                 return new Promise((resolve, reject) => {

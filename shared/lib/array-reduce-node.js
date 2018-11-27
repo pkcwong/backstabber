@@ -8,34 +8,16 @@ export class ArrayReduceNode extends BasicNode {
 				class: ArrayReduceNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Array Reduce'
-			},
 			props: {},
 			input: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				},
-				init: {
-					meta: {
-						label: 'init'
-					}
-				},
-				function: {
-					meta: {
-						label: 'function',
-						description: 'A program that accepts two parameters \'accumulator\' and \'current\' and returns a value'
-					}
-				}
+				array: [],
+				init: null,
+				function: (() => {
+					return null;
+				})
 			},
 			output: {
-				result: {
-					meta: {
-						label: 'result'
-					}
-				}
+				result: null
 			},
 			execute: (props, input) => {
 				return new Promise(async (resolve, reject) => {

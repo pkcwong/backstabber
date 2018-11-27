@@ -11,16 +11,9 @@ export class ReturnNode extends BasicNode {
 				class: ReturnNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Return'
-			},
 			props: {},
 			input: {
-				result: {
-					meta: {
-						label: 'result'
-					}
-				}
+				result: null
 			},
 			output: {},
 			execute: (props, input) => {

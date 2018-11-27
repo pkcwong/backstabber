@@ -8,28 +8,13 @@ export class JsonCollapseNode extends BasicNode {
 				class: JsonCollapseNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Json Collapse'
-			},
 			props: {},
 			input: {
-				json: {
-					meta: {
-						label: 'json'
-					}
-				},
-				key: {
-					meta: {
-						label: 'key'
-					}
-				}
+				json: {},
+				key: null
 			},
 			output: {
-				value: {
-					meta: {
-						label: 'value'
-					}
-				}
+				value: null
 			},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {

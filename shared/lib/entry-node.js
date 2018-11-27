@@ -11,17 +11,10 @@ export class EntryNode extends BasicNode {
 				class: EntryNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Entry'
-			},
 			props: props,
 			input: {},
 			output: {
-				props: {
-					meta: {
-						label: 'props'
-					}
-				}
+				props: {}
 			},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {

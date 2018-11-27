@@ -11,33 +11,14 @@ export class JsonAssignNode extends BasicNode {
 				class: JsonAssignNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Json Assign'
-			},
 			props: {},
 			input: {
-				json: {
-					meta: {
-						label: 'json'
-					}
-				},
-				key: {
-					meta: {
-						label: 'key'
-					}
-				},
-				value: {
-					meta: {
-						label: 'value'
-					}
-				}
+				json: {},
+				key: null,
+				value: null
 			},
 			output: {
-				json: {
-					meta: {
-						label: 'json'
-					}
-				}
+				json: {}
 			},
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
