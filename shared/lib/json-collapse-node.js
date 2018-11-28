@@ -2,6 +2,17 @@ import { BasicNode } from "./basic-node";
 
 export class JsonCollapseNode extends BasicNode {
 
+
+	static ports = {
+		input: {
+			json: {},
+			key: null
+		},
+		output: {
+			value: null
+		}
+	};
+
 	constructor() {
 		super({
 			cache: {
@@ -9,13 +20,7 @@ export class JsonCollapseNode extends BasicNode {
 				args: arguments
 			},
 			props: {},
-			input: {
-				json: {},
-				key: null
-			},
-			output: {
-				value: null
-			},
+			...JsonCollapseNode.ports,
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					resolve({

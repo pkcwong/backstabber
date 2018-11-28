@@ -2,6 +2,19 @@ import { BasicNode } from "./basic-node";
 
 export class ArrayReduceNode extends BasicNode {
 
+	static ports = {
+		input: {
+			array: [],
+			init: null,
+			function: (() => {
+				return null;
+			})
+		},
+		output: {
+			result: null
+		}
+	};
+
 	constructor() {
 		super({
 			cache: {
@@ -9,16 +22,7 @@ export class ArrayReduceNode extends BasicNode {
 				args: arguments
 			},
 			props: {},
-			input: {
-				array: [],
-				init: null,
-				function: (() => {
-					return null;
-				})
-			},
-			output: {
-				result: null
-			},
+			...ArrayReduceNode.ports,
 			execute: (props, input) => {
 				return new Promise(async (resolve, reject) => {
 					let result = input['init'];

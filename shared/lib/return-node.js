@@ -5,6 +5,13 @@ import { BasicNode } from "./basic-node";
  */
 export class ReturnNode extends BasicNode {
 
+	static ports = {
+		input: {
+			result: null
+		},
+		output: {}
+	};
+
 	constructor() {
 		super({
 			cache: {
@@ -12,10 +19,7 @@ export class ReturnNode extends BasicNode {
 				args: arguments
 			},
 			props: {},
-			input: {
-				result: null
-			},
-			output: {},
+			...ReturnNode.ports,
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					resolve(null);

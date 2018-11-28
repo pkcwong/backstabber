@@ -5,6 +5,16 @@ import { BasicNode } from "./basic-node";
  */
 export class ArrayPushNode extends BasicNode {
 
+	static ports = {
+		input: {
+			array: [],
+			value: null
+		},
+		output: {
+			array: []
+		}
+	};
+
 	constructor() {
 		super({
 			cache: {
@@ -12,13 +22,7 @@ export class ArrayPushNode extends BasicNode {
 				args: arguments
 			},
 			props: {},
-			input: {
-				array: [],
-				value: null
-			},
-			output: {
-				array: []
-			},
+			...ArrayPushNode.ports,
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					if (input['array'] !== null) {

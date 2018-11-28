@@ -5,6 +5,18 @@ import { BasicNode } from "./basic-node";
  */
 export class JsonAssignNode extends BasicNode {
 
+
+	static ports = {
+		input: {
+			json: {},
+			key: null,
+			value: null
+		},
+		output: {
+			json: {}
+		}
+	};
+
 	constructor() {
 		super({
 			cache: {
@@ -12,14 +24,7 @@ export class JsonAssignNode extends BasicNode {
 				args: arguments
 			},
 			props: {},
-			input: {
-				json: {},
-				key: null,
-				value: null
-			},
-			output: {
-				json: {}
-			},
+			...JsonAssignNode.ports,
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					if (input['json'] !== null) {

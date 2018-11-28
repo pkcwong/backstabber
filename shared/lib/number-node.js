@@ -5,27 +5,31 @@ import { BasicNode } from "./basic-node";
  */
 export class NumberNode extends BasicNode {
 
-    constructor(number) {
-        super({
-            cache: {
-                class: NumberNode.name,
-                args: arguments
-            },
-            props: {
-                number: number
-            },
-            input: {},
-            output: {
-                number: 0
-            },
-            execute: (props, input) => {
-                return new Promise((resolve, reject) => {
-                    resolve({
-                        number: props['number']
-                    });
-                });
-            }
-        });
-    }
+	static ports = {
+		input: {},
+		output: {
+			number: 0
+		}
+	};
+
+	constructor(number) {
+		super({
+			cache: {
+				class: NumberNode.name,
+				args: arguments
+			},
+			props: {
+				number: number
+			},
+			...NumberNode.ports,
+			execute: (props, input) => {
+				return new Promise((resolve, reject) => {
+					resolve({
+						number: props['number']
+					});
+				});
+			}
+		});
+	}
 
 }

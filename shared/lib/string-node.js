@@ -5,6 +5,13 @@ import { BasicNode } from "./basic-node";
  */
 export class StringNode extends BasicNode {
 
+	static ports = {
+		input: {},
+		output: {
+			string: ''
+		}
+	};
+
 	constructor(string) {
 		super({
 			cache: {
@@ -14,10 +21,7 @@ export class StringNode extends BasicNode {
 			props: {
 				string: string
 			},
-			input: {},
-			output: {
-				string: ''
-			},
+			...StringNode.ports,
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					resolve({

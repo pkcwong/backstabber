@@ -5,6 +5,13 @@ import { BasicNode } from "./basic-node";
  */
 export class BoolNode extends BasicNode {
 
+	static ports = {
+		input: {},
+		output: {
+			bool: false
+		}
+	};
+
 	constructor(bool) {
 		super({
 			cache: {
@@ -14,10 +21,7 @@ export class BoolNode extends BasicNode {
 			props: {
 				bool: bool
 			},
-			input: {},
-			output: {
-				bool: false
-			},
+			...BoolNode.ports,
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					resolve({
