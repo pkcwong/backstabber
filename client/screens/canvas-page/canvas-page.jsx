@@ -101,6 +101,7 @@ class Component extends React.Component {
 									StringNode,
 									ReturnNode
 								].map((item, index) => {
+									console.log(item.name);
 									return (
 										<React.Fragment
 											key={index}
@@ -134,11 +135,14 @@ class Component extends React.Component {
 								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let node = null;
 								//console.log(nodesCount);
-								if (data.type === "Entry") {
+								if (data.type === EntryNode.name) {
 									node = new DefaultNodeModel('Entry');
-									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
-								} else {
+									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
+								} else if (data.type === StringNode.name) {
 									node = new DefaultNodeModel('String');
+									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
+								} else if (data.type === ReturnNode.name) {
+									node = new DefaultNodeModel('Return');
 									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
 									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 								}
