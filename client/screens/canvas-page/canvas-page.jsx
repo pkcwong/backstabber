@@ -93,25 +93,24 @@ class Component extends React.Component {
 								margin: "10pt"
 							}
 						}>
-							<TrayItemWidget model={{ type: 'Entry' }} name="Entry" color="Green"/>
-							<TrayItemWidget model={{ type: 'String' }} name="String" color="peru"/>
 							{
 								[
 									EntryNode,
 									StringNode,
 									ReturnNode
 								].map((item, index) => {
-									console.log(item.name);
+									console.log(item);
 									return (
 										<React.Fragment
 											key={index}
 										>
 											<TrayItemWidget
 												model={{
-													type: item.name
+													type: item.name,
+
 												}}
 												name={item.name}
-												color='Green'
+												color='peru'
 											/>
 										</React.Fragment>
 									)
@@ -134,6 +133,7 @@ class Component extends React.Component {
 								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
 								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let node = null;
+								console.log(data);
 								//console.log(nodesCount);
 								if (data.type === EntryNode.name) {
 									node = new DefaultNodeModel('Entry');
