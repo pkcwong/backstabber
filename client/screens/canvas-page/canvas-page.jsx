@@ -93,8 +93,29 @@ class Component extends React.Component {
 								margin: "10pt"
 							}
 						}>
-							<TrayItemWidget model={{ type: 'in' }} name="Function 1 node" color="peru"/>
-							<TrayItemWidget model={{ type: 'out' }} name="Function 2 node" color="hotpink"/>
+							{
+								[
+									EntryNode,
+									StringNode,
+									ReturnNode
+								].map((item, index) => {
+									console.log(item);
+									return (
+										<React.Fragment
+											key={index}
+										>
+											<TrayItemWidget
+												model={{
+													type: item.name,
+
+												}}
+												name={item.name}
+												color='peru'
+											/>
+										</React.Fragment>
+									)
+								})
+							}
 						</TrayWidget>
 
 					</div>
@@ -112,20 +133,26 @@ class Component extends React.Component {
 								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
 								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let node = null;
+								console.log(data);
 								//console.log(nodesCount);
-								if (data.type === "in") {
-									node = new DefaultNodeModel('Function Node 1');
-									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
-									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
-								} else {
-									node = new DefaultNodeModel('Function Node 2');
+								if (data.type === EntryNode.name) {
+									node = new DefaultNodeModel('Entry');
+									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
+								} else if (data.type === StringNode.name) {
+									node = new DefaultNodeModel('String');
+									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
+								} else if (data.type === ReturnNode.name) {
+									node = new DefaultNodeModel('Return');
 									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
 									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
 								}
 								var points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								this.props.store.dispatch(CanvasAction.addNode(node));
+								// TODO: request user initializations
+								let params = null;
+								this.props.store.dispatch(CanvasAction.addNode(node, EntryNode, params));
+								// TODO: forceUpdate is discouraged
 								this.forceUpdate();
 							}}
 							onDragOver={event => {

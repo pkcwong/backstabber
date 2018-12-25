@@ -5,35 +5,24 @@ import { BasicNode } from "./basic-node";
  */
 export class ArrayPushNode extends BasicNode {
 
+	static ports = {
+		input: {
+			array: [],
+			value: null
+		},
+		output: {
+			array: []
+		}
+	};
+
 	constructor() {
 		super({
 			cache: {
 				class: ArrayPushNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Array Push'
-			},
 			props: {},
-			input: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				},
-				value: {
-					meta: {
-						label: 'value'
-					}
-				}
-			},
-			output: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				}
-			},
+			...ArrayPushNode.ports,
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					if (input['array'] !== null) {
