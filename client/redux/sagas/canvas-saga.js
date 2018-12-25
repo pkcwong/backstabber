@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { sketches_db } from "../../../shared/collections/sketches";
 import { CanvasAction } from "../actions/canvas-action";
+import { sketches_db } from "/shared/collections/sketches";
 
 export const CanvasSaga = function* () {
 	yield takeLatest(CanvasAction.LOAD, function* (action) {
