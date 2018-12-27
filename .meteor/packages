@@ -19,7 +19,6 @@ shell-server@0.4.0            # Server-side component of the `meteor shell` comm
 kadira:flow-router
 react-meteor-data
 accounts-password@1.5.1
-nimble:restivus
 juliancwirko:postcss
 less@2.8.0
 jquery
