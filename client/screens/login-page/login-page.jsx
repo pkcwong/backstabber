@@ -224,7 +224,7 @@ class Component extends React.Component {
 												// Todo: Remember Me function
 												Meteor.loginWithPassword($("#username").val(), $("#password").val(), (error)=>{
 													if(error){
-														alert("Username does not exist or wrong password")
+														alert("Usern`ame does not exist or wrong password")
 													}
 												});
 											}

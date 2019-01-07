@@ -1,9 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { sketches_db } from "../../../shared/collections/sketches";
+import { CanvasAction } from "../actions/canvas-action";
+import { sketches_db } from "/shared/collections/sketches";
 
 export const CanvasSaga = function* () {
-	yield takeLatest('Canvas/LOAD', function* (action) {
+	yield takeLatest(CanvasAction.LOAD, function* (action) {
 		try {
 			let res = yield call((payload) => {
 				return new Promise((resolve, reject) => {
@@ -15,28 +16,19 @@ export const CanvasSaga = function* () {
 				_id: action['payload']['_id']
 			});
 			if (res !== undefined) {
-				yield put({
-					type: 'Canvas/LOAD-COMPLETE',
-					payload: {
-						meta: res['meta'],
-						program: res['program'],
-						position: res['position'],
-						tokens: res['tokens'],
-						logs: res['logs']
-					}
-				});
+				yield put(CanvasAction._LOAD_COMPLETE(res));
 			}
 		} catch (err) {
 			console.error(err);
 		}
 	});
-	yield takeLatest('Canvas/CREATE', function* (action) {
+	yield takeLatest(CanvasAction.CREATE, function* (action) {
 		try {
 			let res = yield call((payload) => {
 				return new Promise((resolve, reject) => {
 					Meteor.call('Sketches/CREATE', {
 						program: payload['program'],
-						position: payload['position']
+						canvas: payload['canvas']
 					}, (err, res) => {
 						if (!err) {
 							resolve(res);
@@ -47,13 +39,12 @@ export const CanvasSaga = function* () {
 				});
 			}, {
 				program: action['payload']['program'],
-				position: action['payload']['position']
+				canvas: action['payload']['canvas']
 			});
-			yield put({
-				type: 'Canvas/LOAD',
-				payload: {
-					_id: res
-				}
+			yield call((payload) => {
+				action.callback(payload);
+			}, {
+				_id: res
 			});
 		} catch (err) {
 			console.error(err);

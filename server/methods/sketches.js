@@ -9,7 +9,7 @@ Meteor.methods({
 				owner: Meteor.userId(),
 				meta: {},
 				program: json['program'],
-				position: json['position'],
+				canvas: json['canvas'],
 				tokens: [],
 				logs: []
 			}));

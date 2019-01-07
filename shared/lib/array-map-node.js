@@ -2,35 +2,26 @@ import { BasicNode } from "./basic-node";
 
 export class ArrayMapNode extends BasicNode {
 
+	static ports = {
+		input: {
+			array: [],
+			function: (() => {
+				return null;
+			})
+		},
+		output: {
+			array: []
+		}
+	};
+
 	constructor() {
 		super({
 			cache: {
 				class: ArrayMapNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Array Map'
-			},
 			props: {},
-			input: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				},
-				function: {
-					meta: {
-						label: 'function'
-					}
-				}
-			},
-			output: {
-				array: {
-					meta: {
-						label: 'array'
-					}
-				}
-			},
+			...ArrayMapNode.ports,
 			execute: (props, input) => {
 				return new Promise(async (resolve, reject) => {
 					let result = [];

@@ -73,6 +73,7 @@ class Component extends React.Component {
 			</React.Fragment>
 		);
 	}
+
 }
 
 const Tracker = withTracker(() => {

@@ -1,25 +1,30 @@
+import { CanvasAction } from "../actions/canvas-action";
+
 const initialState = {
 	nodes: [],
-	links: []
+	links: [],
+	backstabber: []
 };
 
 export const CanvasReducer = (state = initialState, action) => {
 	switch (action['type']) {
-		case 'Canvas/RESET': {
+		case CanvasAction.RESET: {
 			return initialState;
 		}
-		case 'Canvas/ADD_NODE': {
+		case CanvasAction.ADD_NODE: {
 			return Object.assign({}, state, {
-				nodes: [...state.nodes, action['payload']['node']]
+				nodes: [...state.nodes, action['payload']['node']],
+				backstabber: [...state.backstabber, action['payload']['backstabber']]
 			});
 		}
-		case 'Canvas/ADD_LINK': {
+		case CanvasAction.ADD_LINK: {
 			return Object.assign({}, state, {
 				links: [...state.links, action['payload']['link']]
 			});
 		}
-		case 'Canvas/LOAD-COMPLETE': {
-			// TODO parse into react diagram nodes
+		case CanvasAction.LOAD_COMPLETE: {
+			// TODO: parse into react diagram nodes
+			const sketch = action['payload'];
 			return state;
 		}
 		default: {

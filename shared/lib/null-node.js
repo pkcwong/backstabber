@@ -5,24 +5,21 @@ import { BasicNode } from "./basic-node";
  */
 export class NullNode extends BasicNode {
 
+	static ports = {
+		input: {},
+		output: {
+			value: null
+		}
+	};
+
 	constructor() {
 		super({
 			cache: {
 				class: NullNode.name,
 				args: arguments
 			},
-			meta: {
-				label: 'Null'
-			},
 			props: {},
-			input: {},
-			output: {
-				value: {
-					meta: {
-						label: 'value'
-					}
-				}
-			},
+			...NullNode.ports,
 			execute: (props, input) => {
 				return new Promise((resolve, reject) => {
 					resolve({
