@@ -25,6 +25,12 @@ import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
 import { sketches_db } from "../../../shared/collections/sketches";
+import { BasicNode } from "../../../shared/lib/basic-node";
+import { ArrayMapNode } from "../../../shared/lib/array-map-node";
+import { ArrayPushNode } from "../../../shared/lib/array-push-node";
+import { ArrayReduceNode } from "../../../shared/lib/array-reduce-node";
+import { BoolNode } from "../../../shared/lib/bool-node";
+import { NumberNode } from "../../../shared/lib/number-node";
 
 class Component extends React.Component {
 
@@ -33,6 +39,42 @@ class Component extends React.Component {
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
+		this.nodeType = {
+			"StringNode": ()=>{
+				return new StringNode()
+			},
+			"EntryNode": ()=>{
+				return new EntryNode()
+			},
+			"ReturnNode": ()=>{
+				return new ReturnNode()
+			},
+			"ArrayMapNode": ()=>{
+				return new ArrayMapNode()
+			},
+			"ArrayPushNode": ()=>{
+				return new ArrayPushNode()
+			},
+			"ArrayReduceNode": ()=>{
+				return new ArrayReduceNode()
+			},
+			"BoolNode": ()=>{
+				return new BoolNode()
+			},
+			"JsonAssignNode": ()=> {
+				return new JsonAssignNode()
+			},
+			"JsonCollapseNode": ()=> {
+				return new JsonCollapseNode()
+			},
+			"NullNode": ()=> {
+				return new NullNode()
+			},
+			"NumberNode": ()=> {
+				return new NumberNode()
+			},
+		};
+
 	}
 
 	render() {
@@ -85,6 +127,7 @@ class Component extends React.Component {
 							background: "#22313F",
 							// borderColor: "white",
 							borderStyle: "solid",
+							overflowY: "scroll"
 							// borderWidth: "1vh"
 						}
 					}>
@@ -97,9 +140,18 @@ class Component extends React.Component {
 								[
 									EntryNode,
 									StringNode,
-									ReturnNode
+									ReturnNode,
+									ArrayMapNode,
+									ArrayPushNode,
+									ArrayReduceNode,
+									BoolNode,
+									JsonAssignNode,
+									JsonCollapseNode,
+									NullNode,
+									NumberNode,
+									ReturnNode,
+									StringNode
 								].map((item, index) => {
-									console.log(item);
 									return (
 										<React.Fragment
 											key={index}
@@ -132,27 +184,25 @@ class Component extends React.Component {
 							onDrop={event => {
 								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
 								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
-								let node = null;
-								console.log(data);
 								//console.log(nodesCount);
-								if (data.type === EntryNode.name) {
-									node = new DefaultNodeModel('Entry');
-									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
-								} else if (data.type === StringNode.name) {
-									node = new DefaultNodeModel('String');
-									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
-								} else if (data.type === ReturnNode.name) {
-									node = new DefaultNodeModel('Return');
-									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
-									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
+								let nodeType = this.nodeType[data.type]();
+								let node = new DefaultNodeModel(data.type);
+
+								for(let key in nodeType.args.input){
+									console.log(key);
+									node.addPort(new DefaultPortModel(true, key));
 								}
-								var points = this.engine.getRelativeMousePoint(event);
+								for(let key in nodeType.args.output){
+									console.log(key);
+									node.addPort(new DefaultPortModel(false, key));
+								}
+								let points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								// TODO: request user initializations
+								// // TODO: request user initializations
 								let params = null;
 								this.props.store.dispatch(CanvasAction.addNode(node, EntryNode, params));
-								// TODO: forceUpdate is discouraged
+								// // TODO: forceUpdate is discouraged
 								this.forceUpdate();
 							}}
 							onDragOver={event => {
