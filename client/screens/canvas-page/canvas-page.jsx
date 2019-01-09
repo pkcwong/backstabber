@@ -40,39 +40,17 @@ class Component extends React.Component {
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
 		this.nodeType = {
-			"StringNode": ()=>{
-				return new StringNode()
-			},
-			"EntryNode": ()=>{
-				return new EntryNode()
-			},
-			"ReturnNode": ()=>{
-				return new ReturnNode()
-			},
-			"ArrayMapNode": ()=>{
-				return new ArrayMapNode()
-			},
-			"ArrayPushNode": ()=>{
-				return new ArrayPushNode()
-			},
-			"ArrayReduceNode": ()=>{
-				return new ArrayReduceNode()
-			},
-			"BoolNode": ()=>{
-				return new BoolNode()
-			},
-			"JsonAssignNode": ()=> {
-				return new JsonAssignNode()
-			},
-			"JsonCollapseNode": ()=> {
-				return new JsonCollapseNode()
-			},
-			"NullNode": ()=> {
-				return new NullNode()
-			},
-			"NumberNode": ()=> {
-				return new NumberNode()
-			},
+			"StringNode": StringNode,
+			"EntryNode": EntryNode,
+			"ReturnNode": ReturnNode,
+			"ArrayMapNode": ArrayMapNode,
+			"ArrayPushNode": ArrayPushNode,
+			"ArrayReduceNode": ArrayReduceNode,
+			"BoolNode": BoolNode,
+			"JsonAssignNode": JsonAssignNode,
+			"JsonCollapseNode": JsonCollapseNode,
+			"NullNode": NullNode,
+			"NumberNode": NumberNode,
 		};
 
 	}
@@ -141,16 +119,14 @@ class Component extends React.Component {
 									EntryNode,
 									StringNode,
 									ReturnNode,
-									ArrayMapNode,
-									ArrayPushNode,
-									ArrayReduceNode,
-									BoolNode,
-									JsonAssignNode,
-									JsonCollapseNode,
-									NullNode,
-									NumberNode,
-									ReturnNode,
-									StringNode
+									// ArrayMapNode,
+									// ArrayPushNode,
+									// ArrayReduceNode,
+									// BoolNode,
+									// JsonAssignNode,
+									// JsonCollapseNode,
+									// NullNode,
+									// NumberNode,
 								].map((item, index) => {
 									return (
 										<React.Fragment
@@ -185,17 +161,17 @@ class Component extends React.Component {
 								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
 								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								//console.log(nodesCount);
-								let nodeType = this.nodeType[data.type]();
+								let NodeType = this.nodeType[data.type];
 								let node = new DefaultNodeModel(data.type);
 
-								for(let key in nodeType.args.input){
-									console.log(key);
-									node.addPort(new DefaultPortModel(true, key));
-								}
-								for(let key in nodeType.args.output){
-									console.log(key);
-									node.addPort(new DefaultPortModel(false, key));
-								}
+								// for(let key in NodeParam.args.input){
+								// 	console.log(key);
+								// 	node.addPort(new DefaultPortModel(true, key));
+								// }
+								// for(let key in NodeParam.args.output){
+								// 	console.log(key);
+								// 	node.addPort(new DefaultPortModel(false, key));
+								// }
 								let points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
