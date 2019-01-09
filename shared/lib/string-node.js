@@ -1,34 +1,30 @@
 import { BasicNode } from "./basic-node";
 
-/**
- * A constant node that outputs a string based on prop.
- */
 export class StringNode extends BasicNode {
 
+	static props = {
+		string: ''
+	};
+
 	static ports = {
-		input: {},
-		output: {
+		inputs: {},
+		outputs: {
 			string: ''
 		}
 	};
 
-	constructor(string) {
+	static executor = (props = StringNode.props, input = StringNode.ports.inputs) => {
+		return new Promise((resolve, reject) => {
+			resolve({
+				string: props['string']
+			});
+		});
+	};
+
+	constructor(props = StringNode.props) {
 		super({
-			cache: {
-				class: StringNode.name,
-				args: arguments
-			},
-			props: {
-				string: string
-			},
-			...StringNode.ports,
-			execute: (props, input) => {
-				return new Promise((resolve, reject) => {
-					resolve({
-						string: props['string']
-					});
-				});
-			}
+			class: StringNode,
+			props: props
 		});
 	}
 
