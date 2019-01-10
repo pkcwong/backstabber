@@ -1,42 +1,37 @@
 import { BasicNode } from "./basic-node";
 
-/**
- * Return point of a program.
- */
 export class ReturnNode extends BasicNode {
 
+	static props = {};
+
 	static ports = {
-		input: {
-			result: null
+		inputs: {
+			result: {}
 		},
-		output: {}
+		outputs: {}
 	};
 
-	constructor() {
-		super({
-			cache: {
-				class: ReturnNode.name,
-				args: arguments
-			},
-			props: {},
-			...ReturnNode.ports,
-			execute: (props, input) => {
-				return new Promise((resolve, reject) => {
-					resolve(null);
-				});
-			}
+	static executor = (props = ReturnNode.props, input = ReturnNode.ports.inputs) => {
+		return new Promise((resolve, reject) => {
+			resolve(null);
 		});
-		this.callback = null;
+	};
+
+	constructor(props = ReturnNode.props) {
+		super({
+			class: ReturnNode,
+			props: props
+		});
 	}
 
 	registerCallback(callback) {
 		this.callback = () => {
-			callback(this.instance.input.result);
+			callback(this.instance.inputs.result);
 		}
 	}
 
 	execute() {
-		this.callback(this.instance.input.result);
+		this.callback();
 	}
 
 }
