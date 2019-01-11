@@ -1,33 +1,28 @@
 import { BasicNode } from "./basic-node";
 
-/**
- * Entry of a program.
- */
 export class EntryNode extends BasicNode {
 
+	static props = {};
 
 	static ports = {
-		input: {},
-		output: {
+		inputs: {},
+		outputs: {
 			props: {}
 		}
 	};
 
-	constructor(props = {}) {
+	static executor = (props = EntryNode.props, input = EntryNode.ports.inputs) => {
+		return new Promise((resolve, reject) => {
+			resolve({
+				props: props
+			});
+		});
+	};
+
+	constructor(props = EntryNode.props) {
 		super({
-			cache: {
-				class: EntryNode.name,
-				args: arguments
-			},
-			props: props,
-			...EntryNode.ports,
-			execute: (props, input) => {
-				return new Promise((resolve, reject) => {
-					resolve({
-						props: props
-					});
-				});
-			}
+			class: EntryNode,
+			props: props
 		});
 	}
 

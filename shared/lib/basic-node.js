@@ -1,47 +1,36 @@
 import { ObjectID } from 'bson';
 
-/**
- * A BasicNode represents one command of a program.
- */
 export class BasicNode {
 
 	constructor(args) {
-		this.args = args;
-		this.reset();
-		this.observers = [];
 		this._id = new ObjectID().toHexString();
+		this.class = args['class'];
+		this.setProps(args['props']);
+		this.observers = [];
+		this.reset();
 	}
 
-	/**
-	 * Resets the Node to initial state.
-	 */
 	reset() {
 		this.instance = {
-			cache: this.args.cache,
-			props: this.args.props,
-			input: Object.keys(this.args.input).reduce((accumulator, current) => {
+			props: Object.assign({}, this.props),
+			inputs: Object.keys(this.class.ports.inputs).reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
 					[current]: undefined
 				});
 			}, {}),
-			execute: this.args.execute,
-			output: Object.keys(this.args.output).reduce((accumulator, current) => {
+			outputs: Object.keys(this.class.ports.outputs).reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
 					[current]: undefined
 				});
 			}, {})
-		};
+		}
 	}
 
-	/**
-	 * Executes the Node and send outputs to observers
-	 * @returns {*}
-	 */
 	execute() {
 		return new Promise((resolve, reject) => {
-			this.instance.execute(this.instance.props, this.instance.input).then((result) => {
-				Object.keys(this.instance.output).forEach((key) => {
-					this.instance.output[key] = result[key];
+			this.class.executor(this.instance.props, this.instance.inputs).then((result) => {
+				Object.keys(this.instance.outputs).forEach((key) => {
+					this.instance.outputs[key] = result[key];
 				});
 				this.observers.forEach((item) => {
 					item.func();
@@ -51,21 +40,6 @@ export class BasicNode {
 		});
 	}
 
-	/**
-	 * Returns the ready state of a Node
-	 * @returns {boolean}
-	 */
-	ready() {
-		return !Object.keys(this.instance.input).some((item) => {
-			return (this.instance.input[item] === undefined);
-		});
-	}
-
-	/**
-	 * Registers an observer
-	 * @param input
-	 * @param output
-	 */
 	sendOnReady(output, input) {
 		this.observers = [
 			...this.observers,
@@ -80,26 +54,26 @@ export class BasicNode {
 		];
 	}
 
-	/**
-	 * Receives data on an input port and executes on ready
-	 * @param port
-	 * @param data
-	 * @param propagate
-	 */
 	receive(port, data, propagate = true) {
-		if (this.instance.input[port] === undefined) {
-			this.instance.input[port] = data;
-			if (propagate && this.ready()) {
+		if (this.instance.inputs[port] === undefined) {
+			this.instance.inputs[port] = data;
+			if (propagate && this.isReady()) {
 				this.execute();
 			}
 		}
 	}
 
-	/**
-	 * Gets a setter function for a Node's input port
-	 * @param port
-	 * @returns {Function}
-	 */
+	isReady() {
+		return !Object.keys(this.instance.inputs).some((item) => {
+			return (this.instance.inputs[item] === undefined);
+		});
+	}
+
+	setProps(props) {
+		this.props = props;
+		this.reset();
+	}
+
 	getInboundPort(port) {
 		return {
 			_id: this._id,
@@ -110,30 +84,21 @@ export class BasicNode {
 		};
 	}
 
-	/**
-	 * Gets a function that returns the value of the output port
-	 * @param port
-	 * @returns {function(): *}
-	 */
 	getOutboundPort(port) {
 		return {
 			_id: this._id,
 			port: port,
 			func: (() => {
-				return this.instance.output[port];
+				return this.instance.outputs[port];
 			})
 		};
 	}
 
-	/**
-	 * Serializes a BasicNode
-	 * @returns {{_id: (string|*), class: *, args: *, observers: {_id: *, port: *}[]}}
-	 */
 	serialize() {
 		return {
 			_id: this._id,
-			class: this.instance.cache.class,
-			args: this.instance.cache.args,
+			class: this.class.name,
+			props: this.props,
 			observers: this.observers.map((item) => {
 				return {
 					_id: item._id,
