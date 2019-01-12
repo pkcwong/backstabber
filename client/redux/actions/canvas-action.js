@@ -17,12 +17,12 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (node, nodeType) => {
+	static addNode = (node, nodeClass) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
 				node: node,
-				backstabber: nodeType
+				nodeClass: nodeClass,
 			}
 		};
 	};

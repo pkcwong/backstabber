@@ -12,23 +12,22 @@ import {
 	DefaultPortModel
 } from 'storm-react-diagrams';
 import { CanvasAction } from "../../redux/actions/canvas-action";
-import { styles } from "./styles";
 import "./srd.css";
 import { StringNode } from "../../../shared/lib/string-node";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
-import { Program } from "../../../shared/lib/program";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
 import { sketches_db } from "../../../shared/collections/sketches";
-import { BasicNode } from "../../../shared/lib/basic-node";
-
 
 class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			nodeParm: []
+		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
@@ -117,14 +116,6 @@ class Component extends React.Component {
 									EntryNode,
 									StringNode,
 									ReturnNode,
-									// ArrayMapNode,
-									// ArrayPushNode,
-									// ArrayReduceNode,
-									// BoolNode,
-									// JsonAssignNode,
-									// JsonCollapseNode,
-									// NullNode,
-									// NumberNode,
 								].map((item, index) => {
 									return (
 										<React.Fragment
@@ -162,7 +153,6 @@ class Component extends React.Component {
 								}
 							}
 							onDrop={event => {
-								// console.log(this.engine.getDiagramModel().getNodes());
 								let data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
 								let nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let nodeType = this.nodeType[data.type]();
@@ -197,11 +187,36 @@ class Component extends React.Component {
 								fontSize: "1.5em",
 								backgroundColor: "grey",
 								minHeight: "30vh",
-								color: "white",
 								padding: "0.5em"
 							}
 						}>
 							Parameter Setting
+							<div style={
+								{
+									display: "flex",
+									flexWrap: "wrap",
+									color: "white",
+								}
+							}>
+								{
+									this.state.nodeParm.map((item, index) => {
+										return (
+											<React.Fragment key = {index}>
+												<div>
+													item
+												</div>
+											</React.Fragment>
+										)
+									})
+								}
+								<div style={
+									{
+										color: "white"
+									}
+								}>
+									
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

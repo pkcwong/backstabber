@@ -3,7 +3,8 @@ import { CanvasAction } from "../actions/canvas-action";
 const initialState = {
 	nodes: [],
 	links: [],
-	backstabber: []
+	nodeClass: [],
+	nodeDict: {}
 };
 
 export const CanvasReducer = (state = initialState, action) => {
@@ -14,7 +15,10 @@ export const CanvasReducer = (state = initialState, action) => {
 		case CanvasAction.ADD_NODE: {
 			return Object.assign({}, state, {
 				nodes: [...state.nodes, action['payload']['node']],
-				backstabber: [...state.backstabber, action['payload']['backstabber']]
+				nodeClass: [...state.nodeClass, action['payload']['nodeClass']],
+				nodeDict: Object.assign({},state.nodeDict, {
+					[action['payload']['node'].id]: action['payload']['nodeClass'].uid
+				})
 			});
 		}
 		case CanvasAction.ADD_LINK: {
