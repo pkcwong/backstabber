@@ -12,15 +12,10 @@ import {
 	DefaultPortModel
 } from 'storm-react-diagrams';
 import { CanvasAction } from "../../redux/actions/canvas-action";
-import { styles } from "./styles";
 import "./srd.css";
-import { NullNode } from "../../../shared/lib/null-node";
 import { StringNode } from "../../../shared/lib/string-node";
-import { JsonAssignNode } from "../../../shared/lib/json-assign-node";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
-import { Program } from "../../../shared/lib/program";
-import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
@@ -30,9 +25,32 @@ class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			nodeParm: []
+		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
+		this.nodeType = {
+			"StringNode": ()=>{
+				return new StringNode();
+			},
+			"EntryNode": ()=>{
+				return new EntryNode();
+			},
+			"ReturnNode": ()=>{
+				return new ReturnNode();
+			}
+			// "ArrayMapNode": ArrayMapNode,
+			// "ArrayPushNode": ArrayPushNode,
+			// "ArrayReduceNode": ArrayReduceNode,
+			// "BoolNode": BoolNode,
+			// "JsonAssignNode": JsonAssignNode,
+			// "JsonCollapseNode": JsonCollapseNode,
+			// "NullNode": NullNode,
+			// "NumberNode": NumberNode,
+		};
+
 	}
 
 	render() {
@@ -97,9 +115,8 @@ class Component extends React.Component {
 								[
 									EntryNode,
 									StringNode,
-									ReturnNode
+									ReturnNode,
 								].map((item, index) => {
-									console.log(item);
 									return (
 										<React.Fragment
 											key={index}
@@ -123,36 +140,35 @@ class Component extends React.Component {
 						style={
 							{
 								background: "black",
-								width: "90vw"
+								width: "90vw",
+								height: "70vh"
 							}
 						}
 					>
 						<div
 							className="diagram-layer"
-							onDrop={event => {
-								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
-								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
-								let node = null;
-								console.log(data);
-								//console.log(nodesCount);
-								if (data.type === EntryNode.name) {
-									node = new DefaultNodeModel('Entry');
-									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
-								} else if (data.type === StringNode.name) {
-									node = new DefaultNodeModel('String');
-									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
-								} else if (data.type === ReturnNode.name) {
-									node = new DefaultNodeModel('Return');
-									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
-									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
+							style={
+								{
+									height: "70vh"
 								}
-								var points = this.engine.getRelativeMousePoint(event);
+							}
+							onDrop={event => {
+								let data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
+								let nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
+								let nodeType = this.nodeType[data.type]();
+								let node = new DefaultNodeModel(data.type);
+								for(let key in nodeType.class.ports.inputs){
+									node.addPort(new DefaultPortModel(true, key));
+								}
+								for(let key in nodeType.class.ports.outputs){
+									node.addPort(new DefaultPortModel(false, key));
+								}
+								let points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								// TODO: request user initializations
-								let params = null;
-								this.props.store.dispatch(CanvasAction.addNode(node, EntryNode, params));
-								// TODO: forceUpdate is discouraged
+								// // TODO: request user initializations
+								this.props.store.dispatch(CanvasAction.addNode(node, nodeType));
+								// // TODO: forceUpdate is discouraged
 								this.forceUpdate();
 							}}
 							onDragOver={event => {
@@ -166,7 +182,42 @@ class Component extends React.Component {
 							/>
 							{/*<DiagramWidget className="srd-demo-canvas" diagramEngine={this.props.app.getDiagramEngine()} />*/}
 						</div>
-
+						<div style={
+							{
+								fontSize: "1.5em",
+								backgroundColor: "grey",
+								minHeight: "30vh",
+								padding: "0.5em"
+							}
+						}>
+							Parameter Setting
+							<div style={
+								{
+									display: "flex",
+									flexWrap: "wrap",
+									color: "white",
+								}
+							}>
+								{
+									this.state.nodeParm.map((item, index) => {
+										return (
+											<React.Fragment key = {index}>
+												<div>
+													item
+												</div>
+											</React.Fragment>
+										)
+									})
+								}
+								<div style={
+									{
+										color: "white"
+									}
+								}>
+									
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -221,6 +272,9 @@ class Component extends React.Component {
 	createModel = (nodes, links) => {
 		let model = new DiagramModel();
 		nodes.forEach((item) => {
+			item.addListener({
+				selectionChanged: () => { console.log(item) }
+			});
 			model.addNode(item);
 		});
 		links.forEach((item) => {
@@ -256,7 +310,7 @@ class Component extends React.Component {
 						});
 					}
 				});
-			}
+			},
 		});
 		return model;
 	};
