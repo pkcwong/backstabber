@@ -14,23 +14,16 @@ import {
 import { CanvasAction } from "../../redux/actions/canvas-action";
 import { styles } from "./styles";
 import "./srd.css";
-import { NullNode } from "../../../shared/lib/null-node";
 import { StringNode } from "../../../shared/lib/string-node";
-import { JsonAssignNode } from "../../../shared/lib/json-assign-node";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
 import { Program } from "../../../shared/lib/program";
-import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { BasicNode } from "../../../shared/lib/basic-node";
-import { ArrayMapNode } from "../../../shared/lib/array-map-node";
-import { ArrayPushNode } from "../../../shared/lib/array-push-node";
-import { ArrayReduceNode } from "../../../shared/lib/array-reduce-node";
-import { BoolNode } from "../../../shared/lib/bool-node";
-import { NumberNode } from "../../../shared/lib/number-node";
+
 
 class Component extends React.Component {
 
@@ -40,17 +33,23 @@ class Component extends React.Component {
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
 		this.nodeType = {
-			"StringNode": StringNode,
-			"EntryNode": EntryNode,
-			"ReturnNode": ReturnNode,
-			"ArrayMapNode": ArrayMapNode,
-			"ArrayPushNode": ArrayPushNode,
-			"ArrayReduceNode": ArrayReduceNode,
-			"BoolNode": BoolNode,
-			"JsonAssignNode": JsonAssignNode,
-			"JsonCollapseNode": JsonCollapseNode,
-			"NullNode": NullNode,
-			"NumberNode": NumberNode,
+			"StringNode": ()=>{
+				return new StringNode();
+			},
+			"EntryNode": ()=>{
+				return new EntryNode();
+			},
+			"ReturnNode": ()=>{
+				return new ReturnNode();
+			}
+			// "ArrayMapNode": ArrayMapNode,
+			// "ArrayPushNode": ArrayPushNode,
+			// "ArrayReduceNode": ArrayReduceNode,
+			// "BoolNode": BoolNode,
+			// "JsonAssignNode": JsonAssignNode,
+			// "JsonCollapseNode": JsonCollapseNode,
+			// "NullNode": NullNode,
+			// "NumberNode": NumberNode,
 		};
 
 	}
@@ -105,7 +104,6 @@ class Component extends React.Component {
 							background: "#22313F",
 							// borderColor: "white",
 							borderStyle: "solid",
-							overflowY: "scroll"
 							// borderWidth: "1vh"
 						}
 					}>
@@ -151,33 +149,35 @@ class Component extends React.Component {
 						style={
 							{
 								background: "black",
-								width: "90vw"
+								width: "90vw",
+								height: "70vh"
 							}
 						}
 					>
 						<div
 							className="diagram-layer"
+							style={
+								{
+									height: "70vh"
+								}
+							}
 							onDrop={event => {
-								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
-								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
-								//console.log(nodesCount);
-								let NodeType = this.nodeType[data.type];
+								// console.log(this.engine.getDiagramModel().getNodes());
+								let data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
+								let nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
+								let nodeType = this.nodeType[data.type]();
 								let node = new DefaultNodeModel(data.type);
-
-								// for(let key in NodeParam.args.input){
-								// 	console.log(key);
-								// 	node.addPort(new DefaultPortModel(true, key));
-								// }
-								// for(let key in NodeParam.args.output){
-								// 	console.log(key);
-								// 	node.addPort(new DefaultPortModel(false, key));
-								// }
+								for(let key in nodeType.class.ports.inputs){
+									node.addPort(new DefaultPortModel(true, key));
+								}
+								for(let key in nodeType.class.ports.outputs){
+									node.addPort(new DefaultPortModel(false, key));
+								}
 								let points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
 								// // TODO: request user initializations
-								let params = null;
-								this.props.store.dispatch(CanvasAction.addNode(node, EntryNode, params));
+								this.props.store.dispatch(CanvasAction.addNode(node, nodeType));
 								// // TODO: forceUpdate is discouraged
 								this.forceUpdate();
 							}}
@@ -192,7 +192,17 @@ class Component extends React.Component {
 							/>
 							{/*<DiagramWidget className="srd-demo-canvas" diagramEngine={this.props.app.getDiagramEngine()} />*/}
 						</div>
-
+						<div style={
+							{
+								fontSize: "1.5em",
+								backgroundColor: "grey",
+								minHeight: "30vh",
+								color: "white",
+								padding: "0.5em"
+							}
+						}>
+							Parameter Setting
+						</div>
 					</div>
 				</div>
 
@@ -247,6 +257,9 @@ class Component extends React.Component {
 	createModel = (nodes, links) => {
 		let model = new DiagramModel();
 		nodes.forEach((item) => {
+			item.addListener({
+				selectionChanged: () => { console.log(item) }
+			});
 			model.addNode(item);
 		});
 		links.forEach((item) => {
@@ -282,7 +295,7 @@ class Component extends React.Component {
 						});
 					}
 				});
-			}
+			},
 		});
 		return model;
 	};
