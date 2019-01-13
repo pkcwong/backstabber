@@ -26,7 +26,6 @@ class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.handleChange = this.handleChange.bind(this);
 		this.state = {
 			_id: '',
 		};
@@ -45,16 +44,6 @@ class Component extends React.Component {
 			}
 		};
 
-	}
-
-	handleChange(e) {
-		this.setState({
-			// parm: Object.assign({}, this.state.parm, {
-			// 	key: value
-			// })
-			value: e
-		});
-		console.log(e)
 	}
 
 	render() {
@@ -186,71 +175,159 @@ class Component extends React.Component {
 							}
 						}>
 							{
-								(() => {
+								(()=>{
 									if(this.state._id !== ''){
-										console.log(Object.keys(this.props.nodeClass[this.state._id].props).length);
-										console.log(Object.keys(this.props.nodeClass[this.state._id].props)[0]);
-										for(let i = 0; i < Object.keys(this.props.nodeClass[this.state._id].props).length; i++){
-											let key = Object.keys(this.props.nodeClass[this.state._id].props)[0];
-											if(i === Object.keys(this.props.nodeClass[this.state._id].props).length - 1){
-												return(
-													<React.Fragment key = {key}>
-														<div style={
-															{
-																"fontSize": '0.8em'
-															}
-														}>
-															<Form inline>
-																<FormGroup>
-																	<ControlLabel>{key} value:</ControlLabel>{' '}
-																	<FormControl type="text" id={key}/>
-																</FormGroup>{' '}
-															</Form>
-
-														</div>
-														<div>
-															<Button
-																onClick={
-																	()=>{
-																		let props={};
-																		for(let key in this.props.nodeClass[this.state._id].props){
-																			console.log($("#"+key).val());
-																			props = Object.assign({}, props, {
-																				[key]: $("#"+key).val()
-																			});
-																			this.props.nodeClass[this.state._id].setProps(props)
-																		}
-																	}
-																}
-															>
-																Submit
-															</Button>
-														</div>
-													</React.Fragment>
-												)
-											}
-											else{
-												return(
-													<React.Fragment key = {key}>
-														<div style={
-															{
-																"fontSize": '0.8em'
-															}
-														}>
-															<Form inline>
-																<FormGroup>
-																	<ControlLabel>{key} value:</ControlLabel>{' '}
-																	<FormControl type="text" id={key}/>
-																</FormGroup>{' '}
-															</Form>
-
-														</div>
-													</React.Fragment>
-												)
-											}
-										}
+										return Object.keys(this.props.nodeClass[this.state._id].props)
 									}
-								})()
+									else{
+										return [];
+									}
+								})().map((key, index)=>{
+									let button = ({});
+									if(index === Object.keys(this.props.nodeClass[this.state._id].props).length-1){
+										button = (
+											<div>
+												<Button
+													onClick={
+														()=>{
+															let props={};
+															Object.keys(this.props.nodeClass[this.state._id].props).map((key, index)=> {
+																props = Object.assign({}, props, {
+																	[key]: $("#"+key).val()
+																});
+																this.props.nodeClass[this.state._id].setProps(props)
+															});
+														}
+													}
+												>
+													Submit
+												</Button>
+											</div>)
+										;
+									}
+									return(
+										<React.Fragment key = {index}>
+											<div style={
+												{
+													"fontSize": '0.8em'
+												}
+											}>
+												<Form inline>
+													<FormGroup>
+														<ControlLabel>{key} value:</ControlLabel>{' '}
+														<FormControl type="text" id={key}/>
+													</FormGroup>{' '}
+												</Form>
+												{button}
+											</div>
+										</React.Fragment>
+									);
+								})
+								// (() => {
+								// 	if(this.state._id !== ''){
+								// 		Object.keys(this.props.nodeClass[this.state._id].props).map((key, index)=>{
+								// 			console.log(key);
+								// 			return(
+								// 				<React.Fragment key = {index}>
+								// 					<div style={
+								// 						{
+								// 							"fontSize": '0.8em'
+								// 						}
+								// 					}>
+								// 						<Form inline>
+								// 							<FormGroup>
+								// 								<ControlLabel>{key} value:</ControlLabel>{' '}
+								// 								<FormControl type="text" id={key}/>
+								// 							</FormGroup>{' '}
+								// 						</Form>
+								//
+								// 					</div>
+								// 				</React.Fragment>
+								// 			);
+								// 		});
+										// return(
+										// 	<React.Fragment key = 'button'>
+										// 		<div>
+										// 			<Button
+										// 				onClick={
+										// 					()=>{
+										// 						let props={};
+										// 						for(let key in this.props.nodeClass[this.state._id].props){
+										// 							console.log($("#"+key).val());
+										// 							props = Object.assign({}, props, {
+										// 								[key]: $("#"+key).val()
+										// 							});
+										// 							this.props.nodeClass[this.state._id].setProps(props)
+										// 						}
+										// 					}
+										// 				}
+										// 			>
+										// 				Submit
+										// 			</Button>
+										// 		</div>
+										// 	</React.Fragment>
+										// );
+										// for(let i = 0; i < Object.keys(this.props.nodeClass[this.state._id].props).length; i++){
+										// 	let key = Object.keys(this.props.nodeClass[this.state._id].props)[0];
+										// 	if(i === Object.keys(this.props.nodeClass[this.state._id].props).length - 1){
+										// 		return(
+										// 			<React.Fragment key = {key}>
+										// 				<div style={
+										// 					{
+										// 						"fontSize": '0.8em'
+										// 					}
+										// 				}>
+										// 					<Form inline>
+										// 						<FormGroup>
+										// 							<ControlLabel>{key} value:</ControlLabel>{' '}
+										// 							<FormControl type="text" id={key}/>
+										// 						</FormGroup>{' '}
+										// 					</Form>
+										//
+										// 				</div>
+										// 				<div>
+										// 					<Button
+										// 						onClick={
+										// 							()=>{
+										// 								let props={};
+										// 								for(let key in this.props.nodeClass[this.state._id].props){
+										// 									console.log($("#"+key).val());
+										// 									props = Object.assign({}, props, {
+										// 										[key]: $("#"+key).val()
+										// 									});
+										// 									this.props.nodeClass[this.state._id].setProps(props)
+										// 								}
+										// 							}
+										// 						}
+										// 					>
+										// 						Submit
+										// 					</Button>
+										// 				</div>
+										// 			</React.Fragment>
+										// 		)
+										// 	}
+										// 	else{
+										// 		return(
+										// 			<React.Fragment key = {key}>
+										// 				<div style={
+										// 					{
+										// 						"fontSize": '0.8em'
+										// 					}
+										// 				}>
+										// 					<Form inline>
+										// 						<FormGroup>
+										// 							<ControlLabel>{key} value:</ControlLabel>{' '}
+										// 							<FormControl type="text" id={key}/>
+										// 						</FormGroup>{' '}
+										// 					</Form>
+										//
+										// 				</div>
+										// 			</React.Fragment>
+										// 		)
+										// 	}
+										// }
+								// 	}
+								// })()
 							}
 							<div style={
 								{
@@ -312,19 +389,17 @@ class Component extends React.Component {
 	 */
 	createModel = (nodes, links) => {
 		let model = new DiagramModel();
-		for (let key in nodes) {
+		Object.keys(nodes).map((key)=>{
 			// check if the property/key is defined in the object itself, not in parent
-			if (nodes.hasOwnProperty(key)) {
-				nodes[key].addListener({
-					selectionChanged: () => {
-						this.setState({
-							_id: this.props.nodeDict[nodes[key].id]
-						})
-					}
-				});
-				model.addNode(nodes[key]);
-			}
-		}
+			nodes[key].addListener({
+				selectionChanged: () => {
+					this.setState({
+						_id: this.props.nodeDict[key]
+					})
+				}
+			});
+			model.addNode(nodes[key]);
+		});
 		links.forEach((item) => {
 			model.addLink(item);
 		});
