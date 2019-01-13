@@ -20,13 +20,15 @@ import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
 import { sketches_db } from "../../../shared/collections/sketches";
+import { Button, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
 
 class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.handleChange = this.handleChange.bind(this);
 		this.state = {
-			nodeParm: []
+			_id: '',
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -41,16 +43,18 @@ class Component extends React.Component {
 			"ReturnNode": ()=>{
 				return new ReturnNode();
 			}
-			// "ArrayMapNode": ArrayMapNode,
-			// "ArrayPushNode": ArrayPushNode,
-			// "ArrayReduceNode": ArrayReduceNode,
-			// "BoolNode": BoolNode,
-			// "JsonAssignNode": JsonAssignNode,
-			// "JsonCollapseNode": JsonCollapseNode,
-			// "NullNode": NullNode,
-			// "NumberNode": NumberNode,
 		};
 
+	}
+
+	handleChange(e) {
+		this.setState({
+			// parm: Object.assign({}, this.state.parm, {
+			// 	key: value
+			// })
+			value: e
+		});
+		console.log(e)
 	}
 
 	render() {
@@ -65,17 +69,6 @@ class Component extends React.Component {
 						flexDirection: "row",
 					}
 				}>
-					<div>
-						{/*<img style={*/}
-						{/*{*/}
-						{/*height: "6vh",*/}
-						{/*marginLeft: "2vh",*/}
-						{/*marginTop: "0.5vh"*/}
-						{/*}*/}
-						{/*}*/}
-						{/*src={"/res/img/BackStabber_logo.png"}*/}
-						{/*/>*/}
-					</div>
 					<div style={
 						{
 							marginTop: "1vh",
@@ -99,7 +92,7 @@ class Component extends React.Component {
 				}>
 					<div style={
 						{
-							width: "10vw",
+							width: "12vw",
 							background: "#22313F",
 							// borderColor: "white",
 							borderStyle: "solid",
@@ -141,17 +134,12 @@ class Component extends React.Component {
 							{
 								background: "black",
 								width: "90vw",
-								height: "70vh"
+								minHeight: "93vh"
 							}
 						}
 					>
 						<div
 							className="diagram-layer"
-							style={
-								{
-									height: "70vh"
-								}
-							}
 							onDrop={event => {
 								let data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
 								let nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
@@ -180,42 +168,95 @@ class Component extends React.Component {
 								maxNumberPointsPerLink={0}
 								diagramEngine={this.engine}
 							/>
-							{/*<DiagramWidget className="srd-demo-canvas" diagramEngine={this.props.app.getDiagramEngine()} />*/}
 						</div>
+					</div>
+					<div style={
+						{
+							fontSize: "2em",
+							backgroundColor: "grey",
+							width: '30vw',
+							padding: "0.5em",
+							minHeight: '93vh'
+						}
+					}>
+						Parameter Setting
 						<div style={
 							{
-								fontSize: "1.5em",
-								backgroundColor: "grey",
-								minHeight: "30vh",
-								padding: "0.5em"
+								paddingTop: '0.2em'
 							}
 						}>
-							Parameter Setting
+							{
+								(() => {
+									if(this.state._id !== ''){
+										console.log(Object.keys(this.props.nodeClass[this.state._id].props).length);
+										console.log(Object.keys(this.props.nodeClass[this.state._id].props)[0]);
+										for(let i = 0; i < Object.keys(this.props.nodeClass[this.state._id].props).length; i++){
+											let key = Object.keys(this.props.nodeClass[this.state._id].props)[0];
+											if(i === Object.keys(this.props.nodeClass[this.state._id].props).length - 1){
+												return(
+													<React.Fragment key = {key}>
+														<div style={
+															{
+																"fontSize": '0.8em'
+															}
+														}>
+															<Form inline>
+																<FormGroup>
+																	<ControlLabel>{key} value:</ControlLabel>{' '}
+																	<FormControl type="text" id={key}/>
+																</FormGroup>{' '}
+															</Form>
+
+														</div>
+														<div>
+															<Button
+																onClick={
+																	()=>{
+																		let props={};
+																		for(let key in this.props.nodeClass[this.state._id].props){
+																			console.log($("#"+key).val());
+																			props = Object.assign({}, props, {
+																				[key]: $("#"+key).val()
+																			});
+																			this.props.nodeClass[this.state._id].setProps(props)
+																		}
+																	}
+																}
+															>
+																Submit
+															</Button>
+														</div>
+													</React.Fragment>
+												)
+											}
+											else{
+												return(
+													<React.Fragment key = {key}>
+														<div style={
+															{
+																"fontSize": '0.8em'
+															}
+														}>
+															<Form inline>
+																<FormGroup>
+																	<ControlLabel>{key} value:</ControlLabel>{' '}
+																	<FormControl type="text" id={key}/>
+																</FormGroup>{' '}
+															</Form>
+
+														</div>
+													</React.Fragment>
+												)
+											}
+										}
+									}
+								})()
+							}
 							<div style={
 								{
-									display: "flex",
-									flexWrap: "wrap",
-									color: "white",
+									color: "white"
 								}
 							}>
-								{
-									this.state.nodeParm.map((item, index) => {
-										return (
-											<React.Fragment key = {index}>
-												<div>
-													item
-												</div>
-											</React.Fragment>
-										)
-									})
-								}
-								<div style={
-									{
-										color: "white"
-									}
-								}>
-									
-								</div>
 							</div>
 						</div>
 					</div>
@@ -271,12 +312,19 @@ class Component extends React.Component {
 	 */
 	createModel = (nodes, links) => {
 		let model = new DiagramModel();
-		nodes.forEach((item) => {
-			item.addListener({
-				selectionChanged: () => { console.log(item) }
-			});
-			model.addNode(item);
-		});
+		for (let key in nodes) {
+			// check if the property/key is defined in the object itself, not in parent
+			if (nodes.hasOwnProperty(key)) {
+				nodes[key].addListener({
+					selectionChanged: () => {
+						this.setState({
+							_id: this.props.nodeDict[nodes[key].id]
+						})
+					}
+				});
+				model.addNode(nodes[key]);
+			}
+		}
 		links.forEach((item) => {
 			model.addLink(item);
 		});
@@ -335,6 +383,8 @@ const Tracker = withTracker(() => {
 export const CanvasPage = connect((store) => {
 	return {
 		nodes: store['CanvasReducer']['nodes'],
-		links: store['CanvasReducer']['links']
+		links: store['CanvasReducer']['links'],
+		nodeClass: store['CanvasReducer']['nodeClass'],
+		nodeDict: store['CanvasReducer']['nodeDict']
 	};
 })(Tracker);
