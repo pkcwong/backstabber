@@ -1,13 +1,14 @@
 import { CanvasAction } from "../actions/canvas-action";
 
 const initialState = {
-	nodes: [],
+	nodes: {},
 	links: [],
 	nodeClass: {},
 	nodeDict: {}
 };
 
 export const CanvasReducer = (state = initialState, action) => {
+	console.log(action['type']);
 	switch (action['type']) {
 		case CanvasAction.RESET: {
 			return initialState;
@@ -25,6 +26,17 @@ export const CanvasReducer = (state = initialState, action) => {
 					[action['payload']['node'].id]: action['payload']['nodeClass']._id
 				})
 			});
+		}
+		case CanvasAction.DELETE_NODE: {
+			console.log("hi");
+			console.log(action['payload']['key']);
+			let _id = this.state.nodeDict[action['payload']['key']];
+			console.log(_id);
+			return Object.assign({}, state, {
+				nodes: delete state.nodes[action['payload']['key']],
+				nodeClass: delete state.nodeClass[_id],
+				nodeDict: delete state.nodeDict[action['payload']['key']]
+			})
 		}
 		case CanvasAction.ADD_LINK: {
 			return Object.assign({}, state, {

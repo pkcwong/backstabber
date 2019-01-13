@@ -21,6 +21,7 @@ import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { Button, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
+import { Program } from "../../../shared/lib/program";
 
 class Component extends React.Component {
 
@@ -68,6 +69,46 @@ class Component extends React.Component {
 						}
 					}>
 						Welcome to <b>B</b>ack<b>S</b>tabber
+					</div>
+					<div style={
+						{
+							margin: "1vh",
+							paddingLeft: "1.3vw",
+						}
+					}>
+						<Button
+							bsStyle="primary"
+							onClick={
+								// TODO: Save Project
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}>
+							Save Project
+						</Button>
+
+						<Button
+							bsStyle="warning"
+							onClick={
+								// TODO: Generate API
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}>
+							Generate API
+						</Button>
+
+						<Button
+							bsStyle="success"
+							onClick={
+								// TODO: Run the Program
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}
+						>
+							Run
+						</Button>
 					</div>
 				</div>
 				<div style={
@@ -131,7 +172,6 @@ class Component extends React.Component {
 							className="diagram-layer"
 							onDrop={event => {
 								let data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
-								let nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let nodeType = this.nodeType[data.type]();
 								let node = new DefaultNodeModel(data.type);
 								for(let key in nodeType.class.ports.inputs){
@@ -143,10 +183,8 @@ class Component extends React.Component {
 								let points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								// // TODO: request user initializations
 								this.props.store.dispatch(CanvasAction.addNode(node, nodeType));
-								// // TODO: forceUpdate is discouraged
-								this.forceUpdate();
+
 							}}
 							onDragOver={event => {
 								event.preventDefault();
@@ -196,6 +234,9 @@ class Component extends React.Component {
 																	[key]: $("#"+key).val()
 																});
 																this.props.nodeClass[this.state._id].setProps(props)
+																this.setState({
+																	_id: ""
+																})
 															});
 														}
 													}
@@ -223,111 +264,6 @@ class Component extends React.Component {
 										</React.Fragment>
 									);
 								})
-								// (() => {
-								// 	if(this.state._id !== ''){
-								// 		Object.keys(this.props.nodeClass[this.state._id].props).map((key, index)=>{
-								// 			console.log(key);
-								// 			return(
-								// 				<React.Fragment key = {index}>
-								// 					<div style={
-								// 						{
-								// 							"fontSize": '0.8em'
-								// 						}
-								// 					}>
-								// 						<Form inline>
-								// 							<FormGroup>
-								// 								<ControlLabel>{key} value:</ControlLabel>{' '}
-								// 								<FormControl type="text" id={key}/>
-								// 							</FormGroup>{' '}
-								// 						</Form>
-								//
-								// 					</div>
-								// 				</React.Fragment>
-								// 			);
-								// 		});
-										// return(
-										// 	<React.Fragment key = 'button'>
-										// 		<div>
-										// 			<Button
-										// 				onClick={
-										// 					()=>{
-										// 						let props={};
-										// 						for(let key in this.props.nodeClass[this.state._id].props){
-										// 							console.log($("#"+key).val());
-										// 							props = Object.assign({}, props, {
-										// 								[key]: $("#"+key).val()
-										// 							});
-										// 							this.props.nodeClass[this.state._id].setProps(props)
-										// 						}
-										// 					}
-										// 				}
-										// 			>
-										// 				Submit
-										// 			</Button>
-										// 		</div>
-										// 	</React.Fragment>
-										// );
-										// for(let i = 0; i < Object.keys(this.props.nodeClass[this.state._id].props).length; i++){
-										// 	let key = Object.keys(this.props.nodeClass[this.state._id].props)[0];
-										// 	if(i === Object.keys(this.props.nodeClass[this.state._id].props).length - 1){
-										// 		return(
-										// 			<React.Fragment key = {key}>
-										// 				<div style={
-										// 					{
-										// 						"fontSize": '0.8em'
-										// 					}
-										// 				}>
-										// 					<Form inline>
-										// 						<FormGroup>
-										// 							<ControlLabel>{key} value:</ControlLabel>{' '}
-										// 							<FormControl type="text" id={key}/>
-										// 						</FormGroup>{' '}
-										// 					</Form>
-										//
-										// 				</div>
-										// 				<div>
-										// 					<Button
-										// 						onClick={
-										// 							()=>{
-										// 								let props={};
-										// 								for(let key in this.props.nodeClass[this.state._id].props){
-										// 									console.log($("#"+key).val());
-										// 									props = Object.assign({}, props, {
-										// 										[key]: $("#"+key).val()
-										// 									});
-										// 									this.props.nodeClass[this.state._id].setProps(props)
-										// 								}
-										// 							}
-										// 						}
-										// 					>
-										// 						Submit
-										// 					</Button>
-										// 				</div>
-										// 			</React.Fragment>
-										// 		)
-										// 	}
-										// 	else{
-										// 		return(
-										// 			<React.Fragment key = {key}>
-										// 				<div style={
-										// 					{
-										// 						"fontSize": '0.8em'
-										// 					}
-										// 				}>
-										// 					<Form inline>
-										// 						<FormGroup>
-										// 							<ControlLabel>{key} value:</ControlLabel>{' '}
-										// 							<FormControl type="text" id={key}/>
-										// 						</FormGroup>{' '}
-										// 					</Form>
-										//
-										// 				</div>
-										// 			</React.Fragment>
-										// 		)
-										// 	}
-										// }
-								// 	}
-								// })()
 							}
 							<div style={
 								{
@@ -396,6 +332,9 @@ class Component extends React.Component {
 					this.setState({
 						_id: this.props.nodeDict[key]
 					})
+				},
+				entityRemoved: () => {
+					CanvasAction.deleteNode(key);
 				}
 			});
 			model.addNode(nodes[key]);
