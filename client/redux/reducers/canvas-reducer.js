@@ -1,9 +1,10 @@
 import { CanvasAction } from "../actions/canvas-action";
 
 const initialState = {
-	nodes: [],
+	nodes: {},
 	links: [],
-	backstabber: []
+	nodeClass: {},
+	nodeDict: {}
 };
 
 export const CanvasReducer = (state = initialState, action) => {
@@ -13,9 +14,26 @@ export const CanvasReducer = (state = initialState, action) => {
 		}
 		case CanvasAction.ADD_NODE: {
 			return Object.assign({}, state, {
-				nodes: [...state.nodes, action['payload']['node']],
-				backstabber: [...state.backstabber, action['payload']['backstabber']]
+				// nodes: [...state.nodes, action['payload']['node']],
+				nodes: Object.assign({},state.nodes, {
+					[action['payload']['node'].id]: action['payload']['node']
+				}),
+				nodeClass: Object.assign({}, state.nodeClass, {
+					[action['payload']['nodeClass']._id]: action['payload']['nodeClass']
+				}),
+				nodeDict: Object.assign({},state.nodeDict, {
+					[action['payload']['node'].id]: action['payload']['nodeClass']._id
+				})
 			});
+		}
+		case CanvasAction.DELETE_NODE: {
+			let id = action['payload']['key'];
+			let _id = state.nodeDict[action['payload']['key']];
+			return Object.assign({}, state, {
+				nodes: delete state.nodes[id],
+				nodeClass: delete state.nodeClass[_id],
+				nodeDict: delete state.nodeDict[id]
+			})
 		}
 		case CanvasAction.ADD_LINK: {
 			return Object.assign({}, state, {

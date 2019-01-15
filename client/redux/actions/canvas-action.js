@@ -2,6 +2,7 @@ export class CanvasAction {
 
 	static RESET = 'Canvas/RESET';
 	static ADD_NODE = 'Canvas/ADD_NODE';
+	static DELETE_NODE = 'Canvas/DELETE_NODE';
 	static ADD_LINK = 'Canvas/ADD_LINK';
 	static LOAD = 'Canvas/LOAD';
 	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
@@ -17,15 +18,25 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (node, constructor, params) => {
+	static addNode = (node, nodeClass) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
 				node: node,
-				backstabber: new constructor(params)
+				nodeClass: nodeClass,
 			}
 		};
 	};
+
+	static deleteNode = (key) => {
+		return {
+			type: CanvasAction.DELETE_NODE,
+			payload: {
+				key: key,
+			}
+		};
+	};
+
 
 	static addLink = (link) => {
 		return {

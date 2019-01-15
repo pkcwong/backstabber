@@ -12,28 +12,42 @@ import {
 	DefaultPortModel
 } from 'storm-react-diagrams';
 import { CanvasAction } from "../../redux/actions/canvas-action";
-import { styles } from "./styles";
 import "./srd.css";
-import { NullNode } from "../../../shared/lib/null-node";
 import { StringNode } from "../../../shared/lib/string-node";
-import { JsonAssignNode } from "../../../shared/lib/json-assign-node";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
-import { Program } from "../../../shared/lib/program";
-import { JsonCollapseNode } from "../../../shared/lib/json-collapse-node";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
 import { sketches_db } from "../../../shared/collections/sketches";
+import { Button, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
+import { Program } from "../../../shared/lib/program";
 
 class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			_id: '',
+			remove_id: ''
+		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
+		this.nodeType = {
+			"StringNode": ()=>{
+				return new StringNode();
+			},
+			"EntryNode": ()=>{
+				return new EntryNode();
+			},
+			"ReturnNode": ()=>{
+				return new ReturnNode();
+			}
+		};
+
 	}
+
 
 	render() {
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
@@ -47,17 +61,6 @@ class Component extends React.Component {
 						flexDirection: "row",
 					}
 				}>
-					<div>
-						{/*<img style={*/}
-						{/*{*/}
-						{/*height: "6vh",*/}
-						{/*marginLeft: "2vh",*/}
-						{/*marginTop: "0.5vh"*/}
-						{/*}*/}
-						{/*}*/}
-						{/*src={"/res/img/BackStabber_logo.png"}*/}
-						{/*/>*/}
-					</div>
 					<div style={
 						{
 							marginTop: "1vh",
@@ -68,6 +71,46 @@ class Component extends React.Component {
 						}
 					}>
 						Welcome to <b>B</b>ack<b>S</b>tabber
+					</div>
+					<div style={
+						{
+							margin: "1vh",
+							paddingLeft: "1.3vw",
+						}
+					}>
+						<Button
+							bsStyle="primary"
+							onClick={
+								// TODO: Save Project
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}>
+							Save Project
+						</Button>
+
+						<Button
+							bsStyle="warning"
+							onClick={
+								// TODO: Generate API
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}>
+							Generate API
+						</Button>
+
+						<Button
+							bsStyle="success"
+							onClick={
+								// TODO: Run the Program
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}
+						>
+							Run
+						</Button>
 					</div>
 				</div>
 				<div style={
@@ -81,7 +124,7 @@ class Component extends React.Component {
 				}>
 					<div style={
 						{
-							width: "10vw",
+							width: "12vw",
 							background: "#22313F",
 							// borderColor: "white",
 							borderStyle: "solid",
@@ -97,9 +140,8 @@ class Component extends React.Component {
 								[
 									EntryNode,
 									StringNode,
-									ReturnNode
+									ReturnNode,
 								].map((item, index) => {
-									console.log(item);
 									return (
 										<React.Fragment
 											key={index}
@@ -123,37 +165,28 @@ class Component extends React.Component {
 						style={
 							{
 								background: "black",
-								width: "90vw"
+								width: "90vw",
+								minHeight: "93vh"
 							}
 						}
 					>
 						<div
 							className="diagram-layer"
 							onDrop={event => {
-								var data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
-								var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
-								let node = null;
-								console.log(data);
-								//console.log(nodesCount);
-								if (data.type === EntryNode.name) {
-									node = new DefaultNodeModel('Entry');
-									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
-								} else if (data.type === StringNode.name) {
-									node = new DefaultNodeModel('String');
-									node.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
-								} else if (data.type === ReturnNode.name) {
-									node = new DefaultNodeModel('Return');
-									node.addPort(new DefaultPortModel(true, 'out-1', 'IN'));
-									node.addPort(new DefaultPortModel(false, 'out-2', 'Out'));
+								let data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
+								let nodeType = this.nodeType[data.type]();
+								let node = new DefaultNodeModel(data.type);
+								for(let key in nodeType.class.ports.inputs){
+									node.addPort(new DefaultPortModel(true, key));
 								}
-								var points = this.engine.getRelativeMousePoint(event);
+								for(let key in nodeType.class.ports.outputs){
+									node.addPort(new DefaultPortModel(false, key));
+								}
+								let points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								// TODO: request user initializations
-								let params = null;
-								this.props.store.dispatch(CanvasAction.addNode(node, EntryNode, params));
-								// TODO: forceUpdate is discouraged
-								this.forceUpdate();
+								this.props.store.dispatch(CanvasAction.addNode(node, nodeType));
+
 							}}
 							onDragOver={event => {
 								event.preventDefault();
@@ -164,9 +197,83 @@ class Component extends React.Component {
 								maxNumberPointsPerLink={0}
 								diagramEngine={this.engine}
 							/>
-							{/*<DiagramWidget className="srd-demo-canvas" diagramEngine={this.props.app.getDiagramEngine()} />*/}
 						</div>
-
+					</div>
+					<div style={
+						{
+							fontSize: "2em",
+							backgroundColor: "grey",
+							width: '30vw',
+							padding: "0.5em",
+							minHeight: '93vh'
+						}
+					}>
+						Parameter Setting
+						<div style={
+							{
+								paddingTop: '0.2em'
+							}
+						}>
+							{
+								(()=>{
+									if(this.state._id !== ''){
+										return Object.keys(this.props.nodeClass[this.state._id].props)
+									}
+									else{
+										return [];
+									}
+								})().map((key, index)=>{
+									let button = ({});
+									if(index === Object.keys(this.props.nodeClass[this.state._id].props).length-1){
+										button = (
+											<div>
+												<Button
+													onClick={
+														()=>{
+															let props={};
+															Object.keys(this.props.nodeClass[this.state._id].props).map((key, index)=> {
+																props = Object.assign({}, props, {
+																	[key]: $("#"+key).val()
+																});
+																this.props.nodeClass[this.state._id].setProps(props)
+																this.setState({
+																	_id: ""
+																})
+															});
+														}
+													}
+												>
+													Submit
+												</Button>
+											</div>)
+										;
+									}
+									return(
+										<React.Fragment key = {index}>
+											<div style={
+												{
+													"fontSize": '0.8em'
+												}
+											}>
+												<Form inline>
+													<FormGroup>
+														<ControlLabel>{key} value:</ControlLabel>{' '}
+														<FormControl type="text" id={key}/>
+													</FormGroup>{' '}
+												</Form>
+												{button}
+											</div>
+										</React.Fragment>
+									);
+								})
+							}
+							<div style={
+								{
+									color: "white"
+								}
+							}>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -219,9 +326,24 @@ class Component extends React.Component {
 	 * @returns {DiagramModel} a diagram model
 	 */
 	createModel = (nodes, links) => {
+		console.log(nodes);
 		let model = new DiagramModel();
-		nodes.forEach((item) => {
-			model.addNode(item);
+		Object.keys(nodes).map((key)=>{
+			// check if the property/key is defined in the object itself, not in parent
+			nodes[key].addListener({
+				selectionChanged: () => {
+					this.setState({
+						_id: this.props.nodeDict[key]
+					})
+				},
+				entityRemoved: () => {
+					this.setState({
+						_id: ''
+					});
+					this.props.store.dispatch(CanvasAction.deleteNode(key));
+				}
+			});
+			model.addNode(nodes[key]);
 		});
 		links.forEach((item) => {
 			model.addLink(item);
@@ -256,7 +378,7 @@ class Component extends React.Component {
 						});
 					}
 				});
-			}
+			},
 		});
 		return model;
 	};
@@ -281,6 +403,8 @@ const Tracker = withTracker(() => {
 export const CanvasPage = connect((store) => {
 	return {
 		nodes: store['CanvasReducer']['nodes'],
-		links: store['CanvasReducer']['links']
+		links: store['CanvasReducer']['links'],
+		nodeClass: store['CanvasReducer']['nodeClass'],
+		nodeDict: store['CanvasReducer']['nodeDict']
 	};
 })(Tracker);
