@@ -20,13 +20,16 @@ import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import Lodash from 'lodash';
 import { sketches_db } from "../../../shared/collections/sketches";
+import { Button, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
+import { Program } from "../../../shared/lib/program";
 
 class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			nodeParm: []
+			_id: '',
+			remove_id: ''
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -41,17 +44,10 @@ class Component extends React.Component {
 			"ReturnNode": ()=>{
 				return new ReturnNode();
 			}
-			// "ArrayMapNode": ArrayMapNode,
-			// "ArrayPushNode": ArrayPushNode,
-			// "ArrayReduceNode": ArrayReduceNode,
-			// "BoolNode": BoolNode,
-			// "JsonAssignNode": JsonAssignNode,
-			// "JsonCollapseNode": JsonCollapseNode,
-			// "NullNode": NullNode,
-			// "NumberNode": NumberNode,
 		};
 
 	}
+
 
 	render() {
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
@@ -65,17 +61,6 @@ class Component extends React.Component {
 						flexDirection: "row",
 					}
 				}>
-					<div>
-						{/*<img style={*/}
-						{/*{*/}
-						{/*height: "6vh",*/}
-						{/*marginLeft: "2vh",*/}
-						{/*marginTop: "0.5vh"*/}
-						{/*}*/}
-						{/*}*/}
-						{/*src={"/res/img/BackStabber_logo.png"}*/}
-						{/*/>*/}
-					</div>
 					<div style={
 						{
 							marginTop: "1vh",
@@ -86,6 +71,46 @@ class Component extends React.Component {
 						}
 					}>
 						Welcome to <b>B</b>ack<b>S</b>tabber
+					</div>
+					<div style={
+						{
+							margin: "1vh",
+							paddingLeft: "1.3vw",
+						}
+					}>
+						<Button
+							bsStyle="primary"
+							onClick={
+								// TODO: Save Project
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}>
+							Save Project
+						</Button>
+
+						<Button
+							bsStyle="warning"
+							onClick={
+								// TODO: Generate API
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}>
+							Generate API
+						</Button>
+
+						<Button
+							bsStyle="success"
+							onClick={
+								// TODO: Run the Program
+								()=>{
+									let myProgram = new Program(this.props.nodeClass);
+								}
+							}
+						>
+							Run
+						</Button>
 					</div>
 				</div>
 				<div style={
@@ -99,7 +124,7 @@ class Component extends React.Component {
 				}>
 					<div style={
 						{
-							width: "10vw",
+							width: "12vw",
 							background: "#22313F",
 							// borderColor: "white",
 							borderStyle: "solid",
@@ -141,20 +166,14 @@ class Component extends React.Component {
 							{
 								background: "black",
 								width: "90vw",
-								height: "70vh"
+								minHeight: "93vh"
 							}
 						}
 					>
 						<div
 							className="diagram-layer"
-							style={
-								{
-									height: "70vh"
-								}
-							}
 							onDrop={event => {
 								let data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"));
-								let nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 								let nodeType = this.nodeType[data.type]();
 								let node = new DefaultNodeModel(data.type);
 								for(let key in nodeType.class.ports.inputs){
@@ -166,10 +185,8 @@ class Component extends React.Component {
 								let points = this.engine.getRelativeMousePoint(event);
 								node.x = points.x;
 								node.y = points.y;
-								// // TODO: request user initializations
 								this.props.store.dispatch(CanvasAction.addNode(node, nodeType));
-								// // TODO: forceUpdate is discouraged
-								this.forceUpdate();
+
 							}}
 							onDragOver={event => {
 								event.preventDefault();
@@ -180,42 +197,81 @@ class Component extends React.Component {
 								maxNumberPointsPerLink={0}
 								diagramEngine={this.engine}
 							/>
-							{/*<DiagramWidget className="srd-demo-canvas" diagramEngine={this.props.app.getDiagramEngine()} />*/}
 						</div>
+					</div>
+					<div style={
+						{
+							fontSize: "2em",
+							backgroundColor: "grey",
+							width: '30vw',
+							padding: "0.5em",
+							minHeight: '93vh'
+						}
+					}>
+						Parameter Setting
 						<div style={
 							{
-								fontSize: "1.5em",
-								backgroundColor: "grey",
-								minHeight: "30vh",
-								padding: "0.5em"
+								paddingTop: '0.2em'
 							}
 						}>
-							Parameter Setting
+							{
+								(()=>{
+									if(this.state._id !== ''){
+										return Object.keys(this.props.nodeClass[this.state._id].props)
+									}
+									else{
+										return [];
+									}
+								})().map((key, index)=>{
+									let button = ({});
+									if(index === Object.keys(this.props.nodeClass[this.state._id].props).length-1){
+										button = (
+											<div>
+												<Button
+													onClick={
+														()=>{
+															let props={};
+															Object.keys(this.props.nodeClass[this.state._id].props).map((key, index)=> {
+																props = Object.assign({}, props, {
+																	[key]: $("#"+key).val()
+																});
+																this.props.nodeClass[this.state._id].setProps(props)
+																this.setState({
+																	_id: ""
+																})
+															});
+														}
+													}
+												>
+													Submit
+												</Button>
+											</div>)
+										;
+									}
+									return(
+										<React.Fragment key = {index}>
+											<div style={
+												{
+													"fontSize": '0.8em'
+												}
+											}>
+												<Form inline>
+													<FormGroup>
+														<ControlLabel>{key} value:</ControlLabel>{' '}
+														<FormControl type="text" id={key}/>
+													</FormGroup>{' '}
+												</Form>
+												{button}
+											</div>
+										</React.Fragment>
+									);
+								})
+							}
 							<div style={
 								{
-									display: "flex",
-									flexWrap: "wrap",
-									color: "white",
+									color: "white"
 								}
 							}>
-								{
-									this.state.nodeParm.map((item, index) => {
-										return (
-											<React.Fragment key = {index}>
-												<div>
-													item
-												</div>
-											</React.Fragment>
-										)
-									})
-								}
-								<div style={
-									{
-										color: "white"
-									}
-								}>
-									
-								</div>
 							</div>
 						</div>
 					</div>
@@ -270,12 +326,24 @@ class Component extends React.Component {
 	 * @returns {DiagramModel} a diagram model
 	 */
 	createModel = (nodes, links) => {
+		console.log(nodes);
 		let model = new DiagramModel();
-		nodes.forEach((item) => {
-			item.addListener({
-				selectionChanged: () => { console.log(item) }
+		Object.keys(nodes).map((key)=>{
+			// check if the property/key is defined in the object itself, not in parent
+			nodes[key].addListener({
+				selectionChanged: () => {
+					this.setState({
+						_id: this.props.nodeDict[key]
+					})
+				},
+				entityRemoved: () => {
+					this.setState({
+						_id: ''
+					});
+					this.props.store.dispatch(CanvasAction.deleteNode(key));
+				}
 			});
-			model.addNode(item);
+			model.addNode(nodes[key]);
 		});
 		links.forEach((item) => {
 			model.addLink(item);
@@ -335,6 +403,8 @@ const Tracker = withTracker(() => {
 export const CanvasPage = connect((store) => {
 	return {
 		nodes: store['CanvasReducer']['nodes'],
-		links: store['CanvasReducer']['links']
+		links: store['CanvasReducer']['links'],
+		nodeClass: store['CanvasReducer']['nodeClass'],
+		nodeDict: store['CanvasReducer']['nodeDict']
 	};
 })(Tracker);
