@@ -8,7 +8,6 @@ const initialState = {
 };
 
 export const CanvasReducer = (state = initialState, action) => {
-	console.log(action['type']);
 	switch (action['type']) {
 		case CanvasAction.RESET: {
 			return initialState;
@@ -28,14 +27,12 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 		}
 		case CanvasAction.DELETE_NODE: {
-			console.log("hi");
-			console.log(action['payload']['key']);
-			let _id = this.state.nodeDict[action['payload']['key']];
-			console.log(_id);
+			let id = action['payload']['key'];
+			let _id = state.nodeDict[action['payload']['key']];
 			return Object.assign({}, state, {
-				nodes: delete state.nodes[action['payload']['key']],
+				nodes: delete state.nodes[id],
 				nodeClass: delete state.nodeClass[_id],
-				nodeDict: delete state.nodeDict[action['payload']['key']]
+				nodeDict: delete state.nodeDict[id]
 			})
 		}
 		case CanvasAction.ADD_LINK: {

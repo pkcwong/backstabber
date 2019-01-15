@@ -34,8 +34,9 @@ export class CanvasAction {
 			payload: {
 				key: key,
 			}
-		}
+		};
 	};
+
 
 	static addLink = (link) => {
 		return {

@@ -29,6 +29,7 @@ class Component extends React.Component {
 		super(props);
 		this.state = {
 			_id: '',
+			remove_id: ''
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -46,6 +47,7 @@ class Component extends React.Component {
 		};
 
 	}
+
 
 	render() {
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
@@ -324,6 +326,7 @@ class Component extends React.Component {
 	 * @returns {DiagramModel} a diagram model
 	 */
 	createModel = (nodes, links) => {
+		console.log(nodes);
 		let model = new DiagramModel();
 		Object.keys(nodes).map((key)=>{
 			// check if the property/key is defined in the object itself, not in parent
@@ -334,7 +337,10 @@ class Component extends React.Component {
 					})
 				},
 				entityRemoved: () => {
-					CanvasAction.deleteNode(key);
+					this.setState({
+						_id: ''
+					});
+					this.props.store.dispatch(CanvasAction.deleteNode(key));
 				}
 			});
 			model.addNode(nodes[key]);
