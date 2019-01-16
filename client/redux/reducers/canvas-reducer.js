@@ -7,6 +7,13 @@ const initialState = {
 	nodeDict: {}
 };
 
+const remove = (json, key) => {
+	let map = Object.assign({}, json);  // pure function, make a copy
+	delete map[key];
+	return map;
+};
+
+
 export const CanvasReducer = (state = initialState, action) => {
 	switch (action['type']) {
 		case CanvasAction.RESET: {
@@ -30,9 +37,9 @@ export const CanvasReducer = (state = initialState, action) => {
 			let id = action['payload']['key'];
 			let _id = state.nodeDict[action['payload']['key']];
 			return Object.assign({}, state, {
-				nodes: delete state.nodes[id],
-				nodeClass: delete state.nodeClass[_id],
-				nodeDict: delete state.nodeDict[id]
+				nodes: remove(state.nodes, id),
+				nodeClass: remove(state.nodeClass, _id),
+				nodeDict: remove(state.nodeDict, id)
 			})
 		}
 		case CanvasAction.ADD_LINK: {
