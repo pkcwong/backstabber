@@ -235,7 +235,7 @@ class Component extends React.Component {
 																props = Object.assign({}, props, {
 																	[key]: $("#"+key).val()
 																});
-																this.props.nodeClass[this.state._id].setProps(props)
+																this.props.nodeClass[this.state._id].setProps(props);
 																this.setState({
 																	_id: ""
 																})
@@ -255,10 +255,14 @@ class Component extends React.Component {
 													"fontSize": '0.8em'
 												}
 											}>
+												<ControlLabel>Current {key} value:</ControlLabel>{' '}
+												{
+													this.props.nodeClass[this.state._id].props[key]
+												}
 												<Form inline>
 													<FormGroup>
 														<ControlLabel>{key} value:</ControlLabel>{' '}
-														<FormControl type="text" id={key}/>
+														<FormControl type="text" id={key} />
 													</FormGroup>{' '}
 												</Form>
 												{button}
