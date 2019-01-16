@@ -69,7 +69,7 @@ export class BasicNode {
 		});
 	}
 
-	setProps(props) {
+	setProps(props = {}) {
 		this.props = Object.keys(props).reduce((accumulator, current) => {
 			if (this.class.props.hasOwnProperty(current)) {
 				accumulator[current] = props[current];
