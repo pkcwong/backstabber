@@ -13,7 +13,7 @@ describe('CanvasReducer', ()=>{
 			links: [],
 			nodeClass: {},
 			nodeDict: {}
-		}, CanvasAction.RESET())).toEqual({
+		}, CanvasAction.RESET({}))).toEqual({
 			nodes: {},
 			links: [],
 			nodeClass: {},
