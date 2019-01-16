@@ -1,19 +1,25 @@
 import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
-import { DefaultNodeModel } from "storm-react-diagrams/dist/@types/src/main";
 import { StringNode } from "../../shared/lib/string-node";
 
-const node =  new DefaultNodeModel("string");
-const nodeClass = new StringNode();
+import {DefaultNodeModel} from 'storm-react-diagrams';
 
 describe('CanvasReducer', ()=>{
+	const node =  new DefaultNodeModel("StringNode");
+	const nodeClass = new StringNode();
 	it('Should reset states', ()=>{
 		expect(CanvasReducer({
-			nodes: {},
+			nodes: Object.assign({},{}, {
+				[node.id]: node
+			}),
 			links: [],
-			nodeClass: {},
-			nodeDict: {}
-		}, CanvasAction.RESET({}))).toEqual({
+			nodeClass: Object.assign({},{}, {
+				[nodeClass._id]: nodeClass
+			}),
+			nodeDict: Object.assign({},{}, {
+				[node.id]: nodeClass._id
+			}),
+		}, CanvasAction.reset({}))).toEqual({
 			nodes: {},
 			links: [],
 			nodeClass: {},
@@ -26,10 +32,7 @@ describe('CanvasReducer', ()=>{
 			links: [],
 			nodeClass: {},
 			nodeDict: {}
-		}, CanvasAction.ADD_NODE({
-			node: node,
-			nodeClass: new nodeClass
-		}))).toEqual({
+		}, CanvasAction.addNode(node,nodeClass))).toEqual({
 			nodes: Object.assign({},{}, {
 				[node.id]: node
 			}),
@@ -54,9 +57,7 @@ describe('CanvasReducer', ()=>{
 			nodeDict: Object.assign({},{}, {
 				[node.id]: nodeClass._id
 			}),
-		}, CanvasAction.DELETE_NODE({
-			key: node.id,
-		}))).toEqual({
+		}, CanvasAction.deleteNode(node.id))).toEqual({
 			nodes: {},
 			links: [],
 			nodeClass: {},
