@@ -3,7 +3,8 @@ import { StringNode } from "../../shared/lib/string-node";
 import { ReturnNode } from "../../shared/lib/return-node";
 
 const mock = () => {
-	let myStringNode = new StringNode({
+	let myStringNode = new StringNode();
+	myStringNode.setProps({
 		string: 'hello world'
 	});
 	let myReturnNode = new ReturnNode();

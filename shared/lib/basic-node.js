@@ -69,8 +69,13 @@ export class BasicNode {
 		});
 	}
 
-	setProps(props) {
-		this.props = props;
+	setProps(props = {}) {
+		this.props = Object.keys(props).reduce((accumulator, current) => {
+			if (this.class.props.hasOwnProperty(current)) {
+				accumulator[current] = props[current];
+			}
+			return accumulator;
+		}, Object.assign({}, this.class.props));
 		this.reset();
 	}
 
