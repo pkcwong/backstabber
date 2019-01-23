@@ -33,12 +33,21 @@ export class Program {
 		});
 	}
 
+	/**
+	 * Serializes a Program to JSON.
+	 * @returns {*}
+	 */
 	serialize() {
 		return this.nodes.map((node) => {
 			return node.serialize();
 		});
 	}
 
+	/**
+	 * Constructs a Program from JSON.
+	 * @param json
+	 * @returns {Program}
+	 */
 	static deserialize(json) {
 		const constructor = {
 			EntryNode,
@@ -46,7 +55,6 @@ export class Program {
 			StringNode
 		};
 		let map = json.reduce((accumulator, current) => {
-
 			let node = new constructor[current.class](current.props);
 			node._id = current._id;
 			accumulator[current._id] = node;
