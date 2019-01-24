@@ -91,7 +91,7 @@ class Component extends React.Component {
 								// TODO: Save Project
 								()=>{
 									let myProgram = new Program(dictToValue(this.props.nodeClass));
-									console.log(myProgram.serialize())
+									this.props.dispatch(CanvasAction.create(myProgram, null));
 								}
 							}>
 							Save Project
