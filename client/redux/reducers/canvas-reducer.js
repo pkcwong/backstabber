@@ -42,11 +42,16 @@ export const CanvasReducer = (state = initialState, action) => {
 				nodeDict: remove(state.nodeDict, id)
 			})
 		}
-		case CanvasAction.ADD_LINK: {
-			return Object.assign({}, state, {
-				links: [...state.links, action['payload']['link']]
-			});
-		}
+        case CanvasAction.ADD_LINK: {
+            return Object.assign({}, state, {
+                links: [...state.links, action['payload']['link']]
+            });
+        }
+        case CanvasAction.DELETE_LINK: {
+            return Object.assign({}, state, {
+                links: state.links.filter(links => links.id !== action.payload.link.id)
+            });
+        }
 		case CanvasAction.LOAD_COMPLETE: {
 			// TODO: parse into react diagram nodes
 			const sketch = action['payload'];

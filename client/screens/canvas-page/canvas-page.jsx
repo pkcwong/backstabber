@@ -376,11 +376,15 @@ class Component extends React.Component {
 						entity.addListener({
 							entityRemoved: ({ entity }) => {
 								/* TODO link removed */
+                                this.props.store.dispatch(CanvasAction.deleteLink(link));
 								console.log({
 									link: entity
 								});
 							}
 						});
+						if(link.sourcePort.in!=link.targetPort.in){
+                            this.props.store.dispatch(CanvasAction.addLink(link));
+                        }
 						/* TODO link created */
 						console.log({
 							sourcePort: link['sourcePort'],

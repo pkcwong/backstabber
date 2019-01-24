@@ -4,6 +4,7 @@ export class CanvasAction {
 	static ADD_NODE = 'Canvas/ADD_NODE';
 	static DELETE_NODE = 'Canvas/DELETE_NODE';
 	static ADD_LINK = 'Canvas/ADD_LINK';
+    static DELETE_LINK = 'Canvas/DELETE_LINK';
 	static LOAD = 'Canvas/LOAD';
 	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
@@ -38,14 +39,24 @@ export class CanvasAction {
 	};
 
 
-	static addLink = (link) => {
-		return {
-			type: CanvasAction.ADD_LINK,
-			payload: {
-				link: link
-			}
-		};
-	};
+    static addLink = (link) => {
+        return {
+            type: CanvasAction.ADD_LINK,
+            payload: {
+                link: link
+            }
+        };
+    };
+
+
+    static deleteLink = (link) => {
+        return {
+            type: CanvasAction.DELETE_LINK,
+            payload: {
+                link: link
+            }
+        };
+    };
 
 	/**
 	 * Loads a sketch from database.
