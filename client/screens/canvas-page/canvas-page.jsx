@@ -91,6 +91,7 @@ class Component extends React.Component {
 								// TODO: Save Project
 								()=>{
 									let myProgram = new Program(dictToValue(this.props.nodeClass));
+									console.log(myProgram.serialize())
 								}
 							}>
 							Save Project
@@ -375,21 +376,12 @@ class Component extends React.Component {
 					targetPortChanged: ({ entity, port }) => {
 						entity.addListener({
 							entityRemoved: ({ entity }) => {
-								/* TODO link removed */
                                 this.props.store.dispatch(CanvasAction.deleteLink(link));
-								console.log({
-									link: entity
-								});
 							}
 						});
 						if(link.sourcePort.in!=link.targetPort.in){
                             this.props.store.dispatch(CanvasAction.addLink(link));
                         }
-						/* TODO link created */
-						console.log({
-							sourcePort: link['sourcePort'],
-							targetPort: port
-						});
 					}
 				});
 			},
