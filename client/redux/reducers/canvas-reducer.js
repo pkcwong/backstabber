@@ -42,11 +42,42 @@ export const CanvasReducer = (state = initialState, action) => {
 				nodeDict: remove(state.nodeDict, id)
 			})
 		}
-		case CanvasAction.ADD_LINK: {
-			return Object.assign({}, state, {
-				links: [...state.links, action['payload']['link']]
-			});
-		}
+        case CanvasAction.ADD_LINK: {
+			if(!action.payload.link.sourcePort.in){
+                let outbound = state.nodeClass[state.nodeDict[action.payload.link.sourcePort.parent.id]]
+                let inbound = state.nodeClass[state.nodeDict[action.payload.link.targetPort.parent.id]]
+                let outboundName = action.payload.link.sourcePort.label
+                let inboundName = action.payload.link.targetPort.label
+                outbound.sendOnReady(outbound.getOutboundPort(outboundName), inbound.getInboundPort(inboundName))
+			}else{
+                let outbound = state.nodeClass[state.nodeDict[action.payload.link.targetPort.parent.id]]
+                let inbound = state.nodeClass[state.nodeDict[action.payload.link.sourcePort.parent.id]]
+                let outboundName = action.payload.link.targetPort.label
+                let inboundName = action.payload.link.sourcePort.label
+                outbound.sendOnReady(outbound.getOutboundPort(outboundName), inbound.getInboundPort(inboundName))
+			}
+            return Object.assign({}, state, {
+                links: [...state.links, action['payload']['link']]
+            });
+        }
+        case CanvasAction.DELETE_LINK: {
+            if(!action.payload.link.sourcePort.in){
+                let outbound = state.nodeClass[state.nodeDict[action.payload.link.sourcePort.parent.id]]
+                let inbound = state.nodeClass[state.nodeDict[action.payload.link.targetPort.parent.id]]
+                let outboundName = action.payload.link.sourcePort.label
+                let inboundName = action.payload.link.targetPort.label
+                outbound.revokeSendOnReady(outbound.getOutboundPort(outboundName), inbound.getInboundPort(inboundName))
+            }else{
+                let outbound = state.nodeClass[state.nodeDict[action.payload.link.targetPort.parent.id]]
+                let inbound = state.nodeClass[state.nodeDict[action.payload.link.sourcePort.parent.id]]
+                let outboundName = action.payload.link.targetPort.label
+                let inboundName = action.payload.link.sourcePort.label
+                outbound.revokeSendOnReady(outbound.getOutboundPort(outboundName), inbound.getInboundPort(inboundName))
+            }
+            return Object.assign({}, state, {
+                links: state.links.filter(links => links.id !== action.payload.link.id)
+            });
+        }
 		case CanvasAction.LOAD_COMPLETE: {
 			// TODO: parse into react diagram nodes
 			const sketch = action['payload'];
