@@ -59,6 +59,17 @@ export class BasicNode {
 		];
 	}
 
+	/**
+	 * Revokes a connection between two ports.
+	 * @param output
+	 * @param input
+	 */
+	revokeSendOnReady(output, input) {
+		this.observers = this.observers.filter((item) => {
+			return (item._id !== input._id && item.outbound !== output.port && item.inbound !== input.port);
+		});
+	}
+
 	receive(port, data, propagate = true) {
 		if (this.instance.inputs[port] === undefined) {
 			this.instance.inputs[port] = data;
