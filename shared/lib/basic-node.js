@@ -40,6 +40,11 @@ export class BasicNode {
 		});
 	}
 
+	/**
+	 * Connects two ports with a link.
+	 * @param output
+	 * @param input
+	 */
 	sendOnReady(output, input) {
 		this.observers = [
 			...this.observers,
@@ -63,17 +68,35 @@ export class BasicNode {
 		}
 	}
 
+	/**
+	 * Checks if a Node is ready to execute.
+	 * @returns {boolean}
+	 */
 	isReady() {
 		return !Object.keys(this.instance.inputs).some((item) => {
 			return (this.instance.inputs[item] === undefined);
 		});
 	}
 
-	setProps(props) {
-		this.props = props;
+	/**
+	 * Resets the property of a Node.
+	 * @param props
+	 */
+	setProps(props = {}) {
+		this.props = Object.keys(props).reduce((accumulator, current) => {
+			if (this.class.props.hasOwnProperty(current)) {
+				accumulator[current] = props[current];
+			}
+			return accumulator;
+		}, Object.assign({}, this.class.props));
 		this.reset();
 	}
 
+	/**
+	 * Returns an inbound port.
+	 * @param port
+	 * @returns {{_id: (string|*), port: *, func: Function}}
+	 */
 	getInboundPort(port) {
 		return {
 			_id: this._id,
@@ -84,6 +107,11 @@ export class BasicNode {
 		};
 	}
 
+	/**
+	 * Returns an outbound port.
+	 * @param port
+	 * @returns {{_id: (string|*), port: *, func: (function(): (undefined|*))}}
+	 */
 	getOutboundPort(port) {
 		return {
 			_id: this._id,
@@ -94,6 +122,10 @@ export class BasicNode {
 		};
 	}
 
+	/**
+	 * Serializes a Node to JSON.
+	 * @returns {{_id: (string|*), class: *, props: string | *, observers: {_id: *, outbound: *, inbound: *}[]}}
+	 */
 	serialize() {
 		return {
 			_id: this._id,

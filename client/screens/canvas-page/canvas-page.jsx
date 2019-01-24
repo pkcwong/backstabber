@@ -23,6 +23,14 @@ import { sketches_db } from "../../../shared/collections/sketches";
 import { Button, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
 import { Program } from "../../../shared/lib/program";
 
+const dictToValue = (dict) => {
+	let arr = [];
+	Object.keys(dict).map((key)=>{
+		arr = [...arr, dict[key]]
+	});
+	return arr
+};
+
 class Component extends React.Component {
 
 	constructor(props) {
@@ -47,7 +55,6 @@ class Component extends React.Component {
 		};
 
 	}
-
 
 	render() {
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
@@ -83,7 +90,7 @@ class Component extends React.Component {
 							onClick={
 								// TODO: Save Project
 								()=>{
-									let myProgram = new Program(this.props.nodeClass);
+									let myProgram = new Program(dictToValue(this.props.nodeClass));
 								}
 							}>
 							Save Project
@@ -94,7 +101,7 @@ class Component extends React.Component {
 							onClick={
 								// TODO: Generate API
 								()=>{
-									let myProgram = new Program(this.props.nodeClass);
+									let myProgram = new Program(dictToValue(this.props.nodeClass));
 								}
 							}>
 							Generate API
@@ -105,7 +112,7 @@ class Component extends React.Component {
 							onClick={
 								// TODO: Run the Program
 								()=>{
-									let myProgram = new Program(this.props.nodeClass);
+									let myProgram = new Program(dictToValue(this.props.nodeClass));
 								}
 							}
 						>
@@ -235,7 +242,7 @@ class Component extends React.Component {
 																props = Object.assign({}, props, {
 																	[key]: $("#"+key).val()
 																});
-																this.props.nodeClass[this.state._id].setProps(props)
+																this.props.nodeClass[this.state._id].setProps(props);
 																this.setState({
 																	_id: ""
 																})
@@ -255,10 +262,14 @@ class Component extends React.Component {
 													"fontSize": '0.8em'
 												}
 											}>
+												<ControlLabel>Current {key} value:</ControlLabel>{' '}
+												{
+													this.props.nodeClass[this.state._id].props[key]
+												}
 												<Form inline>
 													<FormGroup>
 														<ControlLabel>{key} value:</ControlLabel>{' '}
-														<FormControl type="text" id={key}/>
+														<FormControl type="text" id={key} />
 													</FormGroup>{' '}
 												</Form>
 												{button}
@@ -326,7 +337,6 @@ class Component extends React.Component {
 	 * @returns {DiagramModel} a diagram model
 	 */
 	createModel = (nodes, links) => {
-		console.log(nodes);
 		let model = new DiagramModel();
 		Object.keys(nodes).map((key)=>{
 			// check if the property/key is defined in the object itself, not in parent
