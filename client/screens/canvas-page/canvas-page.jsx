@@ -77,7 +77,7 @@ class Component extends React.Component {
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						TODO: Your API Key goes here...
+						{'/api/program/' + this.props.document._id}
 					</Modal.Body>
 					<Modal.Footer>
 						<Button onClick={
@@ -441,6 +441,7 @@ const Tracker = withTracker(() => {
 
 export const CanvasPage = connect((store) => {
 	return {
+		document: store['CanvasReducer']['document'],
 		nodes: store['CanvasReducer']['nodes'],
 		links: store['CanvasReducer']['links'],
 		nodeClass: store['CanvasReducer']['nodeClass'],

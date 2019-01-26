@@ -1,16 +1,21 @@
 import { Meteor } from 'meteor/meteor';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { CanvasAction } from "../actions/canvas-action";
-import { sketches_db } from "/shared/collections/sketches";
 
 export const CanvasSaga = function* () {
 	yield takeLatest(CanvasAction.LOAD, function* (action) {
 		try {
 			let res = yield call((payload) => {
 				return new Promise((resolve, reject) => {
-					resolve(sketches_db.findOne({
+					Meteor.call('Sketches/LOAD', {
 						_id: payload['_id']
-					}));
+					}, (err, res) => {
+						if (err)
+						{
+							reject(err);
+						}
+						resolve(res);
+					});
 				});
 			}, {
 				_id: action['payload']['_id']

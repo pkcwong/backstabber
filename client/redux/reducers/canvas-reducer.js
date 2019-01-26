@@ -1,6 +1,13 @@
 import { CanvasAction } from "../actions/canvas-action";
+import { Program } from "../../../shared/lib/program";
 
 const initialState = {
+	document: {
+		_id: null,
+		owner: null,
+		tokens: [],
+		logs: []
+	},
 	nodes: {},
 	links: [],
 	nodeClass: {},
@@ -80,8 +87,16 @@ export const CanvasReducer = (state = initialState, action) => {
         }
 		case CanvasAction.LOAD_COMPLETE: {
 			// TODO: parse into react diagram nodes
-			const sketch = action['payload'];
-			return state;
+			const program = Program.deserialize(action['payload']['program']);
+			const canvas = action['payload']['canvas'];
+			return Object.assign({}, state, {
+				document: {
+					_id: action['payload']['_id'],
+					owner: action['payload']['owner'],
+					tokens: action['payload']['tokens'],
+					logs: action['payload']['logs']
+				}
+			});
 		}
 		default: {
 			return state;

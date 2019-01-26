@@ -76,6 +76,7 @@ export class CanvasAction {
 		return {
 			type: CanvasAction.LOAD_COMPLETE,
 			payload: {
+				_id: sketch['_id'],
 				meta: sketch['meta'],
 				program: sketch['program'],
 				canvas: sketch['canvas'],
