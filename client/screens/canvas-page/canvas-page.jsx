@@ -18,7 +18,7 @@ import { EntryNode } from "../../../shared/lib/entry-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
-import Lodash from 'lodash';
+import { Modal } from 'react-bootstrap';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { Button, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
 import { Program } from "../../../shared/lib/program";
@@ -37,7 +37,8 @@ class Component extends React.Component {
 		super(props);
 		this.state = {
 			_id: '',
-			remove_id: ''
+			remove_id: '',
+			show: false
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -60,6 +61,35 @@ class Component extends React.Component {
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
 		return (
 			<React.Fragment>
+				<Modal
+					show={this.state.show}
+					container={this}
+					onHide={()=>{
+						this.setState({
+							show: false
+						})
+					}}
+					aria-labelledby="contained-modal-title"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="contained-modal-title">
+							API Key
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						TODO: Your API Key goes here...
+					</Modal.Body>
+					<Modal.Footer>
+						<Button onClick={
+							()=>{
+								this.setState({
+									show: false
+								})
+							}
+						}>Close</Button>
+					</Modal.Footer>
+				</Modal>
+
 				<div style={
 					{
 						minHeight: "7vh",
@@ -92,6 +122,9 @@ class Component extends React.Component {
 								()=>{
 									let myProgram = new Program(dictToValue(this.props.nodeClass));
 									this.props.dispatch(CanvasAction.create(myProgram, null));
+									this.setState({
+										show: true
+									})
 								}
 							}>
 							Save Project
