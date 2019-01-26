@@ -19,7 +19,13 @@ describe('CanvasReducer', ()=>{
 			nodeDict: Object.assign({},{}, {
 				[node.id]: nodeClass._id
 			}),
-		}, CanvasAction.reset({}))).toEqual({
+		}, CanvasAction.reset())).toEqual({
+			document: {
+				_id: null,
+				owner: null,
+				tokens: [],
+				logs: []
+			},
 			nodes: {},
 			links: [],
 			nodeClass: {},
