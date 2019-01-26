@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Random } from 'meteor/random'
 import { sketches_db } from "/shared/collections/sketches";
 
 Meteor.methods({
@@ -20,6 +21,19 @@ Meteor.methods({
 				tokens: [],
 				logs: []
 			}));
+		});
+	},
+	'Sketches/GENERATE-KEY': (json) => {
+		return new Promise((resolve, reject) => {
+			const key = Random.id();
+			sketches_db.update({
+				_id: json['_id']
+			}, {
+				$push: {
+					tokens: key
+				}
+			});
+			resolve(key);
 		});
 	}
 });

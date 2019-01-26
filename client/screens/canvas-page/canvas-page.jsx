@@ -58,6 +58,10 @@ class Component extends React.Component {
 	}
 
 	render() {
+		if (sketches_db.findOne(this.props.document._id) !== undefined) {
+			// TODO: Display the API tokens.
+			console.log(sketches_db.findOne(this.props.document._id).tokens);
+		}
 		this.engine.setDiagramModel(this.configModel(this.createModel(this.props.nodes, this.props.links)));
 		return (
 			<React.Fragment>
@@ -118,7 +122,7 @@ class Component extends React.Component {
 						<Button
 							bsStyle="primary"
 							onClick={
-								// TODO: Save Project
+								// TODO: Create / Update Project
 								()=>{
 									let myProgram = new Program(dictToValue(this.props.nodeClass));
 									this.props.dispatch(CanvasAction.create(myProgram, null));
@@ -133,9 +137,10 @@ class Component extends React.Component {
 						<Button
 							bsStyle="warning"
 							onClick={
-								// TODO: Generate API
 								()=>{
-									let myProgram = new Program(dictToValue(this.props.nodeClass));
+									if (this.props.document._id !== null) {
+										this.props.dispatch(CanvasAction.generateApiKey(this.props.document._id));
+									}
 								}
 							}>
 							Generate API

@@ -23,6 +23,13 @@ app.post('/api/program/:_id', [
 		response.end();
 		return;
 	}
+	if (!json.tokens.includes(request.header('token'))) {
+		response.writeHead(403, {
+			'Content-Type': 'application/json'
+		});
+		response.end();
+		return;
+	}
 	const program = Program.deserialize(json['program']);
 	program.execute(request.body).then((result) => {
 		response.writeHead(200, {
