@@ -10,9 +10,9 @@ export const CanvasSaga = function* () {
 					Meteor.call('Sketches/LOAD', {
 						_id: payload['_id']
 					}, (err, res) => {
-						if (err)
-						{
+						if (err) {
 							reject(err);
+							return;
 						}
 						resolve(res);
 					});
@@ -47,6 +47,27 @@ export const CanvasSaga = function* () {
 				canvas: action['payload']['canvas']
 			});
 			yield put(CanvasAction.load(res));
+		} catch (err) {
+			console.error(err);
+		}
+	});
+	yield takeLatest(CanvasAction.GENERATE_KEY, function* (action) {
+		try {
+			yield call((payload) => {
+				return new Promise((resolve, reject) => {
+					Meteor.call('Sketches/GENERATE-KEY', {
+						_id: payload['_id']
+					}, (err, res) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						resolve(res);
+					});
+				})
+			}, {
+				_id: action['payload']['_id']
+			});
 		} catch (err) {
 			console.error(err);
 		}

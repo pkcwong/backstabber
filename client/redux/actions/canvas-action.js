@@ -8,6 +8,7 @@ export class CanvasAction {
 	static LOAD = 'Canvas/LOAD';
 	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
+	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 
 	/**
 	 * Resets the canvas
@@ -98,6 +99,20 @@ export class CanvasAction {
 			payload: {
 				program: program.serialize(),
 				canvas: canvas
+			}
+		};
+	};
+
+	/**
+	 * Generates a new API key.
+	 * @param _id
+	 * @returns {{type: string, payload: {_id: *}}}
+	 */
+	static generateApiKey = (_id) => {
+		return {
+			type: CanvasAction.GENERATE_KEY,
+			payload: {
+				_id: _id
 			}
 		};
 	};

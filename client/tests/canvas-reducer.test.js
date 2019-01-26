@@ -21,10 +21,7 @@ describe('CanvasReducer', ()=>{
 			}),
 		}, CanvasAction.reset())).toEqual({
 			document: {
-				_id: null,
-				owner: null,
-				tokens: [],
-				logs: []
+				_id: null
 			},
 			nodes: {},
 			links: [],
