@@ -226,7 +226,7 @@ class Component extends React.Component {
 	 */
 	createModel = (nodes, links) => {
 		let model = new DiagramModel();
-		nodes.map((item) => {
+		nodes.forEach((item) => {
 			item.addListener({
 				selectionChanged: () => {
 
@@ -237,6 +237,13 @@ class Component extends React.Component {
 			});
 			model.addNode(item);
 		});
+		links.forEach((link) => {
+			link.addListener({
+				entityRemoved: () => {
+					// TODO: Link removed
+				}
+			})
+		});
 		links.forEach((item) => {
 			model.addLink(item);
 		});
@@ -245,12 +252,7 @@ class Component extends React.Component {
 		model.addListener({
 			linksUpdated: ({ link }) => {
 				link.addListener({
-					targetPortChanged: ({ entity, port }) => {
-						entity.addListener({
-							entityRemoved: ({ entity }) => {
-								// TODO: Link removed
-							}
-						});
+					targetPortChanged: () => {
 						this.props.dispatch(CanvasAction.addLink(link));
 					}
 				});
