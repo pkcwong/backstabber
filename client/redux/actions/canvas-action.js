@@ -4,7 +4,7 @@ export class CanvasAction {
 	static ADD_NODE = 'Canvas/ADD_NODE';
 	static DELETE_NODE = 'Canvas/DELETE_NODE';
 	static ADD_LINK = 'Canvas/ADD_LINK';
-    static DELETE_LINK = 'Canvas/DELETE_LINK';
+	static DELETE_LINK = 'Canvas/DELETE_LINK';
 	static LOAD = 'Canvas/LOAD';
 	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
@@ -20,44 +20,44 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (node, nodeClass) => {
+	static addNode = (nodeType, points) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
-				node: node,
-				nodeClass: nodeClass,
+				nodeType: nodeType,
+				coordinates: {
+					x: points.x,
+					y: points.y
+				}
 			}
 		};
 	};
 
-	static deleteNode = (key) => {
+	static addLink = (link) => {
+		const ports = [
+			link.sourcePort,
+			link.targetPort
+		];
+		const source = ports.find((item) => {
+			return (item.in === false);
+		});
+		const target = ports.find((item) => {
+			return (item.in === true);
+		});
 		return {
-			type: CanvasAction.DELETE_NODE,
+			type: CanvasAction.ADD_LINK,
 			payload: {
-				key: key,
+				outbound: {
+					_id: source.parent.id,
+					port: source.name
+				},
+				inbound: {
+					_id: target.parent.id,
+					port: target.name
+				}
 			}
 		};
 	};
-
-
-    static addLink = (link) => {
-        return {
-            type: CanvasAction.ADD_LINK,
-            payload: {
-                link: link
-            }
-        };
-    };
-
-
-    static deleteLink = (link) => {
-        return {
-            type: CanvasAction.DELETE_LINK,
-            payload: {
-                link: link
-            }
-        };
-    };
 
 	/**
 	 * Loads a sketch from database.
