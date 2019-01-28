@@ -216,7 +216,6 @@ class Component extends React.Component {
 										let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) =>{
 											return (bsNode._id === this.props.CanvasReducer.select_id)
 										});
-										console.log(bsNode);
 										let button = ({});
 										if(index === Object.keys(bsNode.props).length-1){
 											button = (
