@@ -34,7 +34,6 @@ class Component extends React.Component {
 	}
 
 	render() {
-		// TODO: Display the API tokens.
 		this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
 		return (
 			<React.Fragment>
