@@ -14,7 +14,8 @@ const initialState = {
 		EntryNode,
 		StringNode,
 		ReturnNode
-	}
+	},
+	select_id: ""
 };
 
 export const CanvasReducer = (state = initialState, action) => {
@@ -35,6 +36,9 @@ export const CanvasReducer = (state = initialState, action) => {
 			stormNode.addListener({
 				entityRemoved: () => {
 					action.payload.dispatcher(CanvasAction.purgeNode(stormNode));
+				},
+				selectionChanged: () => {
+					action.payload.dispatcher(CanvasAction.nodeSelected(stormNode.id))
 				}
 			});
 			return Object.assign({}, state, {
@@ -60,7 +64,8 @@ export const CanvasReducer = (state = initialState, action) => {
 				}),
 				srdNodes: state.srdNodes.filter((srdNode) => {
 					return !(srdNode.id === action.payload._id);
-				})
+				}),
+				select_id: ""
 			});
 		}
 		case CanvasAction.ADD_LINK: {
@@ -123,6 +128,14 @@ export const CanvasReducer = (state = initialState, action) => {
 					return !(link.sourcePort === srdPortOutbound && link.targetPort === srdPortInbound);
 				})
 			});
+		}
+		case CanvasAction.NODE_SELECT:{
+			let id = Object.keys(state.lookup).filter((bs_id)=>{
+				return(state.lookup[bs_id] === action.payload._id)
+			});
+			return Object.assign({}, state, {
+				select_id: id[0]
+			})
 		}
 		case CanvasAction.LOAD_COMPLETE: {
 			return Object.assign({}, state, {
