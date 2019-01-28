@@ -19,7 +19,8 @@ describe('CanvasReducer', () => {
 				EntryNode,
 				StringNode,
 				ReturnNode
-			}
+			},
+			select_id: ""
 		});
 	});
 	it('Should add Nodes', () => {

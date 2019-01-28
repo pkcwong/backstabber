@@ -22,8 +22,6 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			_id: '',
-			remove_id: '',
 			show: false
 		};
 		this.engine = new DiagramEngine();
@@ -200,6 +198,70 @@ class Component extends React.Component {
 								paddingTop: '0.2em'
 							}
 						}>
+							{
+
+								(()=>{
+									if(this.props.CanvasReducer.select_id !== ''){
+										let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) =>{
+											return (bsNode._id === this.props.CanvasReducer.select_id)
+										});
+										return (Object.keys(bsNode.props))
+									}
+									else{
+										return [];
+									}
+								})().map((key, index)=>{
+										let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) =>{
+											return (bsNode._id === this.props.CanvasReducer.select_id)
+										});
+										let button = ({});
+										if(index === Object.keys(bsNode.props).length-1){
+											button = (
+												<div>
+													<Button
+														onClick={
+															()=>{
+																let props={};
+																Object.keys(bsNode.props).map((key, index)=> {
+																	props = Object.assign({}, props, {
+																		[key]: $("#"+key).val()
+																	});
+																	bsNode.setProps(props);
+																	this.setState({
+																		_id: ""
+																	})
+																});
+															}
+														}
+													>
+														Submit
+													</Button>
+												</div>)
+											;
+										}
+										return(
+											<React.Fragment key = {index}>
+												<div style={
+													{
+														"fontSize": '0.8em'
+													}
+												}>
+													<ControlLabel>Current {key} value:</ControlLabel>{' '}
+													{
+														bsNode.props[key]
+													}
+													<Form inline>
+														<FormGroup>
+															<ControlLabel>{key} value:</ControlLabel>{' '}
+															<FormControl type="text" id={key} />
+														</FormGroup>{' '}
+													</Form>
+													{button}
+												</div>
+											</React.Fragment>
+										);
+								})
+							}
 							<div style={
 								{
 									color: "white"
