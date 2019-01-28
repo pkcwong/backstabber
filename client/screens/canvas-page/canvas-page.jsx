@@ -240,7 +240,7 @@ class Component extends React.Component {
 		links.forEach((link) => {
 			link.addListener({
 				entityRemoved: () => {
-					// TODO: Link removed
+					this.props.dispatch(CanvasAction.deleteLink(link));
 				}
 			})
 		});

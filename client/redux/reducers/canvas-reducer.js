@@ -1,4 +1,4 @@
-import { DefaultLinkModel, DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
+import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { StringNode } from "../../../shared/lib/string-node";
@@ -70,6 +70,30 @@ export const CanvasReducer = (state = initialState, action) => {
 					...state.srdLinks,
 					srdLink
 				]
+			});
+		}
+		case CanvasAction.DELETE_LINK: {
+			const bsNodeOutbound = state.bsNodes.find((bsNode) => {
+				return (bsNode._id === Object.keys(state.lookup).find((key) => {
+					return (state.lookup[key] === action.payload.outbound._id);
+				}));
+			});
+			const bsNodeInbound = state.bsNodes.find((bsNode) => {
+				return (bsNode._id === Object.keys(state.lookup).find((key) => {
+					return (state.lookup[key] === action.payload.inbound._id);
+				}));
+			});
+			bsNodeOutbound.revokeSendOnReady(bsNodeOutbound.getOutboundPort(action.payload.outbound.port), bsNodeInbound.getInboundPort(action.payload.inbound.port));
+			const srdPortOutbound = state.srdNodes.find((srdNode) => {
+				return (srdNode.id === action.payload.outbound._id);
+			}).ports[action.payload.outbound.port];
+			const srdPortInbound = state.srdNodes.find((srdNode) => {
+				return (srdNode.id === action.payload.inbound._id);
+			}).ports[action.payload.inbound.port];
+			return Object.assign({}, state, {
+				srdLinks: state.srdLinks.filter((link) => {
+					return !(link.sourcePort === srdPortOutbound && link.targetPort === srdPortInbound);
+				})
 			});
 		}
 		case CanvasAction.LOAD_COMPLETE: {

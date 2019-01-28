@@ -59,6 +59,32 @@ export class CanvasAction {
 		};
 	};
 
+	static deleteLink = (link) => {
+		const ports = [
+			link.sourcePort,
+			link.targetPort
+		];
+		const source = ports.find((item) => {
+			return (item.in === false);
+		});
+		const target = ports.find((item) => {
+			return (item.in === true);
+		});
+		return {
+			type: CanvasAction.DELETE_LINK,
+			payload: {
+				outbound: {
+					_id: source.parent.id,
+					port: source.name
+				},
+				inbound: {
+					_id: target.parent.id,
+					port: target.name
+				}
+			}
+		};
+	};
+
 	/**
 	 * Loads a sketch from database.
 	 * @param _id
