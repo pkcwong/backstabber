@@ -3,6 +3,7 @@ import { CanvasAction } from "../actions/canvas-action";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { StringNode } from "../../../shared/lib/string-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
+import { Program } from "../../../shared/lib/program";
 
 const initialState = {
 	_id: null,
@@ -125,10 +126,11 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 		}
 		case CanvasAction.LOAD_COMPLETE: {
+			// TODO: Parse into SRD Models
+			const canvas = action.payload.canvas;
 			return Object.assign({}, state, {
 				_id: action.payload._id,
-				program: action.payload.program,
-				canvas: action.payload.canvas
+				bsNodes: Program.deserialize(action.payload.program).nodes
 			});
 		}
 		default: {

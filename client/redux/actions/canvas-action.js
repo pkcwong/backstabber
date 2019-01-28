@@ -9,6 +9,7 @@ export class CanvasAction {
 	static LOAD = 'Canvas/LOAD';
 	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
+	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 
 	/**
@@ -144,6 +145,24 @@ export class CanvasAction {
 		return {
 			type: CanvasAction.CREATE,
 			payload: {
+				program: program.serialize(),
+				canvas: canvas
+			}
+		};
+	};
+
+	/**
+	 * Updates an existing Sketch on database
+	 * @param _id
+	 * @param program
+	 * @param canvas
+	 * @returns {{type: string, payload: {_id: *, program: *, canvas: *}}}
+	 */
+	static update = (_id, program, canvas) => {
+		return {
+			type: CanvasAction.UPDATE_PROGRAM,
+			payload: {
+				_id: _id,
 				program: program.serialize(),
 				canvas: canvas
 			}
