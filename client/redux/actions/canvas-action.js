@@ -68,12 +68,12 @@ export class CanvasAction {
 			type: CanvasAction.ADD_LINK,
 			payload: {
 				outbound: {
-					_id: source.parent.id,
-					port: source.name
+					_id: source ? source.parent.id : undefined,
+					port: source ? source.name : undefined
 				},
 				inbound: {
-					_id: target.parent.id,
-					port: target.name
+					_id: target ? target.parent.id : undefined,
+					port: target ? target.name : undefined
 				},
 				dispatcher: dispatcher
 			}
