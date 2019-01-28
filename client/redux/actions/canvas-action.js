@@ -11,6 +11,7 @@ export class CanvasAction {
 	static CREATE = 'Canvas/CREATE';
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
+	static NODE_SELECT = 'canvas/NODE_SELECT';
 
 	/**
 	 * Resets the canvas
@@ -79,6 +80,15 @@ export class CanvasAction {
 				dispatcher: dispatcher
 			}
 		};
+	};
+
+	static nodeSelected = (_id)=>{
+		return {
+			type: CanvasAction.NODE_SELECT,
+			payload: {
+				_id: _id
+			}
+		}
 	};
 
 	static deleteLink = (link) => {
