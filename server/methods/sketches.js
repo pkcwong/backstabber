@@ -12,7 +12,6 @@ Meteor.methods({
 	},
 	'Sketches/CREATE': (json) => {
 		return new Promise((resolve, reject) => {
-			// TODO enforce auth
 			resolve(sketches_db.insert({
 				owner: Meteor.userId(),
 				meta: {},
@@ -23,11 +22,25 @@ Meteor.methods({
 			}));
 		});
 	},
+	'Sketches/UPDATE-PROGRAM': (json) => {
+		return new Promise((resolve, reject) => {
+			resolve(sketches_db.update({
+				_id: json['_id'],
+				owner: Meteor.user()
+			}, {
+				$set: {
+					program: json['program'],
+					canvas: json['canvas']
+				}
+			}))
+		});
+	},
 	'Sketches/GENERATE-KEY': (json) => {
 		return new Promise((resolve, reject) => {
 			const key = Random.id();
 			sketches_db.update({
-				_id: json['_id']
+				_id: json['_id'],
+				owner: Meteor.user()
 			}, {
 				$push: {
 					tokens: key

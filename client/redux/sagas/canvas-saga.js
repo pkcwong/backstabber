@@ -72,6 +72,32 @@ export const CanvasSaga = function* () {
 			console.error(err);
 		}
 	});
+	yield takeLatest(CanvasAction.UPDATE_PROGRAM, function* (action) {
+		try {
+			yield call((payload) => {
+				return new Promise((resolve, reject) => {
+					Meteor.call('Sketches/UPDATE-PROGRAM', {
+						_id: payload._id,
+						program: payload.program,
+						canvas: payload.canvas
+					}, (err, res) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						resolve(res);
+					});
+				});
+			}, {
+				_id: action.payload._id,
+				program: action.payload.program,
+				canvas: action.payload.canvas
+			});
+			yield put(CanvasAction.load(action.payload._id));
+		} catch (err) {
+			console.error(err);
+		}
+	});
 	yield takeLatest(CanvasAction.GENERATE_KEY, function* (action) {
 		try {
 			yield call((payload) => {

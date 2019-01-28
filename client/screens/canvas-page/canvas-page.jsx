@@ -16,6 +16,7 @@ import TrayItemWidget from './components/TrayItemWidget';
 import { Modal } from 'react-bootstrap';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { Button, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
+import { Program } from "../../../shared/lib/program";
 
 class Component extends React.Component {
 
@@ -31,7 +32,6 @@ class Component extends React.Component {
 	}
 
 	render() {
-		// TODO: Display the API tokens.
 		this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
 		return (
 			<React.Fragment>
@@ -51,7 +51,23 @@ class Component extends React.Component {
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						// TODO: API Key
+						{'API URL:'}
+						<br/>
+						{window.location.hostname + '/api/program/' + this.props.CanvasReducer._id}
+						<br/>
+						{'API Key:'}
+						<br/>
+						{
+							JSON.stringify((() => {
+								const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+									return (sketch._id === this.props.CanvasReducer._id);
+								});
+								if (sketch === undefined) {
+									return [];
+								}
+								return sketch.tokens
+							})())
+						}
 					</Modal.Body>
 					<Modal.Footer>
 						<Button onClick={
@@ -91,7 +107,18 @@ class Component extends React.Component {
 						<Button
 							bsStyle="primary"
 							onClick={() => {
-								// TODO: Create / Update Project
+								const _id = this.props.CanvasReducer._id;
+								const program = new Program(this.props.CanvasReducer.bsNodes);
+								// TODO: Store canvas information
+								const canvas = null;
+								if (_id === null) {
+									this.props.dispatch(CanvasAction.create(program, canvas));
+								} else {
+									this.props.dispatch(CanvasAction.update(_id, program, canvas));
+								}
+								this.setState({
+									show: true
+								});
 							}}
 						>
 							Save Project
@@ -100,7 +127,10 @@ class Component extends React.Component {
 						<Button
 							bsStyle="warning"
 							onClick={() => {
-								// TODO: Generate API Key
+								this.props.dispatch(CanvasAction.generateApiKey(this.props.CanvasReducer._id));
+								this.setState({
+									show: true
+								});
 							}}
 						>
 							Generate API
