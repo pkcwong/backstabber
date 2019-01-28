@@ -3,6 +3,7 @@ export class CanvasAction {
 	static RESET = 'Canvas/RESET';
 	static ADD_NODE = 'Canvas/ADD_NODE';
 	static DELETE_NODE = 'Canvas/DELETE_NODE';
+	static PURGE_NODE = 'Canvas/PURGE-NODE';
 	static ADD_LINK = 'Canvas/ADD_LINK';
 	static DELETE_LINK = 'Canvas/DELETE_LINK';
 	static LOAD = 'Canvas/LOAD';
@@ -20,7 +21,7 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (nodeType, points) => {
+	static addNode = (nodeType, points, dispatcher) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
@@ -28,12 +29,31 @@ export class CanvasAction {
 				coordinates: {
 					x: points.x,
 					y: points.y
-				}
+				},
+				dispatcher: dispatcher
 			}
 		};
 	};
 
-	static addLink = (link) => {
+	static deleteNode = (node) => {
+		return {
+			type: CanvasAction.DELETE_NODE,
+			payload: {
+				_id: node.id
+			}
+		}
+	};
+
+	static purgeNode = (node) => {
+		return {
+			type: CanvasAction.PURGE_NODE,
+			payload: {
+				_id: node.id
+			}
+		}
+	};
+
+	static addLink = (link, dispatcher) => {
 		const ports = [
 			link.sourcePort,
 			link.targetPort
@@ -54,7 +74,8 @@ export class CanvasAction {
 				inbound: {
 					_id: target.parent.id,
 					port: target.name
-				}
+				},
+				dispatcher: dispatcher
 			}
 		};
 	};

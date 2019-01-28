@@ -172,7 +172,7 @@ class Component extends React.Component {
 						<div
 							className="diagram-layer"
 							onDrop={(event) => {
-								this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
+								this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event), this.props.dispatch));
 							}}
 							onDragOver={(event) => {
 								event.preventDefault();
@@ -226,23 +226,8 @@ class Component extends React.Component {
 	 */
 	createModel = (nodes, links) => {
 		let model = new DiagramModel();
-		nodes.forEach((item) => {
-			item.addListener({
-				selectionChanged: () => {
-
-				},
-				entityRemoved: () => {
-					// TODO: Node removed
-				}
-			});
-			model.addNode(item);
-		});
-		links.forEach((link) => {
-			link.addListener({
-				entityRemoved: () => {
-					this.props.dispatch(CanvasAction.deleteLink(link));
-				}
-			})
+		nodes.forEach((node) => {
+			model.addNode(node);
 		});
 		links.forEach((item) => {
 			model.addLink(item);
@@ -253,7 +238,7 @@ class Component extends React.Component {
 			linksUpdated: ({ link }) => {
 				link.addListener({
 					targetPortChanged: () => {
-						this.props.dispatch(CanvasAction.addLink(link));
+						this.props.dispatch(CanvasAction.addLink(link, this.props.dispatch));
 					}
 				});
 			},

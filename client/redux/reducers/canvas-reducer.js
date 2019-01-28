@@ -32,6 +32,11 @@ export const CanvasReducer = (state = initialState, action) => {
 			Object.keys(bsNode.class.ports.outputs).forEach((key) => {
 				stormNode.addPort(new DefaultPortModel(false, key));
 			});
+			stormNode.addListener({
+				entityRemoved: () => {
+					action.payload.dispatcher(CanvasAction.purgeNode(stormNode));
+				}
+			});
 			return Object.assign({}, state, {
 				bsNodes: [
 					...state.bsNodes,
@@ -43,6 +48,18 @@ export const CanvasReducer = (state = initialState, action) => {
 				],
 				lookup: Object.assign({}, state.lookup, {
 					[bsNode._id]: stormNode.getID()
+				})
+			});
+		}
+		case CanvasAction.DELETE_NODE: {
+			return Object.assign({}, state, {
+				bsNodes: state.bsNodes.filter((bsNode) => {
+					return !(bsNode._id === Object.keys(state.lookup).find((key) => {
+						return (state.lookup[key] === action.payload._id);
+					}));
+				}),
+				srdNodes: state.srdNodes.filter((srdNode) => {
+					return !(srdNode.id === action.payload._id);
 				})
 			});
 		}
@@ -65,6 +82,11 @@ export const CanvasReducer = (state = initialState, action) => {
 				return (srdNode.id === action.payload.inbound._id);
 			}).ports[action.payload.inbound.port];
 			const srdLink = srdPortOutbound.link(srdPortInbound);
+			srdLink.addListener({
+				entityRemoved: () => {
+					action.payload.dispatcher(CanvasAction.deleteLink(srdLink));
+				}
+			});
 			return Object.assign({}, state, {
 				srdLinks: [
 					...state.srdLinks,
@@ -83,6 +105,9 @@ export const CanvasReducer = (state = initialState, action) => {
 					return (state.lookup[key] === action.payload.inbound._id);
 				}));
 			});
+			if (bsNodeOutbound === undefined || bsNodeInbound === undefined) {
+				return state;
+			}
 			bsNodeOutbound.revokeSendOnReady(bsNodeOutbound.getOutboundPort(action.payload.outbound.port), bsNodeInbound.getInboundPort(action.payload.inbound.port));
 			const srdPortOutbound = state.srdNodes.find((srdNode) => {
 				return (srdNode.id === action.payload.outbound._id);
