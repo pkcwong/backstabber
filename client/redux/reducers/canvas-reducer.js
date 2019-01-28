@@ -130,11 +130,10 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 		}
 		case CanvasAction.NODE_SELECT:{
-			let id = Object.keys(state.lookup).filter((bs_id)=>{
-				return(state.lookup[bs_id] === action.payload._id)
-			});
 			return Object.assign({}, state, {
-				select_id: id[0]
+				select_id: Object.keys(state.lookup).find((bs_id)=>{
+					return(state.lookup[bs_id] === action.payload._id)
+				})
 			})
 		}
 		case CanvasAction.LOAD_COMPLETE: {

@@ -22,8 +22,6 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			_id: '',
-			remove_id: '',
 			show: false
 		};
 		this.engine = new DiagramEngine();
