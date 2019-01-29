@@ -109,8 +109,16 @@ class Component extends React.Component {
 							onClick={() => {
 								const _id = this.props.CanvasReducer._id;
 								const program = new Program(this.props.CanvasReducer.bsNodes);
-								// TODO: Store canvas information
-								const canvas = null;
+								let canvas = {};
+								this.props.CanvasReducer.bsNodes.map((bsNode)=>{
+									const srdNode = this.props.CanvasReducer.srdNodes.find((srdNode)=>{
+										return(this.props.CanvasReducer.lookup[bsNode._id] === srdNode.id)
+									});
+									canvas = Object.assign({}, canvas, {
+										"_id": bsNode._id,
+										"coordinates": {x: srdNode.x, y: srdNode.y}
+									});
+								});
 								if (_id === null) {
 									this.props.dispatch(CanvasAction.create(program, canvas));
 								} else {
