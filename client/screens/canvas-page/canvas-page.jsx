@@ -109,7 +109,6 @@ class Component extends React.Component {
 							onClick={() => {
 								const _id = this.props.CanvasReducer._id;
 								const program = new Program(this.props.CanvasReducer.bsNodes);
-								// TODO: Store canvas information
 								let canvas = {};
 								this.props.CanvasReducer.bsNodes.map((bsNode)=>{
 									const srdNode = this.props.CanvasReducer.srdNodes.find((srdNode)=>{
