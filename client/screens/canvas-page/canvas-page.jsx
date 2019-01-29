@@ -116,7 +116,7 @@ class Component extends React.Component {
 									});
 									canvas = Object.assign({}, canvas, {
 										"_id": bsNode._id,
-										"coordinates": [srdNode.x, srdNode.y]
+										"coordinates": {x: srdNode.x, y: srdNode.y}
 									});
 								});
 								if (_id === null) {
