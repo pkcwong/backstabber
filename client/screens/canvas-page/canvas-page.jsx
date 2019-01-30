@@ -348,6 +348,9 @@ class Component extends React.Component {
 						const targetPort = ports.find((item) => {
 							return (item.in === true);
 						});
+						if (sourcePort === undefined || targetPort === undefined) {
+							return;
+						}
 						const bsNodeSource = this.props.CanvasReducer.bsNodes.find((bsNode) => {
 							return (bsNode._id === Object.keys(this.props.CanvasReducer.lookup).find((key) => {
 								return (this.props.CanvasReducer.lookup[key] === sourcePort.parent.id);
