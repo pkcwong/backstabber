@@ -36,7 +36,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 			stormNode.addListener({
 				entityRemoved: () => {
-					action.payload.dispatcher(CanvasAction.purgeNode(bsNode));
+					action.payload.dispatcher(CanvasAction.purgeNode(bsNode._id));
 				},
 				selectionChanged: () => {
 					action.payload.dispatcher(CanvasAction.nodeSelected(stormNode.id))
@@ -133,14 +133,6 @@ export const CanvasReducer = (state = initialState, action) => {
 					return(state.lookup[bs_id] === action.payload._id)
 				})
 			})
-		}
-		case CanvasAction.LOAD_COMPLETE: {
-			// TODO: Parse into SRD Models
-			const canvas = action.payload.canvas;
-			return Object.assign({}, state, {
-				_id: action.payload._id,
-				bsNodes: Program.deserialize(action.payload.program).nodes
-			});
 		}
 		default: {
 			return state;

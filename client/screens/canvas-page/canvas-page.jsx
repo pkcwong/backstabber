@@ -365,7 +365,7 @@ class Component extends React.Component {
 								return (this.props.CanvasReducer.lookup[key] === targetPort.parent.id);
 							}));
 						});
-						this.props.dispatch(CanvasAction.addLink(bsNodeSource, sourcePort.name, bsNodeTarget, targetPort.name, this.props.dispatch));
+						this.props.dispatch(CanvasAction.addLink(bsNodeSource._id, sourcePort.name, bsNodeTarget._id, targetPort.name, this.props.dispatch));
 					}
 				});
 			},
