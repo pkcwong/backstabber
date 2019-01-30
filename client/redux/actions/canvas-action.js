@@ -37,45 +37,35 @@ export class CanvasAction {
 		};
 	};
 
-	static deleteNode = (node) => {
+	static deleteNode = (bsNode) => {
 		return {
 			type: CanvasAction.DELETE_NODE,
 			payload: {
-				_id: node.id
+				_id: bsNode._id
 			}
 		}
 	};
 
-	static purgeNode = (node) => {
+	static purgeNode = (bsNode) => {
 		return {
 			type: CanvasAction.PURGE_NODE,
 			payload: {
-				_id: node.id
+				_id: bsNode._id
 			}
 		}
 	};
 
-	static addLink = (link, dispatcher) => {
-		const ports = [
-			link.sourcePort,
-			link.targetPort
-		];
-		const source = ports.find((item) => {
-			return (item.in === false);
-		});
-		const target = ports.find((item) => {
-			return (item.in === true);
-		});
+	static addLink = (sourceNode, outboundPort, targetNode, inboundPort, dispatcher) => {
 		return {
 			type: CanvasAction.ADD_LINK,
 			payload: {
 				outbound: {
-					_id: source ? source.parent.id : undefined,
-					port: source ? source.name : undefined
+					_id: sourceNode._id,
+					port: outboundPort
 				},
 				inbound: {
-					_id: target ? target.parent.id : undefined,
-					port: target ? target.name : undefined
+					_id: targetNode._id,
+					port: inboundPort
 				},
 				dispatcher: dispatcher
 			}
