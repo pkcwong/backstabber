@@ -50,7 +50,7 @@ export const CanvasSaga = function* () {
 					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, put));
 				}));
 				yield put(CanvasAction.addLink(res.program[0]._id, res.program[0].observers[0].outbound, res.program[0].observers[0]._id, res.program[0].observers[0].inbound, put));
-				res.program.map(node => node.observers.map(link => console.log(link._id)))
+				//res.program.map(node => node.observers.map(link => console.log(link._id)))
 				yield all(res.program.reduce((accumulator, node) => {
 					return [
 						...accumulator,

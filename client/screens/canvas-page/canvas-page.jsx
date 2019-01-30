@@ -125,6 +125,7 @@ class Component extends React.Component {
 								});
 								if (_id === null) {
 									this.props.dispatch(CanvasAction.create(program, canvas));
+									console.log("HIHIHIHIH", this.props.CanvasReducer.bsNodes[0])
 								} else {
 									this.props.dispatch(CanvasAction.update(_id, program, canvas));
 								}

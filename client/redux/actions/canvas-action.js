@@ -56,6 +56,7 @@ export class CanvasAction {
 	};
 
 	static addLink = (sourceNodeID, outboundPort, targetNodeID, inboundPort, dispatcher) => {
+		console.log(sourceNodeID, outboundPort, targetNodeID, inboundPort)
 		return {
 			type: CanvasAction.ADD_LINK,
 			payload: {
