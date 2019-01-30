@@ -115,8 +115,12 @@ class Component extends React.Component {
 										return(this.props.CanvasReducer.lookup[bsNode._id] === srdNode.id)
 									});
 									canvas = Object.assign({}, canvas, {
-										"_id": bsNode._id,
-										"coordinates": {x: srdNode.x, y: srdNode.y}
+										[bsNode._id]: {
+											coordinates: {
+												x: srdNode.x,
+												y: srdNode.y
+											}
+										}
 									});
 								});
 								if (_id === null) {
