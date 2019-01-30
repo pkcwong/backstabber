@@ -9,7 +9,7 @@ export const CanvasSaga = function* () {
 				return state.CanvasReducer;
 			});
 			const srdNode = state.srdNodes.find((node) => {
-				return (node.id === action.payload._id);
+				return (node.id === state.lookup[action.payload._id]);
 			});
 			yield all(Object.keys(srdNode.ports).reduce((acc, port) => {
 				return [
@@ -19,7 +19,9 @@ export const CanvasSaga = function* () {
 					})
 				];
 			}, []));
-			yield put(CanvasAction.deleteNode(srdNode));
+			yield put(CanvasAction.deleteNode(state.bsNodes.find((bsNode) => {
+				return (bsNode._id === action.payload._id);
+			})));
 		} catch (err) {
 			console.error(err);
 		}

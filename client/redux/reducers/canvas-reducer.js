@@ -36,7 +36,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 			stormNode.addListener({
 				entityRemoved: () => {
-					action.payload.dispatcher(CanvasAction.purgeNode(stormNode));
+					action.payload.dispatcher(CanvasAction.purgeNode(bsNode));
 				},
 				selectionChanged: () => {
 					action.payload.dispatcher(CanvasAction.nodeSelected(stormNode.id))
@@ -57,38 +57,35 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 		}
 		case CanvasAction.DELETE_NODE: {
+			const lookup = Object.assign({}, state.lookup);
+			delete lookup[action.payload._id];
 			return Object.assign({}, state, {
 				bsNodes: state.bsNodes.filter((bsNode) => {
-					return !(bsNode._id === Object.keys(state.lookup).find((key) => {
-						return (state.lookup[key] === action.payload._id);
-					}));
+					return (bsNode._id !== action.payload._id);
 				}),
 				srdNodes: state.srdNodes.filter((srdNode) => {
-					return !(srdNode.id === action.payload._id);
+					return (srdNode.id !== state.lookup[action.payload._id]);
 				}),
+				lookup: lookup,
 				select_id: ""
 			});
 		}
 		case CanvasAction.ADD_LINK: {
 			const bsNodeOutbound = state.bsNodes.find((bsNode) => {
-				return (bsNode._id === Object.keys(state.lookup).find((key) => {
-					return (state.lookup[key] === action.payload.outbound._id);
-				}));
+				return (bsNode._id === action.payload.outbound._id);
 			});
 			const bsNodeInbound = state.bsNodes.find((bsNode) => {
-				return (bsNode._id === Object.keys(state.lookup).find((key) => {
-					return (state.lookup[key] === action.payload.inbound._id);
-				}));
+				return (bsNode._id === action.payload.inbound._id);
 			});
 			if (bsNodeOutbound === undefined || bsNodeInbound === undefined) {
 				return state;
 			}
 			bsNodeOutbound.sendOnReady(bsNodeOutbound.getOutboundPort(action.payload.outbound.port), bsNodeInbound.getInboundPort(action.payload.inbound.port));
 			const srdPortOutbound = state.srdNodes.find((srdNode) => {
-				return (srdNode.id === action.payload.outbound._id);
+				return (srdNode.id === state.lookup[action.payload.outbound._id]);
 			}).ports[action.payload.outbound.port];
 			const srdPortInbound = state.srdNodes.find((srdNode) => {
-				return (srdNode.id === action.payload.inbound._id);
+				return (srdNode.id === state.lookup[action.payload.inbound._id]);
 			}).ports[action.payload.inbound.port];
 			const srdLink = srdPortOutbound.link(srdPortInbound);
 			srdLink.addListener({

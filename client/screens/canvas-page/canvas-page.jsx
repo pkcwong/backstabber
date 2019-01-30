@@ -338,7 +338,30 @@ class Component extends React.Component {
 			linksUpdated: ({ link }) => {
 				link.addListener({
 					targetPortChanged: () => {
-						this.props.dispatch(CanvasAction.addLink(link, this.props.dispatch));
+						const ports = [
+							link.sourcePort,
+							link.targetPort
+						];
+						const sourcePort = ports.find((item) => {
+							return (item.in === false);
+						});
+						const targetPort = ports.find((item) => {
+							return (item.in === true);
+						});
+						if (sourcePort === undefined || targetPort === undefined) {
+							return;
+						}
+						const bsNodeSource = this.props.CanvasReducer.bsNodes.find((bsNode) => {
+							return (bsNode._id === Object.keys(this.props.CanvasReducer.lookup).find((key) => {
+								return (this.props.CanvasReducer.lookup[key] === sourcePort.parent.id);
+							}));
+						});
+						const bsNodeTarget = this.props.CanvasReducer.bsNodes.find((bsNode) => {
+							return (bsNode._id === Object.keys(this.props.CanvasReducer.lookup).find((key) => {
+								return (this.props.CanvasReducer.lookup[key] === targetPort.parent.id);
+							}));
+						});
+						this.props.dispatch(CanvasAction.addLink(bsNodeSource, sourcePort.name, bsNodeTarget, targetPort.name, this.props.dispatch));
 					}
 				});
 			},
