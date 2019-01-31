@@ -3,9 +3,9 @@ import { CanvasAction } from "../actions/canvas-action";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { StringNode } from "../../../shared/lib/string-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
-import { Program } from "../../../shared/lib/program";
 
 const initialState = {
+	dispatcher: null,
 	_id: null,
 	bsNodes: [],
 	srdNodes: [],
@@ -21,8 +21,16 @@ const initialState = {
 
 export const CanvasReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case CanvasAction.INIT:
+		{
+			return Object.assign({}, state, {
+				dispatcher: action.payload.dispatcher
+			});
+		}
 		case CanvasAction.RESET: {
-			return initialState;
+			let reset =  Object.assign({}, initialState);
+			delete reset['dispatcher'];
+			return Object.assign({}, state, reset);
 		}
 		case CanvasAction.ADD_NODE: {
 			let bsNode = new state.nodeTypes[action.payload.nodeType]();
@@ -39,10 +47,10 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 			stormNode.addListener({
 				entityRemoved: () => {
-					action.payload.dispatcher(CanvasAction.purgeNode(bsNode._id));
+					state.dispatcher(CanvasAction.purgeNode(bsNode._id));
 				},
 				selectionChanged: () => {
-					action.payload.dispatcher(CanvasAction.nodeSelected(stormNode.id))
+					state.dispatcher(CanvasAction.nodeSelected(stormNode.id))
 				}
 			});
 			return Object.assign({}, state, {
@@ -93,7 +101,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			const srdLink = srdPortOutbound.link(srdPortInbound);
 			srdLink.addListener({
 				entityRemoved: () => {
-					action.payload.dispatcher(CanvasAction.deleteLink(srdLink));
+					state.dispatcher(CanvasAction.deleteLink(srdLink));
 				}
 			});
 			return Object.assign({}, state, {

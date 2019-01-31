@@ -1,5 +1,6 @@
 export class CanvasAction {
 
+	static INIT = 'Canvas/INIT';
 	static RESET = 'Canvas/RESET';
 	static ADD_NODE = 'Canvas/ADD_NODE';
 	static DELETE_NODE = 'Canvas/DELETE_NODE';
@@ -7,11 +8,19 @@ export class CanvasAction {
 	static ADD_LINK = 'Canvas/ADD_LINK';
 	static DELETE_LINK = 'Canvas/DELETE_LINK';
 	static LOAD = 'Canvas/LOAD';
-	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
+
+	static init = (dispatcher) => {
+		return {
+			type: CanvasAction.INIT,
+			payload: {
+				dispatcher: dispatcher
+			}
+		};
+	};
 
 	/**
 	 * Resets the canvas
@@ -23,7 +32,7 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (nodeType, points, dispatcher, bsNodeID = 0) => {
+	static addNode = (nodeType, points, bsNodeID = 0) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
@@ -32,8 +41,7 @@ export class CanvasAction {
 					x: points.x,
 					y: points.y
 				},
-				_id: bsNodeID,
-				dispatcher: dispatcher
+				_id: bsNodeID
 			}
 		};
 	};
@@ -56,7 +64,7 @@ export class CanvasAction {
 		}
 	};
 
-	static addLink = (sourceNodeID, outboundPort, targetNodeID, inboundPort, dispatcher) => {
+	static addLink = (sourceNodeID, outboundPort, targetNodeID, inboundPort) => {
 		return {
 			type: CanvasAction.ADD_LINK,
 			payload: {
@@ -67,8 +75,7 @@ export class CanvasAction {
 				inbound: {
 					_id: targetNodeID,
 					port: inboundPort
-				},
-				dispatcher: dispatcher
+				}
 			}
 		};
 	};
@@ -118,20 +125,6 @@ export class CanvasAction {
 			type: CanvasAction.LOAD,
 			payload: {
 				_id: _id
-			}
-		};
-	};
-
-	static _LOAD_COMPLETE = (sketch) => {
-		return {
-			type: CanvasAction.LOAD_COMPLETE,
-			payload: {
-				_id: sketch['_id'],
-				meta: sketch['meta'],
-				program: sketch['program'],
-				canvas: sketch['canvas'],
-				tokens: sketch['tokens'],
-				logs: sketch['logs']
 			}
 		};
 	};
