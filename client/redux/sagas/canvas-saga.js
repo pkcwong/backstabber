@@ -21,7 +21,7 @@ export const CanvasSaga = function* () {
 			}, []));
 			yield put(CanvasAction.deleteNode(state.bsNodes.find((bsNode) => {
 				return (bsNode._id === action.payload._id);
-			})));
+			})._id));
 		} catch (err) {
 			console.error(err);
 		}
@@ -44,7 +44,19 @@ export const CanvasSaga = function* () {
 				_id: action['payload']['_id']
 			});
 			if (res !== undefined) {
-				yield put(CanvasAction._LOAD_COMPLETE(res));
+				yield put(CanvasAction.reset());
+				yield all(res.program.map(node => {
+					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, node._id));
+				}));
+				yield all(res.program.reduce((accumulator, node) => {
+					return [
+						...accumulator,
+						...node.observers.map(link => {
+							return put(CanvasAction.addLink(node._id, link.outbound, link._id, link.inbound));
+						})
+					];
+				}, []));
+				yield put(CanvasAction.loadComplete(action.payload._id));
 			}
 		} catch (err) {
 			console.error(err);

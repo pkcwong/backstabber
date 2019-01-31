@@ -3,9 +3,9 @@ import { CanvasAction } from "../actions/canvas-action";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { StringNode } from "../../../shared/lib/string-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
-import { Program } from "../../../shared/lib/program";
 
 const initialState = {
+	dispatcher: null,
 	_id: null,
 	bsNodes: [],
 	srdNodes: [],
@@ -21,11 +21,21 @@ const initialState = {
 
 export const CanvasReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case CanvasAction.INIT: {
+			return Object.assign({}, state, {
+				dispatcher: action.payload.dispatcher
+			});
+		}
 		case CanvasAction.RESET: {
-			return initialState;
+			let reset = Object.assign({}, initialState);
+			delete reset['dispatcher'];
+			return Object.assign({}, state, reset);
 		}
 		case CanvasAction.ADD_NODE: {
 			let bsNode = new state.nodeTypes[action.payload.nodeType]();
+			if (action.payload._id !== 0) {
+				bsNode._id = action.payload._id;
+			}
 			let stormNode = new DefaultNodeModel(bsNode.class.name);
 			stormNode.setPosition(action.payload.coordinates.x, action.payload.coordinates.y);
 			Object.keys(bsNode.class.ports.inputs).forEach((key) => {
@@ -36,10 +46,10 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 			stormNode.addListener({
 				entityRemoved: () => {
-					action.payload.dispatcher(CanvasAction.purgeNode(bsNode));
+					state.dispatcher(CanvasAction.purgeNode(bsNode._id));
 				},
 				selectionChanged: () => {
-					action.payload.dispatcher(CanvasAction.nodeSelected(stormNode.id))
+					state.dispatcher(CanvasAction.nodeSelected(stormNode.id))
 				}
 			});
 			return Object.assign({}, state, {
@@ -90,7 +100,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			const srdLink = srdPortOutbound.link(srdPortInbound);
 			srdLink.addListener({
 				entityRemoved: () => {
-					action.payload.dispatcher(CanvasAction.deleteLink(srdLink));
+					state.dispatcher(CanvasAction.deleteLink(srdLink));
 				}
 			});
 			return Object.assign({}, state, {
@@ -127,19 +137,16 @@ export const CanvasReducer = (state = initialState, action) => {
 				})
 			});
 		}
-		case CanvasAction.NODE_SELECT:{
-			return Object.assign({}, state, {
-				select_id: Object.keys(state.lookup).find((bs_id)=>{
-					return(state.lookup[bs_id] === action.payload._id)
-				})
-			})
-		}
 		case CanvasAction.LOAD_COMPLETE: {
-			// TODO: Parse into SRD Models
-			const canvas = action.payload.canvas;
 			return Object.assign({}, state, {
-				_id: action.payload._id,
-				bsNodes: Program.deserialize(action.payload.program).nodes
+				_id: action.payload._id
+			});
+		}
+		case CanvasAction.NODE_SELECT: {
+			return Object.assign({}, state, {
+				select_id: Object.keys(state.lookup).find((bs_id) => {
+					return (state.lookup[bs_id] === action.payload._id)
+				})
 			});
 		}
 		default: {

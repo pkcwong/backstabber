@@ -1,5 +1,6 @@
 export class CanvasAction {
 
+	static INIT = 'Canvas/INIT';
 	static RESET = 'Canvas/RESET';
 	static ADD_NODE = 'Canvas/ADD_NODE';
 	static DELETE_NODE = 'Canvas/DELETE_NODE';
@@ -13,6 +14,15 @@ export class CanvasAction {
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
 
+	static init = (dispatcher) => {
+		return {
+			type: CanvasAction.INIT,
+			payload: {
+				dispatcher: dispatcher
+			}
+		};
+	};
+
 	/**
 	 * Resets the canvas
 	 * @returns {{type: string}}
@@ -23,7 +33,7 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (nodeType, points, dispatcher) => {
+	static addNode = (nodeType, points, bsNodeID = 0) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
@@ -32,42 +42,41 @@ export class CanvasAction {
 					x: points.x,
 					y: points.y
 				},
-				dispatcher: dispatcher
+				_id: bsNodeID
 			}
 		};
 	};
 
-	static deleteNode = (bsNode) => {
+	static deleteNode = (bsNodeID) => {
 		return {
 			type: CanvasAction.DELETE_NODE,
 			payload: {
-				_id: bsNode._id
+				_id: bsNodeID
 			}
 		}
 	};
 
-	static purgeNode = (bsNode) => {
+	static purgeNode = (bsNodeID) => {
 		return {
 			type: CanvasAction.PURGE_NODE,
 			payload: {
-				_id: bsNode._id
+				_id: bsNodeID
 			}
 		}
 	};
 
-	static addLink = (sourceNode, outboundPort, targetNode, inboundPort, dispatcher) => {
+	static addLink = (sourceNodeID, outboundPort, targetNodeID, inboundPort) => {
 		return {
 			type: CanvasAction.ADD_LINK,
 			payload: {
 				outbound: {
-					_id: sourceNode._id,
+					_id: sourceNodeID,
 					port: outboundPort
 				},
 				inbound: {
-					_id: targetNode._id,
+					_id: targetNodeID,
 					port: inboundPort
-				},
-				dispatcher: dispatcher
+				}
 			}
 		};
 	};
@@ -121,16 +130,11 @@ export class CanvasAction {
 		};
 	};
 
-	static _LOAD_COMPLETE = (sketch) => {
+	static loadComplete = (_id) => {
 		return {
 			type: CanvasAction.LOAD_COMPLETE,
 			payload: {
-				_id: sketch['_id'],
-				meta: sketch['meta'],
-				program: sketch['program'],
-				canvas: sketch['canvas'],
-				tokens: sketch['tokens'],
-				logs: sketch['logs']
+				_id: _id
 			}
 		};
 	};

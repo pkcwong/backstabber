@@ -212,7 +212,7 @@ class Component extends React.Component {
 						<div
 							className="diagram-layer"
 							onDrop={(event) => {
-								this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event), this.props.dispatch));
+								this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
 							}}
 							onDragOver={(event) => {
 								event.preventDefault();
@@ -319,7 +319,7 @@ class Component extends React.Component {
 	}
 
 	componentDidMount() {
-
+		this.props.dispatch(CanvasAction.init(this.props.dispatch));
 	}
 
 	/**
@@ -365,7 +365,7 @@ class Component extends React.Component {
 								return (this.props.CanvasReducer.lookup[key] === targetPort.parent.id);
 							}));
 						});
-						this.props.dispatch(CanvasAction.addLink(bsNodeSource, sourcePort.name, bsNodeTarget, targetPort.name, this.props.dispatch));
+						this.props.dispatch(CanvasAction.addLink(bsNodeSource._id, sourcePort.name, bsNodeTarget._id, targetPort.name));
 					}
 				});
 			},
