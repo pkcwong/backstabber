@@ -45,12 +45,9 @@ export const CanvasSaga = function* () {
 			});
 			if (res !== undefined) {
 				yield put(CanvasAction.reset());
-				console.log(res);
 				yield all(res.program.map(node => {
-					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, put));
+					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, put, node._id));
 				}));
-				yield put(CanvasAction.addLink(res.program[0]._id, res.program[0].observers[0].outbound, res.program[0].observers[0]._id, res.program[0].observers[0].inbound, put));
-				//res.program.map(node => node.observers.map(link => console.log(link._id)))
 				yield all(res.program.reduce((accumulator, node) => {
 					return [
 						...accumulator,

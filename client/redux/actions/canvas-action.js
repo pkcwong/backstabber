@@ -23,7 +23,7 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (nodeType, points, dispatcher) => {
+	static addNode = (nodeType, points, dispatcher, bsNodeID = 0) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
@@ -32,6 +32,7 @@ export class CanvasAction {
 					x: points.x,
 					y: points.y
 				},
+				_id: bsNodeID,
 				dispatcher: dispatcher
 			}
 		};
@@ -56,7 +57,6 @@ export class CanvasAction {
 	};
 
 	static addLink = (sourceNodeID, outboundPort, targetNodeID, inboundPort, dispatcher) => {
-		console.log(sourceNodeID, outboundPort, targetNodeID, inboundPort)
 		return {
 			type: CanvasAction.ADD_LINK,
 			payload: {

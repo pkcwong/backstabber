@@ -26,6 +26,9 @@ export const CanvasReducer = (state = initialState, action) => {
 		}
 		case CanvasAction.ADD_NODE: {
 			let bsNode = new state.nodeTypes[action.payload.nodeType]();
+			if(action.payload._id !== 0){
+				bsNode._id = action.payload._id;
+			}
 			let stormNode = new DefaultNodeModel(bsNode.class.name);
 			stormNode.setPosition(action.payload.coordinates.x, action.payload.coordinates.y);
 			Object.keys(bsNode.class.ports.inputs).forEach((key) => {
