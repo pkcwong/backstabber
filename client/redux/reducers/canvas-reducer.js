@@ -90,6 +90,11 @@ export const CanvasReducer = (state = initialState, action) => {
 			if (bsNodeOutbound === undefined || bsNodeInbound === undefined) {
 				return state;
 			}
+			if (bsNodeOutbound.observers.find((link) => {
+				return (link._id === action.payload.inbound._id && link.outbound === action.payload.outbound.port && link.inbound === action.payload.inbound.port);
+			}) !== undefined) {
+				return state;
+			}
 			bsNodeOutbound.sendOnReady(bsNodeOutbound.getOutboundPort(action.payload.outbound.port), bsNodeInbound.getInboundPort(action.payload.inbound.port));
 			const srdPortOutbound = state.srdNodes.find((srdNode) => {
 				return (srdNode.id === state.lookup[action.payload.outbound._id]);
