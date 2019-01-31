@@ -8,6 +8,7 @@ export class CanvasAction {
 	static ADD_LINK = 'Canvas/ADD_LINK';
 	static DELETE_LINK = 'Canvas/DELETE_LINK';
 	static LOAD = 'Canvas/LOAD';
+	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
@@ -123,6 +124,15 @@ export class CanvasAction {
 	static load = (_id) => {
 		return {
 			type: CanvasAction.LOAD,
+			payload: {
+				_id: _id
+			}
+		};
+	};
+
+	static loadComplete = (_id) => {
+		return {
+			type: CanvasAction.LOAD_COMPLETE,
 			payload: {
 				_id: _id
 			}

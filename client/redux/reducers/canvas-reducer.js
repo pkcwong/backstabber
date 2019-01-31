@@ -21,20 +21,19 @@ const initialState = {
 
 export const CanvasReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case CanvasAction.INIT:
-		{
+		case CanvasAction.INIT: {
 			return Object.assign({}, state, {
 				dispatcher: action.payload.dispatcher
 			});
 		}
 		case CanvasAction.RESET: {
-			let reset =  Object.assign({}, initialState);
+			let reset = Object.assign({}, initialState);
 			delete reset['dispatcher'];
 			return Object.assign({}, state, reset);
 		}
 		case CanvasAction.ADD_NODE: {
 			let bsNode = new state.nodeTypes[action.payload.nodeType]();
-			if(action.payload._id !== 0){
+			if (action.payload._id !== 0) {
 				bsNode._id = action.payload._id;
 			}
 			let stormNode = new DefaultNodeModel(bsNode.class.name);
@@ -138,12 +137,17 @@ export const CanvasReducer = (state = initialState, action) => {
 				})
 			});
 		}
-		case CanvasAction.NODE_SELECT:{
+		case CanvasAction.LOAD_COMPLETE: {
 			return Object.assign({}, state, {
-				select_id: Object.keys(state.lookup).find((bs_id)=>{
-					return(state.lookup[bs_id] === action.payload._id)
+				_id: action.payload._id
+			});
+		}
+		case CanvasAction.NODE_SELECT: {
+			return Object.assign({}, state, {
+				select_id: Object.keys(state.lookup).find((bs_id) => {
+					return (state.lookup[bs_id] === action.payload._id)
 				})
-			})
+			});
 		}
 		default: {
 			return state;

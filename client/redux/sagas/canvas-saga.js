@@ -56,6 +56,7 @@ export const CanvasSaga = function* () {
 						})
 					];
 				}, []));
+				yield put(CanvasAction.loadComplete(action.payload._id));
 			}
 		} catch (err) {
 			console.error(err);
