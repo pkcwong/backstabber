@@ -1,5 +1,6 @@
 import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
+import { BoolNode } from "../../../shared/lib/bool-node";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { StringNode } from "../../../shared/lib/string-node";
 import { ReturnNode } from "../../../shared/lib/return-node";
@@ -12,6 +13,7 @@ const initialState = {
 	srdLinks: [],
 	lookup: {},
 	nodeTypes: {
+		BoolNode,
 		EntryNode,
 		StringNode,
 		ReturnNode

@@ -1,3 +1,4 @@
+import { BoolNode } from "./bool-node";
 import { EntryNode } from "./entry-node";
 import { ReturnNode } from "./return-node";
 import { StringNode } from "./string-node";
@@ -50,6 +51,7 @@ export class Program {
 	 */
 	static deserialize(json) {
 		const constructor = {
+			BoolNode,
 			EntryNode,
 			ReturnNode,
 			StringNode

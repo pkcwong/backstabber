@@ -13,7 +13,6 @@ export class BasicNode {
 
 	reset() {
 		this.instance = {
-			props: Object.assign({}, this.props),
 			inputs: Object.keys(this.class.ports.inputs).reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
 					[current]: undefined
@@ -32,7 +31,7 @@ export class BasicNode {
 
 	execute() {
 		return new Promise((resolve, reject) => {
-			this.class.executor(this.instance.props, this.instance.inputs).then((result) => {
+			this.class.executor(this.props, this.instance.inputs).then((result) => {
 				Object.keys(this.instance.outputs).forEach((key) => {
 					this.instance.outputs[key] = result[key];
 				});
