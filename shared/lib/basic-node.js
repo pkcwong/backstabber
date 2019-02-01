@@ -5,10 +5,10 @@ export class BasicNode {
 	constructor(args) {
 		this._id = new ObjectID().toHexString();
 		this.class = args['class'];
-		this.setProps(args['props']);
 		this.observers = [];
+		this.instance = {};
 		this.callbacks = [];
-		this.reset();
+		this.setProps(args['props']);
 	}
 
 	reset() {
