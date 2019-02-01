@@ -122,8 +122,10 @@ class Component extends React.Component {
 						}>Close</Button>
 						<Button onClick={
 							() => {
-								// TODO pass JSON to start real time debugging
-								$("#user_input").val();
+								const program = new Program(this.props.CanvasReducer.bsNodes);
+								// TODO register callback listeners for UI
+								program.execute(JSON.parse($("#user_input").val()));
+								// TODO: real time debugging
 								this.setState({
 									run_modal: false
 								})
