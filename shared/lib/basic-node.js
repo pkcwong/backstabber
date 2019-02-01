@@ -5,9 +5,10 @@ export class BasicNode {
 	constructor(args) {
 		this._id = new ObjectID().toHexString();
 		this.class = args['class'];
-		this.setProps(args['props']);
 		this.observers = [];
-		this.reset();
+		this.instance = {};
+		this.callbacks = [];
+		this.setProps(args['props']);
 	}
 
 	reset() {
@@ -23,7 +24,10 @@ export class BasicNode {
 					[current]: undefined
 				});
 			}, {})
-		}
+		};
+		this.callbacks.forEach((callback) => {
+			callback(null, this);
+		});
 	}
 
 	execute() {
@@ -35,7 +39,15 @@ export class BasicNode {
 				this.observers.forEach((item) => {
 					item.func();
 				});
+				this.callbacks.forEach((callback) => {
+					callback(null, this);
+				});
 				resolve(result);
+			}).catch((err) => {
+				this.callbacks.forEach((callback) => {
+					callback(err, this);
+				});
+				reject(err);
 			});
 		});
 	}
@@ -53,7 +65,7 @@ export class BasicNode {
 				outbound: output.port,
 				inbound: input.port,
 				func: (() => {
-					input.func(output.func());
+					input.setter(output.getter());
 				})
 			}
 		];
@@ -68,6 +80,17 @@ export class BasicNode {
 		this.observers = this.observers.filter((item) => {
 			return (item._id !== input._id && item.outbound !== output.port && item.inbound !== input.port);
 		});
+	}
+
+	/**
+	 * Registers a callback to be notified of reset / execution state changes.
+	 * @param callback
+	 */
+	registerCallback(callback) {
+		this.callbacks = [
+			...this.callbacks,
+			callback
+		];
 	}
 
 	receive(port, data, propagate = true) {
@@ -112,7 +135,7 @@ export class BasicNode {
 		return {
 			_id: this._id,
 			port: port,
-			func: ((output) => {
+			setter: ((output) => {
 				this.receive(port, output);
 			})
 		};
@@ -127,7 +150,7 @@ export class BasicNode {
 		return {
 			_id: this._id,
 			port: port,
-			func: (() => {
+			getter: (() => {
 				return this.instance.outputs[port];
 			})
 		};

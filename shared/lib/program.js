@@ -21,7 +21,7 @@ export class Program {
 			this.nodes.filter((node) => {
 				return (node instanceof ReturnNode);
 			}).forEach((node) => {
-				node.registerCallback((result) => {
+				node.registerReturnCallback((result) => {
 					resolve(result);
 				});
 			});
