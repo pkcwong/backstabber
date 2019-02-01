@@ -1,6 +1,7 @@
 import { DefaultNodeModel } from 'storm-react-diagrams';
 import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
+import { BoolNode } from "../../shared/lib/bool-node";
 import { StringNode } from "../../shared/lib/string-node";
 import { EntryNode } from "../../shared/lib/entry-node";
 import { ReturnNode } from "../../shared/lib/return-node";
@@ -16,6 +17,7 @@ describe('CanvasReducer', () => {
 			srdLinks: [],
 			lookup: {},
 			nodeTypes: {
+				BoolNode,
 				EntryNode,
 				StringNode,
 				ReturnNode
