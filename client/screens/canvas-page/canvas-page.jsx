@@ -13,9 +13,8 @@ import { CanvasAction } from "../../redux/actions/canvas-action";
 import "./srd.css";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
-import { Modal } from 'react-bootstrap';
 import { sketches_db } from "../../../shared/collections/sketches";
-import { Button, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
+import { Button, ControlLabel, Form, FormControl, FormGroup, Modal, InputGroup } from "react-bootstrap";
 import { Program } from "../../../shared/lib/program";
 
 class Component extends React.Component {
@@ -23,7 +22,8 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			show: false
+			show: false,
+			run_modal: false
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -77,6 +77,58 @@ class Component extends React.Component {
 								})
 							}
 						}>Close</Button>
+					</Modal.Footer>
+				</Modal>
+				<Modal
+					show={this.state.run_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							run_modal: false
+						})
+					}}
+					aria-labelledby="contained-modal-title"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="contained-modal-title">
+							Real Time Debugging
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<div>
+							<label>
+								Input JSON
+							</label>
+							<textarea
+								style={
+									{
+										width: '100%',
+										resize: 'vertical'
+									}
+								}
+								id="user_input"
+								rows="10"
+							/>
+						</div>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button
+							onClick={
+							() => {
+								this.setState({
+									run_modal: false
+								})
+							}
+						}>Close</Button>
+						<Button onClick={
+							() => {
+								// TODO pass JSON to start real time debugging
+								$("#user_input").val();
+								this.setState({
+									run_modal: false
+								})
+							}
+						}>Submit</Button>
 					</Modal.Footer>
 				</Modal>
 				<div style={
@@ -151,6 +203,9 @@ class Component extends React.Component {
 							bsStyle="success"
 							onClick={() => {
 								// TODO: Execute Program
+								this.setState({
+									run_modal: true
+								})
 							}}
 						>
 							Run
