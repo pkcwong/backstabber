@@ -24,7 +24,7 @@ export class ReturnNode extends BasicNode {
 		});
 	}
 
-	registerCallback(callback) {
+	registerReturnCallback(callback) {
 		this.callback = () => {
 			callback(this.instance.inputs.result);
 		}
