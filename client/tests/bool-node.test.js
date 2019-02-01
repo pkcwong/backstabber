@@ -6,7 +6,7 @@ const mock = () => {
 	});
 };
 
-describe(BoolNode.name, function() {
+describe('BoolNode', function() {
 	it('should return a boolean', async function () {
 		expect(await mock().execute()).toEqual({
 			bool: true
