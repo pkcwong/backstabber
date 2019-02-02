@@ -1,5 +1,6 @@
 import { BoolNode } from "./bool-node";
 import { EntryNode } from "./entry-node";
+import { NumberNode } from "./number-node";
 import { ReturnNode } from "./return-node";
 import { StringNode } from "./string-node";
 
@@ -53,6 +54,7 @@ export class Program {
 		const constructor = {
 			BoolNode,
 			EntryNode,
+			NumberNode,
 			ReturnNode,
 			StringNode
 		};
