@@ -23,7 +23,7 @@ class Component extends React.Component {
 		super(props);
 		this.state = {
 			show: false,
-			run_modal: false
+			run_modal: false,
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -124,11 +124,17 @@ class Component extends React.Component {
 							() => {
 								const program = new Program(this.props.CanvasReducer.bsNodes);
 								// TODO register callback listeners for UI
-								program.execute(JSON.parse($("#user_input").val()));
+								program.execute(JSON.parse($("#user_input").val())).then((v)=>{
+									console.log(v);
+									this.props.CanvasReducer.bsNodes.map((bsNode)=>{
+										let node = bsNode.getOutboundPort().getter();
+										console.log(node);
+									});
+								});
 								// TODO: real time debugging
 								this.setState({
 									run_modal: false
-								})
+								});
 							}
 						}>Submit</Button>
 					</Modal.Footer>
