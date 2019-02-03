@@ -25,21 +25,24 @@ class Component extends React.Component {
 						Welcome To BackStabber
 					</h1>
 
-					<div className="geDialog"
+					<div className="Dialog"
 						style={
 						{
 							align: "center",
 							width: "360px",
 							height: "240px",
-							margin: "0 auto"
+							margin: "0 auto",
+							borderWidth: "5px",
+							borderStyle: "outset double",
+							borderColor: "purple"
 						}
 					}>
 						<div style={
-							{
-								textAlign: "center",
-								maxHeight: "100%"
-							}
-						}>
+						     	{
+									textAlign: "center",
+									maxHeight: "100%"
+						     	}
+						    }>
 							<div title="Language"
 							     style={
 								     {
@@ -105,7 +108,7 @@ class Component extends React.Component {
 								        marginBottom: "8px"
 									}
 								}>
-									Create New Diagram
+									Create New Program
 								</button>
 								<br></br>
 								<button style={
@@ -115,7 +118,7 @@ class Component extends React.Component {
 								        marginBottom: "8px"
 							        }
 						        }>
-									Open Existing Diagram
+									Open Existing Program
 								</button>
 								<a href="javascript:void(0)"
 								   style={
