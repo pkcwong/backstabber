@@ -133,4 +133,26 @@ export const CanvasSaga = function* () {
 			console.error(err);
 		}
 	});
+	yield takeLatest(CanvasAction.REVOKE_KEY, function* (action) {
+		try {
+			yield call((payload) => {
+				return new Promise((resolve, reject) => {
+					Meteor.call('Sketches/REVOKE-KEY', {
+						_id: payload._id,
+						key: payload.key
+					}, (err, res) => {
+						if (err) {
+							reject(err);
+						}
+						resolve(res);
+					});
+				});
+			}, {
+				_id: action.payload._id,
+				key: action.payload.key
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	});
 };
