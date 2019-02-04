@@ -122,23 +122,20 @@ class Component extends React.Component {
 					<Button onClick={
 						() => {
 							const program = new Program(this.props.CanvasReducer.bsNodes);
-							// TODO register callback listeners for UI
-							program.execute(JSON.parse($("#user_input").val())).then(() => {
-								this.props.CanvasReducer.bsNodes.map((bsNode) => {
-									let srdNode = this.props.CanvasReducer.srdNodes.find((srdNode) => {
-										return (srdNode.id === this.props.CanvasReducer.lookup[bsNode._id])
-									});
-									Object.keys(bsNode.instance.outputs).map((port) => {
-										let label = bsNode.getOutboundPort(port).getter();
-										console.log(srdNode.ports[port].links);
-										Object.keys(srdNode.ports[port].links).map((key)=>{
-											// console.log(srdNode.ports[port].links[key]);
-											this.props.dispatch(CanvasAction.updateLinkLabel(srdNode.ports[port].links[key], label));
-											console.log(srdNode.ports[port].links[key]);
+							this.props.CanvasReducer.bsNodes.forEach((bsNode) => {
+								bsNode.callbacks = [];
+								bsNode.registerCallback((err, res) => {
+									// TODO: update Labels
+									console.log("bsNode " + bsNode._id + " updated with output ports: " + JSON.stringify(Object.keys(bsNode.class.ports.outputs).reduce((acc, curr) => {
+										return Object.assign({}, acc, {
+											[curr]: bsNode.getOutboundPort(curr).getter()
 										});
-									});
-
+									}, {})));
 								});
+							});
+							program.execute(JSON.parse($("#user_input").val())).then(() => {
+								console.log('Program execution complete');
+								// TODO: execution complete
 							});
 							// TODO: real time debugging
 							this.setState({
