@@ -53,12 +53,12 @@ class Component extends React.Component {
 					<Modal.Body>
 						{'API URL:'}
 						<br/>
-						{window.location.hostname + '/api/program/' + this.props.CanvasReducer._id}
+						{window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id}
 						<br/>
 						{'API Key:'}
 						<br/>
 						{
-							JSON.stringify((() => {
+							(() => {
 								const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 									return (sketch._id === this.props.CanvasReducer._id);
 								});
@@ -66,7 +66,24 @@ class Component extends React.Component {
 									return [];
 								}
 								return sketch.tokens
-							})())
+							})().map((item, index) => {
+								return (
+									<React.Fragment
+										key={index}
+									>
+										<p>
+											{item}
+											<Button
+												onClick={() => {
+													this.props.dispatch(CanvasAction.revokeApiKey(this.props.CanvasReducer._id, item));
+												}}
+											>
+												Revoke
+											</Button>
+										</p>
+									</React.Fragment>
+								);
+							})
 						}
 					</Modal.Body>
 					<Modal.Footer>
