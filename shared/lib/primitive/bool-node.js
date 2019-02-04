@@ -1,4 +1,4 @@
-import { BasicNode } from "./basic-node";
+import { BasicNode } from "../basic-node";
 
 export class BoolNode extends BasicNode {
 

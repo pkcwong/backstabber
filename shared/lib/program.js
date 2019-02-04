@@ -1,8 +1,8 @@
-import { BoolNode } from "./bool-node";
-import { EntryNode } from "./entry-node";
-import { NumberNode } from "./number-node";
-import { ReturnNode } from "./return-node";
-import { StringNode } from "./string-node";
+import { BoolNode } from "./primitive/bool-node";
+import { EntryNode } from "./api/entry-node";
+import { NumberNode } from "./primitive/number-node";
+import { ReturnNode } from "./api/return-node";
+import { StringNode } from "./primitive/string-node";
 
 export class Program {
 

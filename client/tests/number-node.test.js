@@ -1,4 +1,4 @@
-import { NumberNode } from "../../shared/lib/number-node";
+import { NumberNode } from "../../shared/lib/primitive/number-node";
 
 const mock = () => {
 	return new NumberNode({
