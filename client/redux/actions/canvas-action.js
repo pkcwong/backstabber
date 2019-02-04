@@ -13,7 +13,6 @@ export class CanvasAction {
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
-	static UPDATE_LINK_LABEL = 'canvas/UPDATE_LINK_LABEL';
 
 	static init = (dispatcher) => {
 		return {
@@ -81,16 +80,6 @@ export class CanvasAction {
 			}
 		};
 	};
-
-	static updateLinkLabel = ((srdLink, label) => {
-		return {
-			type: CanvasAction.UPDATE_LINK_LABEL,
-			payload: {
-				srdLink: srdLink,
-				label: label
-			}
-		}
-	});
 
 	static nodeSelected = (_id)=>{
 		return {
