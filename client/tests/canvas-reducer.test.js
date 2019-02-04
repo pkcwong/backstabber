@@ -1,10 +1,10 @@
 import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
-import { BoolNode } from "../../shared/lib/bool-node";
-import { EntryNode } from "../../shared/lib/entry-node";
-import { NumberNode } from "../../shared/lib/number-node";
-import { ReturnNode } from "../../shared/lib/return-node";
-import { StringNode } from "../../shared/lib/string-node";
+import { BoolNode } from "../../shared/lib/primitive/bool-node";
+import { EntryNode } from "../../shared/lib/api/entry-node";
+import { NumberNode } from "../../shared/lib/primitive/number-node";
+import { ReturnNode } from "../../shared/lib/api/return-node";
+import { StringNode } from "../../shared/lib/primitive/string-node";
 
 describe('CanvasReducer', () => {
 	it('Should reset states', () => {

@@ -1,10 +1,10 @@
 import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
-import { BoolNode } from "../../../shared/lib/bool-node";
-import { EntryNode } from "../../../shared/lib/entry-node";
-import { NumberNode } from "../../../shared/lib/number-node";
-import { StringNode } from "../../../shared/lib/string-node";
-import { ReturnNode } from "../../../shared/lib/return-node";
+import { BoolNode } from "../../../shared/lib/primitive/bool-node";
+import { EntryNode } from "../../../shared/lib/api/entry-node";
+import { NumberNode } from "../../../shared/lib/primitive/number-node";
+import { StringNode } from "../../../shared/lib/primitive/string-node";
+import { ReturnNode } from "../../../shared/lib/api/return-node";
 
 const initialState = {
 	dispatcher: null,

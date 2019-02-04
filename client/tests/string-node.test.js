@@ -1,4 +1,4 @@
-import { StringNode } from "../../shared/lib/string-node";
+import { StringNode } from "../../shared/lib/primitive/string-node";
 
 describe('StringNode', function() {
 	it('should return a string', async function () {
