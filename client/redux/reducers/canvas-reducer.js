@@ -142,6 +142,16 @@ export const CanvasReducer = (state = initialState, action) => {
 				})
 			});
 		}
+		case CanvasAction.UPDATE_LINK_LABEL: {
+			let srdLink = state.srdLinks.map((srdLink)=> {
+				if(srdLink.id === action.payload.srdLink.id){
+					srdLink.addLabel(action.payload.label);
+				}
+			});
+			return Object.assign({}, state, {
+				srdLinks: srdLink
+			})
+		}
 		case CanvasAction.LOAD_COMPLETE: {
 			return Object.assign({}, state, {
 				_id: action.payload._id
