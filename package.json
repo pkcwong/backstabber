@@ -10,7 +10,6 @@
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.1.1",
-    "bson": "^3.0.2",
     "express": "^4.16.4",
     "gridfs-stream": "^1.1.1",
     "lodash": "^4.17.10",
