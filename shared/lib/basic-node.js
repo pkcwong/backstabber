@@ -1,9 +1,7 @@
-import { ObjectID } from 'bson';
-
 export class BasicNode {
 
 	constructor(args) {
-		this._id = new ObjectID().toHexString();
+		this._id = Math.random().toString(36).substr(2, 16);
 		this.class = args['class'];
 		this.observers = [];
 		this.instance = {};
