@@ -92,7 +92,19 @@ export class BasicNode {
 
 	receive(port, data, propagate = true) {
 		if (this.instance.inputs[port] === undefined) {
-			this.instance.inputs[port] = data;
+			try {
+				this.instance.inputs[port] = this.class.ports.inputs[port](data);
+			} catch (err) {
+				console.error(err);
+				throw {
+					message: "invalid parameter",
+					error: {
+						ref: this,
+						port: port,
+						data: data
+					}
+				};
+			}
 			if (propagate && this.isReady()) {
 				this.execute();
 			}
@@ -116,6 +128,16 @@ export class BasicNode {
 	setProps(props = {}) {
 		this.props = Object.keys(props).reduce((accumulator, current) => {
 			if (this.class.props.hasOwnProperty(current)) {
+				if (typeof this.class.props[current] !== typeof props[current]) {
+					throw {
+						message: "invalid prop",
+						error: {
+							ref: this,
+							prop: current,
+							data: props[current]
+						}
+					};
+				}
 				accumulator[current] = props[current];
 			}
 			return accumulator;
