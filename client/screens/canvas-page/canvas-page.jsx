@@ -7,6 +7,7 @@ import {
 	DiagramEngine,
 	DefaultNodeFactory,
 	DefaultLinkFactory,
+	DefaultLabelFactory,
 	DiagramModel
 } from 'storm-react-diagrams';
 import { CanvasAction } from "../../redux/actions/canvas-action";
@@ -28,7 +29,7 @@ class Component extends React.Component {
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
-
+		this.engine.registerLabelFactory(new DefaultLabelFactory());
 	}
 
 	render() {
