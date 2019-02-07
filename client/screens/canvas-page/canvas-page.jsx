@@ -153,8 +153,8 @@ class Component extends React.Component {
 									});
 								});
 							});
-							program.execute(JSON.parse($("#user_input").val())).then(() => {
-								console.log('Program execution complete');
+							program.execute(JSON.parse($("#user_input").val())).catch((err) => {
+								alert(err);
 							});
 							this.setState({
 								run_modal: false
@@ -386,7 +386,18 @@ class Component extends React.Component {
 										}>
 											<ControlLabel>Current {key} value:</ControlLabel>{' '}
 											{
-												bsNode.props[key]
+												(()=>{
+													if(bsNode.props[key] === true){
+														return 'true'
+													}
+													else if(bsNode.props[key] === false){
+														return 'false'
+													}
+													else{
+														return bsNode.props[key]
+													}
+												})()
+
 											}
 											<Form inline>
 												<FormGroup>
