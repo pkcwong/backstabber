@@ -7,11 +7,13 @@ export class EntryNode extends BasicNode {
 	static ports = {
 		inputs: {},
 		outputs: {
-			props: {}
+			props: (x) => {
+				return (typeof x === 'object');
+			}
 		}
 	};
 
-	static executor = (props = EntryNode.props, input = EntryNode.ports.inputs) => {
+	static executor = (props = EntryNode.props, input) => {
 		return new Promise((resolve, reject) => {
 			resolve({
 				props: props
