@@ -123,6 +123,7 @@ class Component extends React.Component {
 						}>Close</Button>
 					<Button onClick={
 						() => {
+							this.props.dispatch(CanvasAction.deleteLabel());
 							const program = new Program(this.props.CanvasReducer.bsNodes);
 							this.props.CanvasReducer.bsNodes.forEach((bsNode) => {
 								bsNode.callbacks = [];
