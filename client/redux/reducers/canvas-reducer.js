@@ -1,4 +1,4 @@
-import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
+import { DefaultNodeModel, DefaultPortModel, DefaultLabelModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
 import { EntryNode } from "../../../shared/lib/entry-node";
 import { StringNode } from "../../../shared/lib/string-node";
@@ -140,6 +140,21 @@ export const CanvasReducer = (state = initialState, action) => {
 				srdLinks: state.srdLinks.filter((link) => {
 					return !(link.sourcePort === srdPortOutbound && link.targetPort === srdPortInbound);
 				})
+			});
+		}
+		case CanvasAction.ADD_LABEL: {
+			let srdNode = state.srdNodes.find((srdNode)=>{
+				return (srdNode.id === state.lookup[action.payload.bsNode._id])
+			});
+			let labelPort = srdNode.ports[action.payload.portName].links[Object.keys(srdNode.ports[action.payload.portName].links)[action.payload.index]];
+			console.log(labelPort);
+			let labelModel = new DefaultLabelModel;
+			labelModel.setLabel(action.payload.label);
+			labelPort.labels = Object.assign({}, labelPort.labels, {
+				labelModel
+			});
+			return Object.assign({}, state, {
+				srdNodes: state.srdNodes
 			});
 		}
 		case CanvasAction.LOAD_COMPLETE: {

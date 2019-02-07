@@ -131,6 +131,12 @@ class Component extends React.Component {
 											[curr]: bsNode.getOutboundPort(curr).getter()
 										});
 									}, {})));
+
+									Object.keys(bsNode.class.ports.outputs).map((port_name, index)=>{
+										if(typeof bsNode.getOutboundPort(port_name).getter() !== 'undefined'){
+											this.props.dispatch(CanvasAction.addLabel(bsNode, index, port_name, bsNode.getOutboundPort(port_name).getter()));
+										}
+									});
 								});
 							});
 							program.execute(JSON.parse($("#user_input").val())).then(() => {

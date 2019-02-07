@@ -13,6 +13,7 @@ export class CanvasAction {
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
+	static ADD_LABEL = 'canvas/ADD_LABEL';
 
 	static init = (dispatcher) => {
 		return {
@@ -114,6 +115,18 @@ export class CanvasAction {
 				}
 			}
 		};
+	};
+
+	static addLabel = (bsNode, index, portName, label) => {
+		return {
+			type: CanvasAction.ADD_LABEL,
+			payload: {
+				bsNode: bsNode,
+				label: label,
+				portName: portName,
+				index: index
+			}
+		}
 	};
 
 	/**
