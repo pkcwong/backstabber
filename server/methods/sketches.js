@@ -48,5 +48,17 @@ Meteor.methods({
 			});
 			resolve(key);
 		});
+	},
+	'Sketches/REVOKE-KEY': (json) => {
+		return new Promise((resolve, reject) => {
+			sketches_db.update({
+				_id: json['_id'],
+				owner: Meteor.userId()
+			}, {
+				$pull: {
+					tokens: json['key']
+				}
+			});
+		});
 	}
 });

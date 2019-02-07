@@ -1,9 +1,7 @@
-import { ObjectID } from 'bson';
-
 export class BasicNode {
 
 	constructor(args) {
-		this._id = new ObjectID().toHexString();
+		this._id = Math.random().toString(36).substr(2, 16);
 		this.class = args['class'];
 		this.observers = [];
 		this.instance = {};
@@ -13,7 +11,6 @@ export class BasicNode {
 
 	reset() {
 		this.instance = {
-			props: Object.assign({}, this.props),
 			inputs: Object.keys(this.class.ports.inputs).reduce((accumulator, current) => {
 				return Object.assign({}, accumulator, {
 					[current]: undefined
@@ -32,7 +29,7 @@ export class BasicNode {
 
 	execute() {
 		return new Promise((resolve, reject) => {
-			this.class.executor(this.instance.props, this.instance.inputs).then((result) => {
+			this.class.executor(this.props, this.instance.inputs).then((result) => {
 				Object.keys(this.instance.outputs).forEach((key) => {
 					this.instance.outputs[key] = result[key];
 				});
@@ -95,7 +92,19 @@ export class BasicNode {
 
 	receive(port, data, propagate = true) {
 		if (this.instance.inputs[port] === undefined) {
-			this.instance.inputs[port] = data;
+			try {
+				this.instance.inputs[port] = this.class.ports.inputs[port](data);
+			} catch (err) {
+				console.error(err);
+				throw {
+					message: "invalid parameter",
+					error: {
+						ref: this,
+						port: port,
+						data: data
+					}
+				};
+			}
 			if (propagate && this.isReady()) {
 				this.execute();
 			}
@@ -119,6 +128,16 @@ export class BasicNode {
 	setProps(props = {}) {
 		this.props = Object.keys(props).reduce((accumulator, current) => {
 			if (this.class.props.hasOwnProperty(current)) {
+				if (typeof this.class.props[current] !== typeof props[current]) {
+					throw {
+						message: "invalid prop",
+						error: {
+							ref: this,
+							prop: current,
+							data: props[current]
+						}
+					};
+				}
 				accumulator[current] = props[current];
 			}
 			return accumulator;

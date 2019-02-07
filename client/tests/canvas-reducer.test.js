@@ -1,13 +1,12 @@
-import { DefaultNodeModel } from 'storm-react-diagrams';
 import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
-import { StringNode } from "../../shared/lib/string-node";
-import { EntryNode } from "../../shared/lib/entry-node";
-import { ReturnNode } from "../../shared/lib/return-node";
+import { BoolNode } from "../../shared/lib/primitive/bool-node";
+import { EntryNode } from "../../shared/lib/api/entry-node";
+import { NumberNode } from "../../shared/lib/primitive/number-node";
+import { ReturnNode } from "../../shared/lib/api/return-node";
+import { StringNode } from "../../shared/lib/primitive/string-node";
 
 describe('CanvasReducer', () => {
-	const node = new DefaultNodeModel("StringNode");
-	const nodeClass = new StringNode();
 	it('Should reset states', () => {
 		expect(CanvasReducer({}, CanvasAction.reset())).toEqual({
 			_id: null,
@@ -16,9 +15,11 @@ describe('CanvasReducer', () => {
 			srdLinks: [],
 			lookup: {},
 			nodeTypes: {
+				BoolNode,
 				EntryNode,
-				StringNode,
-				ReturnNode
+				NumberNode,
+				ReturnNode,
+				StringNode
 			},
 			select_id: ""
 		});

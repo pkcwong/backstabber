@@ -12,6 +12,7 @@ export class CanvasAction {
 	static CREATE = 'Canvas/CREATE';
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
+	static REVOKE_KEY = 'Canvas/REVOKE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
 	static ADD_LABEL = 'canvas/ADD_LABEL';
 	static DELETE_LABEL = 'canvas/DELETE_LABEL';
@@ -35,7 +36,7 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (nodeType, points, bsNodeID = 0) => {
+	static addNode = (nodeType, points, bsNodeID = 0, props = 0) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
@@ -44,7 +45,8 @@ export class CanvasAction {
 					x: points.x,
 					y: points.y
 				},
-				_id: bsNodeID
+				_id: bsNodeID,
+				props: props
 			}
 		};
 	};
@@ -203,6 +205,22 @@ export class CanvasAction {
 			type: CanvasAction.GENERATE_KEY,
 			payload: {
 				_id: _id
+			}
+		};
+	};
+
+	/**
+	 * Revokes an existing API key.
+	 * @param _id
+	 * @param key
+	 * @returns {{type: string, payload: {_id: *, key: *}}}
+	 */
+	static revokeApiKey = (_id, key) => {
+		return {
+			type: CanvasAction.REVOKE_KEY,
+			payload: {
+				_id: _id,
+				key: key
 			}
 		};
 	};

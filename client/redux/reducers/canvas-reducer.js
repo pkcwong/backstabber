@@ -1,8 +1,10 @@
 import { DefaultNodeModel, DefaultPortModel, DefaultLabelModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
-import { EntryNode } from "../../../shared/lib/entry-node";
-import { StringNode } from "../../../shared/lib/string-node";
-import { ReturnNode } from "../../../shared/lib/return-node";
+import { BoolNode } from "../../../shared/lib/primitive/bool-node";
+import { EntryNode } from "../../../shared/lib/api/entry-node";
+import { NumberNode } from "../../../shared/lib/primitive/number-node";
+import { StringNode } from "../../../shared/lib/primitive/string-node";
+import { ReturnNode } from "../../../shared/lib/api/return-node";
 
 const initialState = {
 	dispatcher: null,
@@ -12,7 +14,9 @@ const initialState = {
 	srdLinks: [],
 	lookup: {},
 	nodeTypes: {
+		BoolNode,
 		EntryNode,
+		NumberNode,
 		StringNode,
 		ReturnNode
 	},
@@ -35,6 +39,9 @@ export const CanvasReducer = (state = initialState, action) => {
 			let bsNode = new state.nodeTypes[action.payload.nodeType]();
 			if (action.payload._id !== 0) {
 				bsNode._id = action.payload._id;
+			}
+			if (action.payload.props !== 0) {
+				bsNode.setProps(action.payload.props);
 			}
 			let stormNode = new DefaultNodeModel(bsNode.class.name);
 			stormNode.setPosition(action.payload.coordinates.x, action.payload.coordinates.y);

@@ -34,46 +34,56 @@ class Component extends React.Component {
 
 	render() {
 		this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
-		return <React.Fragment>
-			<Modal
-				show={this.state.show}
-				container={this}
-				onHide={() => {
-					this.setState({
-						show: false
-					})
-				}}
-				aria-labelledby="contained-modal-title"
-			>
-				<Modal.Header closeButton>
-					<Modal.Title id="contained-modal-title">
-						API Key
-					</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					{'API URL:'}
-					<br/>
-					{window.location.hostname + '/api/program/' + this.props.CanvasReducer._id}
-					<br/>
-					{'API Key:'}
-					<br/>
-					{
-						JSON.stringify((() => {
-							const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
-								return (sketch._id === this.props.CanvasReducer._id);
-							});
-							if (sketch === undefined) {
-								return [];
-							}
-							return sketch.tokens
-						})())
-					}
-				</Modal.Body>
-				<Modal.Footer>
-					<Button onClick={
-						() => {
-							this.setState({
-								show: false
+		return (
+			<React.Fragment>
+				<Modal
+					show={this.state.show}
+					container={this}
+					onHide={() => {
+						this.setState({
+							show: false
+						})
+					}}
+					aria-labelledby="contained-modal-title"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="contained-modal-title">
+							API Key
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						{'API URL:'}
+						<br/>
+						{window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id}
+						<br/>
+						{'API Key:'}
+						<br/>
+						{
+							(() => {
+								const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+									return (sketch._id === this.props.CanvasReducer._id);
+								});
+								if (sketch === undefined) {
+									return [];
+								}
+								return sketch.tokens
+							})().map((item, index) => {
+								return (
+									<React.Fragment
+										key={index}
+									>
+										<p>
+											{item}
+											<Button
+												onClick={() => {
+													this.props.dispatch(CanvasAction.revokeApiKey(this.props.CanvasReducer._id, item));
+												}}
+											>
+												Revoke
+											</Button>
+										</p>
+									</React.Fragment>
+								);
 							})
 						}
 					}>Close</Button>

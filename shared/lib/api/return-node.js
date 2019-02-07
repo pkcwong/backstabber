@@ -1,4 +1,4 @@
-import { BasicNode } from "./basic-node";
+import { BasicNode } from "../basic-node";
 
 export class ReturnNode extends BasicNode {
 
@@ -6,12 +6,14 @@ export class ReturnNode extends BasicNode {
 
 	static ports = {
 		inputs: {
-			result: {}
+			result: (x) => {
+				return x;
+			}
 		},
 		outputs: {}
 	};
 
-	static executor = (props = ReturnNode.props, input = ReturnNode.ports.inputs) => {
+	static executor = (props = ReturnNode.props, input) => {
 		return new Promise((resolve, reject) => {
 			resolve(null);
 		});

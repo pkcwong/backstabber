@@ -46,7 +46,7 @@ export const CanvasSaga = function* () {
 			if (res !== undefined) {
 				yield put(CanvasAction.reset());
 				yield all(res.program.map(node => {
-					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, node._id));
+					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, node._id, node.props));
 				}));
 				yield all(res.program.reduce((accumulator, node) => {
 					return [
@@ -128,6 +128,28 @@ export const CanvasSaga = function* () {
 				})
 			}, {
 				_id: action['payload']['_id']
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	});
+	yield takeLatest(CanvasAction.REVOKE_KEY, function* (action) {
+		try {
+			yield call((payload) => {
+				return new Promise((resolve, reject) => {
+					Meteor.call('Sketches/REVOKE-KEY', {
+						_id: payload._id,
+						key: payload.key
+					}, (err, res) => {
+						if (err) {
+							reject(err);
+						}
+						resolve(res);
+					});
+				});
+			}, {
+				_id: action.payload._id,
+				key: action.payload.key
 			});
 		} catch (err) {
 			console.error(err);
