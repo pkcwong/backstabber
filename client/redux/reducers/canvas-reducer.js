@@ -147,12 +147,7 @@ export const CanvasReducer = (state = initialState, action) => {
 				return (srdNode.id === state.lookup[action.payload.bsNode._id])
 			});
 			let labelPort = srdNode.ports[action.payload.portName].links[Object.keys(srdNode.ports[action.payload.portName].links)[action.payload.index]];
-			console.log(labelPort);
-			let labelModel = new DefaultLabelModel;
-			labelModel.setLabel(action.payload.label);
-			labelPort.labels = Object.assign({}, labelPort.labels, {
-				labelModel
-			});
+			labelPort.addLabel(action.payload.label);
 			return Object.assign({}, state, {
 				srdNodes: state.srdNodes
 			});
