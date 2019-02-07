@@ -86,10 +86,18 @@ class Component extends React.Component {
 								);
 							})
 						}
-					}>Close</Button>
-				</Modal.Footer>
-			</Modal>
-			<Modal
+					</Modal.Body>
+					<Modal.Footer>
+						<Button onClick={
+							() => {
+								this.setState({
+									show: false
+								})
+							}
+						}>Close</Button>
+					</Modal.Footer>
+				</Modal>
+				<Modal
 				show={this.state.run_modal}
 				container={this}
 				onHide={() => {
@@ -401,8 +409,7 @@ class Component extends React.Component {
 					</div>
 				</div>
 			</div>
-
-		</React.Fragment>;
+		</React.Fragment>);
 	}
 
 	componentDidMount() {
