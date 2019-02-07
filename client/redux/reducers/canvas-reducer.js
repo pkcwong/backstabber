@@ -152,6 +152,14 @@ export const CanvasReducer = (state = initialState, action) => {
 				srdNodes: state.srdNodes
 			});
 		}
+		case CanvasAction.DELETE_LABEL: {
+			state.srdLinks.map((srdLink)=>{
+				srdLink.labels = [];
+			});
+			return Object.assign({}, state, {
+				srdLink: state.srdLinks
+			});
+		}
 		case CanvasAction.LOAD_COMPLETE: {
 			return Object.assign({}, state, {
 				_id: action.payload._id

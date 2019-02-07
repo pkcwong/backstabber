@@ -108,6 +108,7 @@ class Component extends React.Component {
 							}
 							id="user_input"
 							rows="10"
+							defaultValue="{}"
 						/>
 					</div>
 				</Modal.Body>
@@ -126,13 +127,6 @@ class Component extends React.Component {
 							this.props.CanvasReducer.bsNodes.forEach((bsNode) => {
 								bsNode.callbacks = [];
 								bsNode.registerCallback((err, res) => {
-									// TODO: update Labels
-									console.log("bsNode " + bsNode._id + " updated with output ports: " + JSON.stringify(Object.keys(bsNode.class.ports.outputs).reduce((acc, curr) => {
-										return Object.assign({}, acc, {
-											[curr]: bsNode.getOutboundPort(curr).getter()
-										});
-									}, {})));
-
 									Object.keys(bsNode.class.ports.outputs).map((port_name, index)=>{
 										if(typeof bsNode.getOutboundPort(port_name).getter() !== 'undefined'){
 											this.props.dispatch(CanvasAction.addLabel(bsNode, index, port_name, bsNode.getOutboundPort(port_name).getter()));
@@ -142,9 +136,7 @@ class Component extends React.Component {
 							});
 							program.execute(JSON.parse($("#user_input").val())).then(() => {
 								console.log('Program execution complete');
-								// TODO: execution complete
 							});
-							// TODO: real time debugging
 							this.setState({
 								run_modal: false
 							});
@@ -230,6 +222,15 @@ class Component extends React.Component {
 						}}
 					>
 						Run
+					</Button>
+					<Button
+						bsStyle="danger"
+						onClick={() => {
+							console.log('hi');
+							this.props.dispatch(CanvasAction.deleteLabel());
+						}}
+					>
+						Finish
 					</Button>
 				</div>
 			</div>

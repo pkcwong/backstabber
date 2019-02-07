@@ -14,6 +14,7 @@ export class CanvasAction {
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
 	static ADD_LABEL = 'canvas/ADD_LABEL';
+	static DELETE_LABEL = 'canvas/DELETE_LABEL';
 
 	static init = (dispatcher) => {
 		return {
@@ -129,6 +130,12 @@ export class CanvasAction {
 		}
 	};
 
+	static deleteLabel = () => {
+		return {
+			type: CanvasAction.DELETE_LABEL,
+			payload:{}
+		}
+	};
 	/**
 	 * Loads a sketch from database.
 	 * @param _id
