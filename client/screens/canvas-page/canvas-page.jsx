@@ -361,7 +361,7 @@ class Component extends React.Component {
 													() => {
 														let props = {};
 														Object.keys(bsNode.props).map((key, index) => {
-															if(bsNode.props.hasOwnProperty('number') && !isNaN(Number($("#" + key).val()))){
+															if(typeof bsNode.class.props[key] === "number" && !isNaN(Number($("#" + key).val()))){
 																props = Object.assign({}, props, {
 																	[key]: Number($("#" + key).val())
 																});
