@@ -31,7 +31,9 @@ export class ProgramNode extends BasicNode {
 					reject(err);
 					return;
 				}
-				resolve(res);
+				resolve({
+					result: res
+				});
 			});
 		});
 	};
