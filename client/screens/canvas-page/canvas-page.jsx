@@ -153,8 +153,10 @@ class Component extends React.Component {
 									});
 								});
 							});
-							program.execute(JSON.parse($("#user_input").val())).then(() => {
-								console.log('Program execution complete');
+							program.execute(JSON.parse($("#user_input").val())).then((result) => {
+
+							}).catch((err) => {
+								alert(err);
 							});
 							this.setState({
 								run_modal: false
@@ -361,9 +363,28 @@ class Component extends React.Component {
 													() => {
 														let props = {};
 														Object.keys(bsNode.props).map((key, index) => {
-															props = Object.assign({}, props, {
-																[key]: $("#" + key).val()
-															});
+															if(typeof bsNode.class.props[key] === "number" && !isNaN(Number($("#" + key).val()))){
+																props = Object.assign({}, props, {
+																	[key]: Number($("#" + key).val())
+																});
+															}
+															else if(typeof bsNode.class.props[key] === "boolean"){
+																if($("#" + key).val() === 'true'){
+																	props = Object.assign({}, props, {
+																		[key]: true
+																	});
+																}
+																else{
+																	props = Object.assign({}, props, {
+																		[key]: false
+																	});
+																}
+															}
+															else{
+																props = Object.assign({}, props, {
+																	[key]: $("#" + key).val()
+																});
+															}
 															bsNode.setProps(props);
 															this.setState({
 																_id: ""
@@ -386,7 +407,18 @@ class Component extends React.Component {
 										}>
 											<ControlLabel>Current {key} value:</ControlLabel>{' '}
 											{
-												bsNode.props[key]
+												(()=>{
+													if(bsNode.props[key] === true){
+														return 'true'
+													}
+													else if(bsNode.props[key] === false){
+														return 'false'
+													}
+													else{
+														return bsNode.props[key]
+													}
+												})()
+
 											}
 											<Form inline>
 												<FormGroup>
