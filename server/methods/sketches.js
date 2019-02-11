@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random'
 import { sketches_db } from "/shared/collections/sketches";
+import { Program } from "../../shared/lib/program";
 
 Meteor.methods({
 	'Sketches/LOAD': (json) => {
@@ -58,6 +59,27 @@ Meteor.methods({
 				$pull: {
 					tokens: json['key']
 				}
+			});
+		});
+	},
+	'sketches/EXECUTE': (json) => {
+		return new Promise((resolve, reject) => {
+			const sketch = sketches_db.findOne({
+				_id: json._id
+			});
+			if (sketch === undefined) {
+				reject();
+				return;
+			}
+			if (!sketch.tokens.includes(json.token)) {
+				reject();
+				return;
+			}
+			const program = Program.deserialize(sketch.program);
+			program.execute(json.entry).then((result) => {
+				resolve(result);
+			}).catch((err) => {
+				reject(err);
 			});
 		});
 	}
