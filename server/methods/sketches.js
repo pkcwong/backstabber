@@ -77,6 +77,18 @@ Meteor.methods({
 			}
 			const program = Program.deserialize(sketch.program);
 			program.execute(json.entry).then((result) => {
+				sketches_db.update({
+					_id: json._id
+				}, {
+					$push: {
+						logs: {
+							timestamp: new Date(),
+							token: json.token,
+							args: json.entry,
+							result: result
+						}
+					}
+				});
 				resolve(result);
 			}).catch((err) => {
 				reject(err);
