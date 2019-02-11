@@ -153,7 +153,9 @@ class Component extends React.Component {
 									});
 								});
 							});
-							program.execute(JSON.parse($("#user_input").val())).catch((err) => {
+							program.execute(JSON.parse($("#user_input").val())).then((result) => {
+
+							}).catch((err) => {
 								alert(err);
 							});
 							this.setState({
@@ -365,7 +367,20 @@ class Component extends React.Component {
 																props = Object.assign({}, props, {
 																	[key]: Number($("#" + key).val())
 																});
-															}else{
+															}
+															else if(typeof bsNode.class.props[key] === "boolean"){
+																if($("#" + key).val() === 'true'){
+																	props = Object.assign({}, props, {
+																		[key]: true
+																	});
+																}
+																else{
+																	props = Object.assign({}, props, {
+																		[key]: false
+																	});
+																}
+															}
+															else{
 																props = Object.assign({}, props, {
 																	[key]: $("#" + key).val()
 																});
