@@ -125,7 +125,7 @@ export class CanvasAction {
 			type: CanvasAction.ADD_LABEL,
 			payload: {
 				bsNode: bsNode,
-				label: label,
+				label: JSON.stringify(label),
 				portName: portName,
 				index: index
 			}
