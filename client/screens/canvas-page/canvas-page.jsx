@@ -361,9 +361,15 @@ class Component extends React.Component {
 													() => {
 														let props = {};
 														Object.keys(bsNode.props).map((key, index) => {
-															props = Object.assign({}, props, {
-																[key]: $("#" + key).val()
-															});
+															if(typeof bsNode.class.props[key] === "number" && !isNaN(Number($("#" + key).val()))){
+																props = Object.assign({}, props, {
+																	[key]: Number($("#" + key).val())
+																});
+															}else{
+																props = Object.assign({}, props, {
+																	[key]: $("#" + key).val()
+																});
+															}
 															bsNode.setProps(props);
 															this.setState({
 																_id: ""
