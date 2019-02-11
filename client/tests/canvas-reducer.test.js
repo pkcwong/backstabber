@@ -3,6 +3,7 @@ import { CanvasAction } from "../redux/actions/canvas-action";
 import { BoolNode } from "../../shared/lib/primitive/bool-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { NumberNode } from "../../shared/lib/primitive/number-node";
+import { ProgramNode } from "../../shared/lib/functional/ProgramNode";
 import { ReturnNode } from "../../shared/lib/api/return-node";
 import { StringNode } from "../../shared/lib/primitive/string-node";
 
@@ -18,6 +19,7 @@ describe('CanvasReducer', () => {
 				BoolNode,
 				EntryNode,
 				NumberNode,
+				ProgramNode,
 				ReturnNode,
 				StringNode
 			},

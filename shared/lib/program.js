@@ -1,6 +1,7 @@
 import { BoolNode } from "./primitive/bool-node";
 import { EntryNode } from "./api/entry-node";
 import { NumberNode } from "./primitive/number-node";
+import { ProgramNode } from "./functional/ProgramNode";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
 
@@ -18,7 +19,7 @@ export class Program {
 			this.nodes.filter((node) => {
 				return (node instanceof EntryNode);
 			}).forEach((node) => {
-				node.instance.props = args;
+				node.props = args;
 			});
 			this.nodes.filter((node) => {
 				return (node instanceof ReturnNode);
@@ -55,6 +56,7 @@ export class Program {
 			BoolNode,
 			EntryNode,
 			NumberNode,
+			ProgramNode,
 			ReturnNode,
 			StringNode
 		};

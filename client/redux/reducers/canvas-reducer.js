@@ -3,8 +3,9 @@ import { CanvasAction } from "../actions/canvas-action";
 import { BoolNode } from "../../../shared/lib/primitive/bool-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
 import { NumberNode } from "../../../shared/lib/primitive/number-node";
-import { StringNode } from "../../../shared/lib/primitive/string-node";
+import { ProgramNode } from "../../../shared/lib/functional/ProgramNode";
 import { ReturnNode } from "../../../shared/lib/api/return-node";
+import { StringNode } from "../../../shared/lib/primitive/string-node";
 
 const initialState = {
 	dispatcher: null,
@@ -17,8 +18,9 @@ const initialState = {
 		BoolNode,
 		EntryNode,
 		NumberNode,
-		StringNode,
-		ReturnNode
+		ProgramNode,
+		ReturnNode,
+		StringNode
 	},
 	select_id: ""
 };
@@ -150,7 +152,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 		}
 		case CanvasAction.ADD_LABEL: {
-			let srdNode = state.srdNodes.find((srdNode)=>{
+			let srdNode = state.srdNodes.find((srdNode) => {
 				return (srdNode.id === state.lookup[action.payload.bsNode._id])
 			});
 			let labelPort = srdNode.ports[action.payload.portName].links[Object.keys(srdNode.ports[action.payload.portName].links)[action.payload.index]];
@@ -160,7 +162,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 		}
 		case CanvasAction.DELETE_LABEL: {
-			state.srdLinks.map((srdLink)=>{
+			state.srdLinks.map((srdLink) => {
 				srdLink.labels = [];
 			});
 			return Object.assign({}, state, {

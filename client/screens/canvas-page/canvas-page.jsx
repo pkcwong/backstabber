@@ -354,10 +354,10 @@ class Component extends React.Component {
 								let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) => {
 									return (bsNode._id === this.props.CanvasReducer.select_id)
 								});
-								let button = ({});
+								let button = (<React.Fragment/>);
 								if (index === Object.keys(bsNode.props).length - 1) {
 									button = (
-										<div>
+										<React.Fragment>
 											<Button
 												onClick={
 													() => {
@@ -395,7 +395,7 @@ class Component extends React.Component {
 											>
 												Submit
 											</Button>
-										</div>)
+										</React.Fragment>)
 									;
 								}
 								return (
