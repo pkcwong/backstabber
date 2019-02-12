@@ -24,7 +24,7 @@ app.post('/api/program/:_id', [
 		return;
 	}
 	if (!json.tokens.includes(request.header('token'))) {
-		response.writeHead(403, {
+		response.writeHead(401, {
 			'Content-Type': 'application/json'
 		});
 		response.end();

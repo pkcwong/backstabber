@@ -147,6 +147,11 @@ class Component extends React.Component {
 								bsNode.callbacks = [];
 								bsNode.registerCallback((err, res) => {
 									Object.keys(bsNode.class.ports.outputs).map((port_name, index)=>{
+										if (err) {
+											alert(err);
+											this.props.dispatch(CanvasAction.addLabel(bsNode, index, port_name, err));
+											return;
+										}
 										if(typeof bsNode.getOutboundPort(port_name).getter() !== 'undefined'){
 											this.props.dispatch(CanvasAction.addLabel(bsNode, index, port_name, bsNode.getOutboundPort(port_name).getter()));
 										}
@@ -155,8 +160,6 @@ class Component extends React.Component {
 							});
 							program.execute(JSON.parse($("#user_input").val())).then((result) => {
 
-							}).catch((err) => {
-								alert(err);
 							});
 							this.setState({
 								run_modal: false

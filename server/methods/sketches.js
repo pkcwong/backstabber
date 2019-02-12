@@ -68,11 +68,11 @@ Meteor.methods({
 				_id: json._id
 			});
 			if (sketch === undefined) {
-				reject();
+				reject("404 Not Found");
 				return;
 			}
 			if (!sketch.tokens.includes(json.token)) {
-				reject();
+				reject("401 Unauthorized");
 				return;
 			}
 			const program = Program.deserialize(sketch.program);
@@ -93,6 +93,8 @@ Meteor.methods({
 			}).catch((err) => {
 				reject(err);
 			});
+		}).catch((err) => {
+			throw new Meteor.Error(err);
 		});
 	}
 });
