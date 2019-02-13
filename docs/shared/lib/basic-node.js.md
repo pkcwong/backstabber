@@ -12,14 +12,16 @@ data members | description | rationale
 ```class``` | The constructor of the child class. | The ```BasicNode``` should store info on the child class, so it may derive properties from its child class.
 ```props``` | A ```json``` representative of the ```bsNode``` properties. | Each ```bsNode``` should contain some properties, and the parent class would be the best place to store them.
 ```observers``` | An array of ```json``` containing callback functions. | Whenever a ```bsNode``` completes execution, it must propagate its outputs to the next nodes. The callback functions serve this purpose.
+```callbacks``` | An array containing callback functions. | Whenever a ```bsNode``` has a state change, it must notify the UI.
 ```instance``` | A ```json``` containing the current state of the ```bsNode```. | A ```bsNode``` may have its state changed upon events such as reset and execute. This data member contains the current state, and upon reset the states are copied from its ```props``` to restore original state.
 
 member functions | description | rationale
---- | ---
+--- | --- | ---
 ```reset()``` | Resets the ```bsNode``` into its original state. | A ```bsNode``` can be reused if it can be reset.
 ```execute()``` | Executes the ```bsNode``` and update outputs at ```this.instance.outputs```. | This serves as the core payload of the ```bsNode```.
 ```sendOnReady(output, input)``` | Registers an observer to the ```bsNode```. | This instructs the ```bsNode``` to propagate its outputs to the next node, given its own outbound port and the target's inbound port.
 ```revokeSendOnReady(output, input)``` | Removes a registered observer. | The reverse of ```this.sendOnReady```, which allows the user to undo an observer registration.
+```registerCallback(callback)``` | Registers a callback. | The UI can be notified of any state changes or errors.
 ```receive(port, data, propagate = true)``` | Receives data at a port. | The ```bsNode``` receives data at a specific port, and may automatically execute when it is ready, controlled by rhe ```propagate``` flag.
 ```isReady()``` | Checks if a ```bsNode``` is ready to execute. | A ```bsNode``` is ready to be executed when all its inbound ports are ready and with a value other than ```undefined```.
 ```setProps(props = {})``` | Sets the node properties, and resets the node. | This allows a node's property to be changed by the user.
@@ -27,9 +29,83 @@ member functions | description | rationale
 ```getOutboundPort(port)``` | Returns a ```json``` containing a getter function for an outbound port. | This allows another ```bsNode``` to store the getter function for later use in order to get the realtime data at the outbound port.
 ```serialize()``` | Returns a serialized form of the ```bsNode```. | MongoDB cannot store class objects as it only accept ```json``` type documents, therefore it is necessary to write a serialization method, which returns a ```json``` that can be deserialized back into a class instance later.
 
+## Design
+
+Following the strategy of functional programming, a ```Program``` should be defined as a complex function build with simpler functions. This inspired the design of the building block.
+
+> The basic build block would be ```Function```, which is visualized by ```Node```.
+
+Back in elementary school math, people are taught the idea that a function is like a *black box* (machine), that takes some input and returns some output. We take the idea, and used ```Node``` to visualize such black box. A ```Node``` would take in data from input ports, execute, and propogate the result to its output ports.
+
+The executor function of each ```Node``` plays the role of the main payload of the *black box*. The function accepts two parameters, ```props``` (configuration settings) and ```inputs``` (function inputs). The executor function returns a ```Promise``` which resolves to a result, as there is no prediction to when the execution completes.
+
+```JavaScript
+static executor = (props, inputs) => {
+	return new Promise((resolve, reject) => {
+		// payload
+	});
+};
+```
+
+After execution, the ```Node``` must then pass on its results to its outputs, and also propagate the data to other nodes. Note that ```this.class.executor``` refers to the ```executor``` function mentioned above.
+
+```JavaScript
+execute() {
+	return new Promise((resolve, reject) => {
+		// executor payload
+		this.class.executor(this.props, this.instance.inputs).then((result) => {
+			// pass results to output ports
+			Object.keys(this.instance.outputs).forEach((key) => {
+				this.instance.outputs[key] = result[key];
+			});
+			// propagate data to other nodes
+			this.observers.forEach((item) => {
+				item.func();
+			});
+			// notify UI
+			this.callbacks.forEach((callback) => {
+				callback(null, this);
+			});
+			resolve(result);
+		}).catch((err) => {
+			// an error occured
+			// do not propagate data
+			this.callbacks.forEach((callback) => {
+				callback(err, this);
+			});
+			reject(err);
+		});
+	});
+}
+```
+
 ## Development Journal
 
 This jounral highlights some of the critical commits regarding the development of ```basic-node.js```.
+
+
+### commit 4bc348258d8f274f7879d6ed6a7dd38b9b880e6a
+
+Feb 1, 2019
+
+Front end requested a mechanism in which a callback function may be registered, such that the UI may be notified of any state changes. The states in which the callbacks are triggered include:
+
+- on ```Node``` reset
+- on ```Node``` execution complete
+
+An extra data member ```this.callbacks``` is therefore needed. The callback function would follow the NodeJS callback standard.
+
+```JavaScript
+//sample callback
+(err, res) => {
+	if (err) {
+		throw err;
+	}
+	// res will be an instance of Node
+}
+```
+
+callback functions may be registered via the new method ```registerCallback```.
 
 ### commit 43d5f6fd717516f63958752f9914e45d9abd5fd5
 
