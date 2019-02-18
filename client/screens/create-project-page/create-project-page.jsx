@@ -1,18 +1,42 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Form, FormControl, Checkbox, Button } from 'react-bootstrap';
+import { sketches_db } from "../../../shared/collections/sketches";
+import { Modal } from 'react-bootstrap';
 
 class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			open: false,
+			open_modal: {}
+		};
 	}
 
 	render() {
 		return (
 			<React.Fragment>
+				<Modal
+					show={this.state.open}
+					container={this}
+					onHide={() => {
+						this.setState({
+							open: false
+						})
+					}}
+					aria-labelledby="contained-modal-title"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="contained-modal-title">
+							Open Existing Program
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<br/>
+					</Modal.Body>
+
+				</Modal>
 				<div style={
 					{
 					}
@@ -117,7 +141,16 @@ class Component extends React.Component {
 								        width: "340px",
 								        marginBottom: "8px"
 							        }
-						        }>
+						        } onClick={
+									() => {
+										this.setState({
+											open: true,
+											open_modal: this.props.Meteor.collection
+										});
+						        	    console.log(this.props.Meteor.collection);
+									}
+								}
+								>
 									Open Existing Program
 								</button>
 								<a href="javascript:void(0)"
@@ -138,6 +171,21 @@ class Component extends React.Component {
 		);
 	}
 }
+
+const TrackerSketches = withTracker(() => {
+	Meteor.subscribe('sketches_db');
+	return {
+		Meteor: {
+			collection: {
+				sketches: sketches_db.find().fetch()
+			},
+			user: Meteor.user(),
+			userId: Meteor.userId(),
+			status: Meteor.status(),
+			loggingIn: Meteor.loggingIn()
+		}
+	};
+})(Component);
 
 const Tracker = withTracker(() => {
 	Meteor.subscribe('users_db');
