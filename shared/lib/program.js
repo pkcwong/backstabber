@@ -1,7 +1,8 @@
 import { BoolNode } from "./primitive/bool-node";
 import { EntryNode } from "./api/entry-node";
+import { ExecuteNode } from "./functional/execute-node";
 import { NumberNode } from "./primitive/number-node";
-import { ProgramNode } from "./functional/ProgramNode";
+import { ProgramNode } from "./functional/program-node";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
 
@@ -55,6 +56,7 @@ export class Program {
 		const constructor = {
 			BoolNode,
 			EntryNode,
+			ExecuteNode,
 			NumberNode,
 			ProgramNode,
 			ReturnNode,
