@@ -25,6 +25,8 @@ class Component extends React.Component {
 		this.state = {
 			show: false,
 			run_modal: false,
+			error_modal: false,
+			error: ""
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -36,6 +38,29 @@ class Component extends React.Component {
 		this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
 		return (
 			<React.Fragment>
+
+				<Modal
+					show={this.state.error_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							error_modal: false
+						})
+					}}
+					aria-labelledby="contained-modal-title"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="contained-modal-title">
+							Error
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						{'ERROR MESSAGE:'}
+						<br/>
+						{this.state.error}
+						<br/>
+					</Modal.Body>
+				</Modal>
 				<Modal
 					show={this.state.show}
 					container={this}
@@ -98,15 +123,15 @@ class Component extends React.Component {
 					</Modal.Footer>
 				</Modal>
 				<Modal
-				show={this.state.run_modal}
-				container={this}
-				onHide={() => {
-					this.setState({
-						run_modal: false
-					})
-				}}
-				aria-labelledby="contained-modal-title"
-			>
+					show={this.state.run_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							run_modal: false
+						})
+					}}
+					aria-labelledby="contained-modal-title"
+				>
 				<Modal.Header closeButton>
 					<Modal.Title id="contained-modal-title">
 						Real Time Debugging
@@ -388,7 +413,13 @@ class Component extends React.Component {
 																	[key]: $("#" + key).val()
 																});
 															}
-															bsNode.setProps(props);
+															try{
+																bsNode.setProps(props);
+															}
+															catch(e){
+																this.state.error = e.message;
+																this.state.error_modal = true;
+															}
 															this.setState({
 																_id: ""
 															})
