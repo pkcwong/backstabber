@@ -2,19 +2,19 @@ import { BasicNode } from "../basic-node";
 
 export class ProgramNode extends BasicNode {
 
-	static props = {
-		_id: '',
-		token: ''
-	};
+	static props = {};
 
 	static ports = {
 		inputs: {
-			entry: (x) => {
+			_id: (x) => {
+				return x;
+			},
+			token: (x) => {
 				return x;
 			}
 		},
 		outputs: {
-			result: (x) => {
+			program: (x) => {
 				return (x !== undefined);
 			}
 		}
@@ -22,18 +22,12 @@ export class ProgramNode extends BasicNode {
 
 	static executor = (props = ProgramNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
-			Meteor.call('sketches/EXECUTE', {
-				_id: props._id,
-				token: props.token,
-				entry: inputs.entry
-			}, (err, res) => {
-				if (err) {
-					reject(err);
-					return;
+			// TODO: Validation needed
+			resolve({
+				program: {
+					_id: inputs._id,
+					token: inputs.token
 				}
-				resolve({
-					result: res
-				});
 			});
 		});
 	};
