@@ -417,8 +417,10 @@ class Component extends React.Component {
 																bsNode.setProps(props);
 															}
 															catch(e){
-																this.state.error = e.message;
-																this.state.error_modal = true;
+																this.setState({
+																	error: e.message,
+																	error_modal: true
+																})
 															}
 															this.setState({
 																_id: ""
