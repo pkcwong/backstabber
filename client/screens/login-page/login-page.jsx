@@ -204,9 +204,6 @@ class Component extends React.Component {
 											width: "90%"
 										}
 									}>
-										<Checkbox id="rememberme">
-											Remember Me
-										</Checkbox>
 									</div>
 									<div style={
 										{
@@ -221,10 +218,11 @@ class Component extends React.Component {
 											}
 										} onClick={
 											()=>{
-												// Todo: Remember Me function
 												Meteor.loginWithPassword($("#username").val(), $("#password").val(), (error)=>{
 													if(error){
 														alert("Usern`ame does not exist or wrong password")
+													}else{
+														FlowRouter.go("/create")
 													}
 												});
 											}

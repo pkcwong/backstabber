@@ -178,7 +178,10 @@ class Component extends React.Component {
 								>
 									Open Existing Program
 								</button>
-								<a href="javascript:void(0)"
+								<a onClick={() => {
+									Meteor.logout()
+									FlowRouter.go("/login")
+								}}
 								   style={
 									   {
 										   display: "inline-block",
