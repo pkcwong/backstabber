@@ -27,7 +27,7 @@ Meteor.methods({
 		return new Promise((resolve, reject) => {
 			resolve(sketches_db.update({
 				_id: json['_id'],
-				owner: Meteor.user()
+				owner: Meteor.userId()
 			}, {
 				$set: {
 					program: json['program'],
@@ -41,7 +41,7 @@ Meteor.methods({
 			const key = Random.id();
 			sketches_db.update({
 				_id: json['_id'],
-				owner: Meteor.user()
+				owner: Meteor.userId()
 			}, {
 				$push: {
 					tokens: key
