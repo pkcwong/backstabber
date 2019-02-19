@@ -9,8 +9,8 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			open: false,
-			open_modal: {}
+			open_modal: false,
+			open: []
 		};
 	}
 
@@ -18,11 +18,11 @@ class Component extends React.Component {
 		return (
 			<React.Fragment>
 				<Modal
-					show={this.state.open}
+					show={this.state.open_modal}
 					container={this}
 					onHide={() => {
 						this.setState({
-							open: false
+							open_modal: false
 						})
 					}}
 					aria-labelledby="contained-modal-title"
@@ -33,6 +33,13 @@ class Component extends React.Component {
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
+						{'Existing Program:'}
+						<br/>
+						{this.state.open.map((item, index) => {
+							return (
+								<div id={item}>{item}</div>
+							)
+						})}
 						<br/>
 					</Modal.Body>
 
@@ -144,10 +151,16 @@ class Component extends React.Component {
 						        } onClick={
 									() => {
 										this.setState({
-											open: true,
-											open_modal: this.props.Meteor.collection
+											open_modal: true,
 										});
-						        	    console.log(this.props.Meteor.collection);
+										let sketches = this.props.Meteor.collection.sketches.filter(user => user.owner == this.props.Meteor.userId)
+										sketches = Object.values(sketches).map((value, index) =>{
+											return (value._id)
+										})
+										console.log(sketches)
+										this.setState({
+											open: sketches
+										})
 									}
 								}
 								>
@@ -172,27 +185,14 @@ class Component extends React.Component {
 	}
 }
 
-const TrackerSketches = withTracker(() => {
+const Tracker = withTracker(() => {
+	Meteor.subscribe('users_db');
 	Meteor.subscribe('sketches_db');
 	return {
 		Meteor: {
 			collection: {
+				users: Meteor.users.find().fetch(),
 				sketches: sketches_db.find().fetch()
-			},
-			user: Meteor.user(),
-			userId: Meteor.userId(),
-			status: Meteor.status(),
-			loggingIn: Meteor.loggingIn()
-		}
-	};
-})(Component);
-
-const Tracker = withTracker(() => {
-	Meteor.subscribe('users_db');
-	return {
-		Meteor: {
-			collection: {
-				users: Meteor.users.find().fetch()
 			},
 			user: Meteor.user(),
 			userId: Meteor.userId(),
