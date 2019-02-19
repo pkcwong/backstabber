@@ -1,4 +1,4 @@
-import { BoolNode } from "../../shared/lib/bool-node";
+import { BoolNode } from "../../shared/lib/primitive/bool-node";
 
 const mock = () => {
 	return new BoolNode({

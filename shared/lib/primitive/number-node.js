@@ -1,4 +1,4 @@
-import { BasicNode } from "./basic-node";
+import { BasicNode } from "../basic-node";
 
 export class NumberNode extends BasicNode {
 
@@ -9,19 +9,21 @@ export class NumberNode extends BasicNode {
 	static ports = {
 		inputs: {},
 		outputs: {
-			number: 0
+			number: (x) => {
+				return (typeof x === 'number');
+			}
 		}
 	};
 
-	static executor = (props = NumberNode.props, inputs = NumberNode.ports.inputs) => {
+	static executor = (props = NumberNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				number: (typeof props.number === 'number') ? props.number : parseFloat(props.number)
+				number: props.number
 			});
 		});
 	};
 
-	constructor(props = NumberNode.props) {
+	constructor(props) {
 		super({
 			class: NumberNode,
 			props: props

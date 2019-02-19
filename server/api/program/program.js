@@ -24,7 +24,7 @@ app.post('/api/program/:_id', [
 		return;
 	}
 	if (!json.tokens.includes(request.header('token'))) {
-		response.writeHead(403, {
+		response.writeHead(401, {
 			'Content-Type': 'application/json'
 		});
 		response.end();
@@ -32,6 +32,18 @@ app.post('/api/program/:_id', [
 	}
 	const program = Program.deserialize(json['program']);
 	program.execute(request.body).then((result) => {
+		sketches_db.update({
+			_id: request.params['_id']
+		}, {
+			$push: {
+				logs: {
+					timestamp: new Date(),
+					token: request.header('token'),
+					args: request.body,
+					result: result
+				}
+			}
+		});
 		response.writeHead(200, {
 			'Content-Type': 'application/json'
 		});

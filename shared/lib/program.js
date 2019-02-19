@@ -1,8 +1,10 @@
-import { BoolNode } from "./bool-node";
-import { EntryNode } from "./entry-node";
-import { NumberNode } from "./number-node";
-import { ReturnNode } from "./return-node";
-import { StringNode } from "./string-node";
+import { BoolNode } from "./primitive/bool-node";
+import { EntryNode } from "./api/entry-node";
+import { ExecuteNode } from "./functional/execute-node";
+import { NumberNode } from "./primitive/number-node";
+import { ProgramNode } from "./functional/program-node";
+import { ReturnNode } from "./api/return-node";
+import { StringNode } from "./primitive/string-node";
 
 export class Program {
 
@@ -18,7 +20,7 @@ export class Program {
 			this.nodes.filter((node) => {
 				return (node instanceof EntryNode);
 			}).forEach((node) => {
-				node.instance.props = args;
+				node.props = args;
 			});
 			this.nodes.filter((node) => {
 				return (node instanceof ReturnNode);
@@ -54,7 +56,9 @@ export class Program {
 		const constructor = {
 			BoolNode,
 			EntryNode,
+			ExecuteNode,
 			NumberNode,
+			ProgramNode,
 			ReturnNode,
 			StringNode
 		};

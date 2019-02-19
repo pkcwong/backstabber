@@ -1,10 +1,12 @@
 import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
-import { BoolNode } from "../../../shared/lib/bool-node";
-import { EntryNode } from "../../../shared/lib/entry-node";
-import { NumberNode } from "../../../shared/lib/number-node";
-import { StringNode } from "../../../shared/lib/string-node";
-import { ReturnNode } from "../../../shared/lib/return-node";
+import { BoolNode } from "../../../shared/lib/primitive/bool-node";
+import { EntryNode } from "../../../shared/lib/api/entry-node";
+import { ExecuteNode } from "../../../shared/lib/functional/execute-node";
+import { NumberNode } from "../../../shared/lib/primitive/number-node";
+import { ProgramNode } from "../../../shared/lib/functional/program-node";
+import { ReturnNode } from "../../../shared/lib/api/return-node";
+import { StringNode } from "../../../shared/lib/primitive/string-node";
 
 const initialState = {
 	dispatcher: null,
@@ -16,9 +18,11 @@ const initialState = {
 	nodeTypes: {
 		BoolNode,
 		EntryNode,
+		ExecuteNode,
 		NumberNode,
-		StringNode,
-		ReturnNode
+		ProgramNode,
+		ReturnNode,
+		StringNode
 	},
 	select_id: ""
 };
@@ -147,6 +151,24 @@ export const CanvasReducer = (state = initialState, action) => {
 				srdLinks: state.srdLinks.filter((link) => {
 					return !(link.sourcePort === srdPortOutbound && link.targetPort === srdPortInbound);
 				})
+			});
+		}
+		case CanvasAction.ADD_LABEL: {
+			let srdNode = state.srdNodes.find((srdNode) => {
+				return (srdNode.id === state.lookup[action.payload.bsNode._id])
+			});
+			let labelPort = srdNode.ports[action.payload.portName].links[Object.keys(srdNode.ports[action.payload.portName].links)[action.payload.index]];
+			labelPort.addLabel(action.payload.label);
+			return Object.assign({}, state, {
+				srdNodes: state.srdNodes
+			});
+		}
+		case CanvasAction.DELETE_LABEL: {
+			state.srdLinks.map((srdLink) => {
+				srdLink.labels = [];
+			});
+			return Object.assign({}, state, {
+				srdLink: state.srdLinks
 			});
 		}
 		case CanvasAction.LOAD_COMPLETE: {

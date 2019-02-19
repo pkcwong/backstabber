@@ -1,4 +1,4 @@
-import { BasicNode } from "./basic-node";
+import { BasicNode } from "../basic-node";
 
 export class BoolNode extends BasicNode {
 
@@ -9,11 +9,13 @@ export class BoolNode extends BasicNode {
 	static ports = {
 		inputs: {},
 		outputs: {
-			bool: false
+			bool: (x) => {
+				return (typeof x === 'boolean');
+			}
 		}
 	};
 
-	static executor = (props = BoolNode.props, input = BoolNode.ports.inputs) => {
+	static executor = (props = BoolNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
 				bool: props.bool
@@ -21,7 +23,7 @@ export class BoolNode extends BasicNode {
 		});
 	};
 
-	constructor(props = BoolNode.props) {
+	constructor(props) {
 		super({
 			class: BoolNode,
 			props: props

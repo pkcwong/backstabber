@@ -1,6 +1,6 @@
 import { Program } from "../../shared/lib/program";
-import { StringNode } from "../../shared/lib/string-node";
-import { ReturnNode } from "../../shared/lib/return-node";
+import { StringNode } from "../../shared/lib/primitive/string-node";
+import { ReturnNode } from "../../shared/lib/api/return-node";
 
 const mock = () => {
 	let myStringNode = new StringNode();

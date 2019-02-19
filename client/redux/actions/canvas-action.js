@@ -12,7 +12,10 @@ export class CanvasAction {
 	static CREATE = 'Canvas/CREATE';
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
+	static REVOKE_KEY = 'Canvas/REVOKE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
+	static ADD_LABEL = 'canvas/ADD_LABEL';
+	static DELETE_LABEL = 'canvas/DELETE_LABEL';
 
 	static init = (dispatcher) => {
 		return {
@@ -117,6 +120,24 @@ export class CanvasAction {
 		};
 	};
 
+	static addLabel = (bsNode, index, portName, label) => {
+		return {
+			type: CanvasAction.ADD_LABEL,
+			payload: {
+				bsNode: bsNode,
+				label: JSON.stringify(label),
+				portName: portName,
+				index: index
+			}
+		}
+	};
+
+	static deleteLabel = () => {
+		return {
+			type: CanvasAction.DELETE_LABEL,
+			payload:{}
+		}
+	};
 	/**
 	 * Loads a sketch from database.
 	 * @param _id
@@ -184,6 +205,22 @@ export class CanvasAction {
 			type: CanvasAction.GENERATE_KEY,
 			payload: {
 				_id: _id
+			}
+		};
+	};
+
+	/**
+	 * Revokes an existing API key.
+	 * @param _id
+	 * @param key
+	 * @returns {{type: string, payload: {_id: *, key: *}}}
+	 */
+	static revokeApiKey = (_id, key) => {
+		return {
+			type: CanvasAction.REVOKE_KEY,
+			payload: {
+				_id: _id,
+				key: key
 			}
 		};
 	};
