@@ -40,11 +40,14 @@ class Component extends React.Component {
 							return (
 								<React.Fragment key={item}>
 									<li>
-										<button onClick={() =>{
+										<a onClick={() =>{
 											this.props.store.dispatch(CanvasAction.load(item))
 											FlowRouter.go("/canvas")
 									}}>
 											{item}
+										</a>
+										<button>
+											Delete
 										</button>
 									</li>
 								</React.Fragment>
