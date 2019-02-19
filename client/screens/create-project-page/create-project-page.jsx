@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { Modal } from 'react-bootstrap';
+import {CanvasAction} from "../../redux/actions/canvas-action";
 
 class Component extends React.Component {
 
@@ -37,12 +38,20 @@ class Component extends React.Component {
 						<br/>
 						{this.state.open.map((item, index) => {
 							return (
-								<div id={item}>{item}</div>
+								<React.Fragment key={item}>
+									<li>
+										<button onClick={() =>{
+											this.props.store.dispatch(CanvasAction.load(item))
+											FlowRouter.go("/canvas")
+									}}>
+											{item}
+										</button>
+									</li>
+								</React.Fragment>
 							)
 						})}
 						<br/>
 					</Modal.Body>
-
 				</Modal>
 				<div style={
 					{
@@ -138,7 +147,10 @@ class Component extends React.Component {
 								        width: "340px",
 								        marginBottom: "8px"
 									}
-								}>
+								} onClick={() => {
+									this.props.store.dispatch(CanvasAction.reset())
+									FlowRouter.go("/canvas")
+								}}>
 									Create New Program
 								</button>
 								<br></br>
@@ -153,11 +165,11 @@ class Component extends React.Component {
 										this.setState({
 											open_modal: true,
 										});
+										//FIXME enforce authentication
 										let sketches = this.props.Meteor.collection.sketches.filter(user => user.owner == this.props.Meteor.userId)
 										sketches = Object.values(sketches).map((value, index) =>{
 											return (value._id)
 										})
-										console.log(sketches)
 										this.setState({
 											open: sketches
 										})
