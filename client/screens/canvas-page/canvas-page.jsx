@@ -251,7 +251,15 @@ class Component extends React.Component {
 					>
 						Save Project
 					</Button>
-
+					<Button
+						bsStyle="danger"
+						disabled={(this.props.CanvasReducer._id === null)}
+						onClick={() => {
+							this.props.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
+						}}
+					>
+						Delete Project
+					</Button>
 					<Button
 						bsStyle="warning"
 						onClick={() => {
@@ -277,7 +285,6 @@ class Component extends React.Component {
 					<Button
 						bsStyle="danger"
 						onClick={() => {
-							console.log('hi');
 							this.props.dispatch(CanvasAction.deleteLabel());
 						}}
 					>

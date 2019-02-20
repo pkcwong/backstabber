@@ -33,7 +33,15 @@ Meteor.methods({
 					program: json['program'],
 					canvas: json['canvas']
 				}
-			}))
+			}));
+		});
+	},
+	'Sketches/DELETE': (json) => {
+		return new Promise((resolve, reject) => {
+			resolve(sketches_db.remove({
+				_id: json._id,
+				owner: Meteor.userId()
+			}));
 		});
 	},
 	'Sketches/GENERATE-KEY': (json) => {
