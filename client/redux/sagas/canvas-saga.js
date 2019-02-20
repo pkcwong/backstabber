@@ -86,7 +86,7 @@ export const CanvasSaga = function* () {
 			console.error(err);
 		}
 	});
-	yield takeLatest(CanvasAction.UPDATE_PROGRAM, function* (action) {
+	yield takeEvery(CanvasAction.UPDATE_PROGRAM, function* (action) {
 		try {
 			yield call((payload) => {
 				return new Promise((resolve, reject) => {
@@ -112,7 +112,29 @@ export const CanvasSaga = function* () {
 			console.error(err);
 		}
 	});
-	yield takeLatest(CanvasAction.GENERATE_KEY, function* (action) {
+	yield takeEvery(CanvasAction.DELETE, function* (action) {
+		try {
+			yield call((payload) => {
+				return new Promise((resolve, reject) => {
+					Meteor.call('Sketches/DELETE', {
+						_id: payload._id
+					}, (err, res) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						resolve(res);
+					});
+				});
+			}, {
+				_id: action.payload._id
+			});
+			yield put(CanvasAction.reset());
+		} catch (err) {
+			console.error(err);
+		}
+	});
+	yield takeEvery(CanvasAction.GENERATE_KEY, function* (action) {
 		try {
 			yield call((payload) => {
 				return new Promise((resolve, reject) => {
@@ -133,7 +155,7 @@ export const CanvasSaga = function* () {
 			console.error(err);
 		}
 	});
-	yield takeLatest(CanvasAction.REVOKE_KEY, function* (action) {
+	yield takeEvery(CanvasAction.REVOKE_KEY, function* (action) {
 		try {
 			yield call((payload) => {
 				return new Promise((resolve, reject) => {
