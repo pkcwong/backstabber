@@ -465,12 +465,10 @@ class Component extends React.Component {
 												})()
 
 											}
-											<Form inline>
-												<FormGroup>
-													<ControlLabel>{key} value:</ControlLabel>{' '}
-													<FormControl type="text" id={key}/>
-												</FormGroup>{' '}
-											</Form>
+											<FormGroup>
+												<ControlLabel>{key} value:</ControlLabel>{' '}
+												<FormControl type="text" id={key}/>
+											</FormGroup>{' '}
 											{button}
 										</div>
 									</React.Fragment>
