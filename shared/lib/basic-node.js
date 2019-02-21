@@ -3,6 +3,7 @@ export class BasicNode {
 	constructor(args) {
 		this._id = Math.random().toString(36).substr(2, 16);
 		this.class = args['class'];
+		this.program = null;
 		this.observers = [];
 		this.instance = {};
 		this.callbacks = [];
@@ -27,25 +28,42 @@ export class BasicNode {
 		});
 	}
 
+	bindProgram(program) {
+		this.program = {
+			execute: program.execute,
+			resolve: program.resolve,
+			reject: program.reject,
+			monitor: program.monitor
+		};
+	}
+
 	execute() {
 		return new Promise((resolve, reject) => {
-			this.class.executor(this.props, this.instance.inputs).then((result) => {
-				Object.keys(this.instance.outputs).forEach((key) => {
-					this.instance.outputs[key] = result[key];
+			if (this.program.monitor()) {
+				this.program.execute(this);
+				this.class.executor(this.props, this.instance.inputs).then((result) => {
+					Object.keys(this.instance.outputs).forEach((key) => {
+						this.instance.outputs[key] = result[key];
+					});
+					this.observers.forEach((item) => {
+						item.func();
+					});
+					this.callbacks.forEach((callback) => {
+						callback(null, this);
+					});
+					this.program.resolve(this);
+					resolve(result);
+				}).catch((err) => {
+					this.callbacks.forEach((callback) => {
+						callback(err, this);
+					});
+					this.program.reject(this);
+					reject(err);
 				});
-				this.observers.forEach((item) => {
-					item.func();
-				});
-				this.callbacks.forEach((callback) => {
-					callback(null, this);
-				});
-				resolve(result);
-			}).catch((err) => {
-				this.callbacks.forEach((callback) => {
-					callback(err, this);
-				});
-				reject(err);
-			});
+			} else {
+				this.program.reject(this);
+				reject('Halted');
+			}
 		});
 	}
 
