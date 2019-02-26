@@ -25,6 +25,7 @@ class Component extends React.Component {
 		this.state = {
 			show: false,
 			run_modal: false,
+			API_KEY: false,
 			error_modal: false,
 			error: ""
 		};
@@ -81,17 +82,25 @@ class Component extends React.Component {
 						<br/>
 						{window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id}
 						<br/>
-						{'API Key:'}
+						{
+							(() => {
+								if (this.state.API_KEY) {
+									return 'API Key:'
+								}
+							})()
+						}
 						<br/>
 						{
 							(() => {
-								const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
-									return (sketch._id === this.props.CanvasReducer._id);
-								});
-								if (sketch === undefined) {
-									return [];
+								if (this.state.API_KEY) {
+									const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+										return (sketch._id === this.props.CanvasReducer._id);
+									});
+									if (sketch === undefined) {
+										return [];
+									}
+									return sketch.tokens
 								}
-								return sketch.tokens
 							})().map((item, index) => {
 								return (
 									<React.Fragment
@@ -243,7 +252,8 @@ class Component extends React.Component {
 								this.props.dispatch(CanvasAction.update(_id, program, canvas));
 							}
 							this.setState({
-								show: true
+								show: true,
+								API_KEY: false
 							});
 						}}
 					>
@@ -255,7 +265,8 @@ class Component extends React.Component {
 						onClick={() => {
 							this.props.dispatch(CanvasAction.generateApiKey(this.props.CanvasReducer._id));
 							this.setState({
-								show: true
+								show: true,
+								API_KEY: true
 							});
 						}}
 					>

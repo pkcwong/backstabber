@@ -46,7 +46,9 @@ class Component extends React.Component {
 									}}>
 											{item}
 										</a>
-										<button>
+										<button onClick={() => {
+											//TODO call CanvasAction.delete
+										}}>
 											Delete
 										</button>
 									</li>
