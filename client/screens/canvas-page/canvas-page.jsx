@@ -305,16 +305,18 @@ class Component extends React.Component {
 					flexDirection: "row",
 					height: "93vh",
 					margin: "0",
-					padding: "0"
+					padding: "0",
 				}
 			}>
 				<div style={
 					{
-						width: "12vw",
+						width: "15vw",
 						background: "#22313F",
 						// borderColor: "white",
 						borderStyle: "solid",
 						// borderWidth: "1vh"
+						overflowY: 'scroll',
+						// overflow: 'auto'
 					}
 				}>
 					{
