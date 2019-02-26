@@ -27,6 +27,7 @@ class Component extends React.Component {
 			run_modal: false,
 			API_KEY: false,
 			error_modal: false,
+			delete_modal: false,
 			error: ""
 		};
 		this.engine = new DiagramEngine();
@@ -82,17 +83,10 @@ class Component extends React.Component {
 						<br/>
 						{window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id}
 						<br/>
-						{
-							(() => {
-								if (this.state.API_KEY) {
-									return 'API Key:'
-								}
-							})()
-						}
+						{'API Key:'}
 						<br/>
 						{
 							(() => {
-								if (this.state.API_KEY) {
 									const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 										return (sketch._id === this.props.CanvasReducer._id);
 									});
@@ -100,7 +94,6 @@ class Component extends React.Component {
 										return [];
 									}
 									return sketch.tokens
-								}
 							})().map((item, index) => {
 								return (
 									<React.Fragment
@@ -204,6 +197,37 @@ class Component extends React.Component {
 					}>Submit</Button>
 				</Modal.Footer>
 			</Modal>
+			<Modal
+				show={this.state.delete_modal}
+				container={this}
+				onHide={() => {
+					this.setState({
+						delete_modal: false
+					})
+				}}
+			>
+				<Modal.Header closeButton>
+					<Modal.Title>
+						Delete Program
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					{'Please confirm deleting the program:'}
+					<br/>
+					<button onClick={() => {
+						this.props.store.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
+						this.setState({
+							delete_modal: false
+						})
+					}}>
+						Delete
+					</button>
+					<button>
+						Cancel
+					</button>
+					<br/>
+				</Modal.Body>
+			</Modal>
 			<div style={
 				{
 					minHeight: "7vh",
@@ -265,7 +289,9 @@ class Component extends React.Component {
 						bsStyle="danger"
 						disabled={(this.props.CanvasReducer._id === null)}
 						onClick={() => {
-							this.props.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
+							this.setState({
+								delete_modal: true
+							})
 						}}
 					>
 						Delete Project

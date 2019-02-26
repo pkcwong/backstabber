@@ -11,7 +11,8 @@ class Component extends React.Component {
 		super(props);
 		this.state = {
 			open_modal: false,
-			open: []
+			delete_modal: false,
+			delete: ""
 		};
 	}
 
@@ -26,17 +27,18 @@ class Component extends React.Component {
 							open_modal: false
 						})
 					}}
-					aria-labelledby="contained-modal-title"
 				>
 					<Modal.Header closeButton>
-						<Modal.Title id="contained-modal-title">
+						<Modal.Title>
 							Open Existing Program
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
 						{'Existing Program:'}
 						<br/>
-						{this.state.open.map((item, index) => {
+						{Object.values(this.props.Meteor.collection.sketches.filter(user => user.owner == this.props.Meteor.userId)).map((value, index) =>{
+							return (value._id)
+						}).map((item, index) => {
 							return (
 								<React.Fragment key={item}>
 									<li>
@@ -48,6 +50,10 @@ class Component extends React.Component {
 										</a>
 										<button onClick={() => {
 											//TODO call CanvasAction.delete
+											this.setState({
+												delete_modal: true,
+												delete: item
+											})
 										}}>
 											Delete
 										</button>
@@ -55,6 +61,38 @@ class Component extends React.Component {
 								</React.Fragment>
 							)
 						})}
+						<br/>
+					</Modal.Body>
+				</Modal>
+				<Modal
+					show={this.state.delete_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							open_modal: true,
+							delete_modal: false
+						})
+					}}
+				>
+					<Modal.Header closeButton>
+						<Modal.Title>
+							Delete Program
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						{'Please confirm deleting the program:'}
+						<br/>
+							<button onClick={() => {
+								this.props.store.dispatch(CanvasAction.delete(this.state.delete));
+								this.setState({
+									delete_modal: false
+								})
+							}}>
+								Delete
+							</button>
+							<button>
+								Cancel
+							</button>
 						<br/>
 					</Modal.Body>
 				</Modal>
