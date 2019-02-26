@@ -16,15 +16,58 @@ const initialState = {
 	srdNodes: [],
 	srdLinks: [],
 	lookup: {},
+	// nodeTypes: {
+	// 	BoolNode,
+	// 	EntryNode,
+	// 	ExecuteNode,
+	// 	NumberNode,
+	// 	ObjectNode,
+	// 	ProgramNode,
+	// 	ReturnNode,
+	// 	StringNode
+	// },
 	nodeTypes: {
-		BoolNode,
-		EntryNode,
-		ExecuteNode,
-		NumberNode,
-		ObjectNode,
-		ProgramNode,
-		ReturnNode,
-		StringNode
+		API: {
+			EntryNode,
+			ReturnNode
+		},
+		Primitives: {
+			NumberNode,
+			BoolNode,
+			StringNode,
+			// NullNode,
+		},
+		Arithmetics: {
+			// PlusNode,
+			// MinusNode,
+			// MultipleNode,
+			// DivideNode,
+		},
+		Logic: {
+			// IfNode,
+			// NegateNode
+		},
+		Functional: {
+			ProgramNode
+		},
+		Object: {
+			// ObjectNode,
+			// ObjectAssignNode,
+			// ObjectValueNode,
+			// ObjectKeysNode
+		},
+		Array: {
+			// ArrayNode,
+			// ArrayPushNode,
+			// ArrayFilterNode,
+			// ArrayMapNode
+		},
+		Database: {
+			// CollectionFindNode,
+			// CollectionInsertNode,
+			// ColledctionUpdateNode,
+			// ColelctionRemoveNode,
+		}
 	},
 	select_id: ""
 };
@@ -42,7 +85,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			return Object.assign({}, state, reset);
 		}
 		case CanvasAction.ADD_NODE: {
-			let bsNode = new state.nodeTypes[action.payload.nodeType]();
+			let bsNode = new state.nodeTypes[action.payload.category][action.payload.nodeType]();
 			if (action.payload._id !== 0) {
 				bsNode._id = action.payload._id;
 			}
