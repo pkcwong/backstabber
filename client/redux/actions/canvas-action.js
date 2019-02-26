@@ -11,6 +11,7 @@ export class CanvasAction {
 	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
+	static DELETE = 'Canvas/DELETE';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static REVOKE_KEY = 'Canvas/REVOKE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
@@ -191,6 +192,20 @@ export class CanvasAction {
 				_id: _id,
 				program: program.serialize(),
 				canvas: canvas
+			}
+		};
+	};
+
+	/**
+	 * Deletes an existing Sketch on database
+	 * @param _id
+	 * @returns {{payload: {_id: *}, type: string}}
+	 */
+	static delete = (_id) => {
+		return {
+			type: CanvasAction.DELETE,
+			payload: {
+				_id: _id
 			}
 		};
 	};

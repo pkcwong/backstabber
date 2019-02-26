@@ -10,30 +10,83 @@ export class Program {
 
 	constructor(nodes) {
 		this.nodes = nodes;
+		this.status = nodes.reduce((status, bsNode) => {
+			return Object.assign({}, status, {
+				[bsNode._id]: 'idle'
+			});
+		}, {});
 	}
 
+	/**
+	 * Executes a Program.
+	 * @param args
+	 * @returns {Promise<any>}
+	 */
 	execute(args = {}) {
-		return new Promise((resolve, reject) => {
-			this.nodes.forEach((node) => {
-				node.reset();
-			});
-			this.nodes.filter((node) => {
-				return (node instanceof EntryNode);
-			}).forEach((node) => {
-				node.props = args;
-			});
-			this.nodes.filter((node) => {
-				return (node instanceof ReturnNode);
-			}).forEach((node) => {
-				node.registerReturnCallback((result) => {
-					resolve(result);
+		return Promise.race([
+			new Promise((resolve, reject) => {
+				this.nodes.forEach((node) => {
+					node.reset();
 				});
-			});
-			this.nodes.filter((node) => {
-				return node.isReady();
-			}).forEach((node) => {
-				node.execute();
-			});
+				this.nodes.filter((bsNode) => {
+					return !(bsNode instanceof ReturnNode);
+				}).forEach((bsNode) => {
+					bsNode.bindProgram({
+						execute: (bsNode) => {
+							this.status[bsNode._id] = 'executed';
+						},
+						resolve: (bsNode) => {
+							this.status[bsNode._id] = 'resolved';
+						},
+						reject: (bsNode) => {
+							this.status[bsNode._id] = 'rejected';
+							reject('Exception');
+						},
+						monitor: () => {
+							return !Object.keys(this.status).map((_id) => {
+								return this.status[_id];
+							}).includes('rejected');
+						}
+					});
+				});
+				this.nodes.filter((node) => {
+					return (node instanceof EntryNode);
+				}).forEach((node) => {
+					node.props = args;
+				});
+				this.nodes.filter((node) => {
+					return (node instanceof ReturnNode);
+				}).forEach((node) => {
+					node.registerReturnCallback((result) => {
+						resolve(result);
+					});
+				});
+				this.nodes.filter((node) => {
+					return node.isReady();
+				}).forEach((node) => {
+					node.execute();
+				});
+			}),
+			new Promise((resolve, reject) => {
+				const _id = setTimeout(() => {
+					clearTimeout(_id);
+					this.halt();
+					reject('Timeout');
+				}, 1000);
+			})
+		]);
+	}
+
+	/**
+	 * Halts a Program.
+	 */
+	halt() {
+		Object.keys(this.status).filter((_id) => {
+			return (this.nodes.find((bsNode) => {
+				return (bsNode._id === _id);
+			}) instanceof EntryNode);
+		}).forEach((_id) => {
+			this.status[_id] = 'rejected';
 		});
 	}
 
