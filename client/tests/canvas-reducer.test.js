@@ -18,22 +18,54 @@ describe('CanvasReducer', () => {
 			srdLinks: [],
 			lookup: {},
 			nodeTypes: {
-				BoolNode,
-				EntryNode,
-				ExecuteNode,
-				NumberNode,
-				ObjectNode,
-				ProgramNode,
-				ReturnNode,
-				StringNode
-			},
+				API: {
+					EntryNode,
+					ReturnNode
+				},
+				Primitives: {
+					NumberNode,
+					BoolNode,
+					StringNode,
+					// NullNode,
+				},
+				Arithmetics: {
+					// PlusNode,
+					// MinusNode,
+					// MultipleNode,
+					// DivideNode,
+				},
+				Logic: {
+					// IfNode,
+					// NegateNode
+				},
+				Functional: {
+					ProgramNode
+				},
+				Object: {
+					// ObjectNode,
+					// ObjectAssignNode,
+					// ObjectValueNode,
+					// ObjectKeysNode
+				},
+				Array: {
+					// ArrayNode,
+					// ArrayPushNode,
+					// ArrayFilterNode,
+					// ArrayMapNode
+				},
+				Database: {
+					// CollectionFindNode,
+					// CollectionInsertNode,
+					// ColledctionUpdateNode,
+					// ColelctionRemoveNode,
+				}
 			select_id: ""
 		});
 	});
 	it('Should add Nodes', () => {
 		const initialState = CanvasReducer({}, CanvasAction.reset());
 		let state = Object.assign({}, initialState);
-		state = CanvasReducer(state, CanvasAction.addNode(StringNode.name, {
+		state = CanvasReducer(state, CanvasAction.addNode(StringNode.name, 'Primitives',{
 			x: 0,
 			y: 0
 		}));

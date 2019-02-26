@@ -16,16 +16,6 @@ const initialState = {
 	srdNodes: [],
 	srdLinks: [],
 	lookup: {},
-	// nodeTypes: {
-	// 	BoolNode,
-	// 	EntryNode,
-	// 	ExecuteNode,
-	// 	NumberNode,
-	// 	ObjectNode,
-	// 	ProgramNode,
-	// 	ReturnNode,
-	// 	StringNode
-	// },
 	nodeTypes: {
 		API: {
 			EntryNode,
@@ -51,7 +41,7 @@ const initialState = {
 			ProgramNode
 		},
 		Object: {
-			// ObjectNode,
+			ObjectNode,
 			// ObjectAssignNode,
 			// ObjectValueNode,
 			// ObjectKeysNode
