@@ -23,6 +23,13 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			categoryColor: ['#f7f1e3', '#D24D57','#4D8FAC', '#ffda79', '#218c74', '#cd6133', '#706fd3' ,'#aaa69d'],
+			selected_category: Object.keys(this.props.CanvasReducer.nodeTypes).reduce((obj, current)=>{
+				return Object.assign(obj, {
+					[current]: false
+				})
+			}, {}),
+
 			show: false,
 			run_modal: false,
 			error_modal: false,
@@ -310,30 +317,68 @@ class Component extends React.Component {
 						// borderWidth: "1vh"
 					}
 				}>
-					<TrayWidget style={
-						{
-							margin: "10pt"
-						}
-					}>
-						{
-							Object.keys(this.props.CanvasReducer.nodeTypes).map((item, index) => {
-								return (
-									<React.Fragment
-										key={index}
+					{
+						Object.keys(this.props.CanvasReducer.nodeTypes).map((category, idx) => {
+							return (
+								<React.Fragment
+									key={idx}
+								>
+									<div
+										style={
+											{
+												color: this.state.categoryColor[idx],
+												padding: "2vh",
+												textAlign: "center",
+												borderRadius: "1vh",
+												margin: "1vh",
+												fontWeight: "bold"
+											}
+										}
+										onClick={
+											()=>{
+												let selected_category = this.state.selected_category;
+												selected_category[category]= !this.state.selected_category[category];
+												this.setState({
+													selected_category: selected_category
+												});
+											}
+										}
 									>
-										<TrayItemWidget
-											model={{
-												type: item,
-
-											}}
-											name={item}
-											color='peru'
-										/>
-									</React.Fragment>
-								)
-							})
-						}
-					</TrayWidget>
+										{category}
+									</div>
+									<TrayWidget>
+										{
+											(()=>{
+												if(this.state.selected_category[category]){
+													return Object.keys(this.props.CanvasReducer.nodeTypes[category]).map((node)=>{
+														return node
+													})
+												}
+												else{
+													return []
+												}
+											})().map((node, index)=>{
+												return (
+													<React.Fragment
+														key={index}
+													>
+														<TrayItemWidget
+															model={{
+																type: node,
+																category: category
+															}}
+															color= {this.state.categoryColor[idx]}
+															name={node}
+														/>
+													</React.Fragment>
+												)
+											})
+										}
+									</TrayWidget>
+								</React.Fragment>
+							)
+						})
+					}
 				</div>
 				<div
 					style={
@@ -347,7 +392,8 @@ class Component extends React.Component {
 					<div
 						className="diagram-layer"
 						onDrop={(event) => {
-							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
+							console.log(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type);
+							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, JSON.parse(event.dataTransfer.getData('storm-diagram-node')).category, this.engine.getRelativeMousePoint(event)));
 						}}
 						onDragOver={(event) => {
 							event.preventDefault();
