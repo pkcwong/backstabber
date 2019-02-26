@@ -42,7 +42,7 @@ describe('CanvasReducer', () => {
 					ProgramNode
 				},
 				Object: {
-					// ObjectNode,
+					ObjectNode,
 					// ObjectAssignNode,
 					// ObjectValueNode,
 					// ObjectKeysNode
@@ -59,6 +59,7 @@ describe('CanvasReducer', () => {
 					// ColledctionUpdateNode,
 					// ColelctionRemoveNode,
 				}
+			},
 			select_id: ""
 		});
 	});
