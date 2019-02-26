@@ -489,18 +489,7 @@ class Component extends React.Component {
 										}>
 											<ControlLabel>Current {key} value:</ControlLabel>{' '}
 											{
-												(()=>{
-													if(bsNode.props[key] === true){
-														return 'true'
-													}
-													else if(bsNode.props[key] === false){
-														return 'false'
-													}
-													else{
-														return bsNode.props[key]
-													}
-												})()
-
+												JSON.stringify(bsNode.props[key])
 											}
 											<FormGroup>
 												<ControlLabel>{key} value:</ControlLabel>{' '}

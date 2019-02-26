@@ -4,6 +4,7 @@ import { BoolNode } from "../../shared/lib/primitive/bool-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
 import { NumberNode } from "../../shared/lib/primitive/number-node";
+import { ObjectNode } from "../../shared/lib/object/object-node";
 import { ProgramNode } from "../../shared/lib/functional/program-node";
 import { ReturnNode } from "../../shared/lib/api/return-node";
 import { StringNode } from "../../shared/lib/primitive/string-node";
@@ -21,6 +22,7 @@ describe('CanvasReducer', () => {
 				EntryNode,
 				ExecuteNode,
 				NumberNode,
+				ObjectNode,
 				ProgramNode,
 				ReturnNode,
 				StringNode
