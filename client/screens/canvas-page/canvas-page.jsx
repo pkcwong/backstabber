@@ -23,13 +23,11 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			categoryColor: ['#f7f1e3', '#D24D57','#4D8FAC', '#ffda79', '#218c74', '#cd6133', '#706fd3' ,'#aaa69d'],
 			selected_category: Object.keys(this.props.CanvasReducer.nodeTypes).reduce((obj, current)=>{
 				return Object.assign(obj, {
 					[current]: false
 				})
 			}, {}),
-
 			show: false,
 			run_modal: false,
 			error_modal: false,
@@ -281,7 +279,6 @@ class Component extends React.Component {
 					<Button
 						bsStyle="success"
 						onClick={() => {
-							// TODO: Execute Program
 							this.setState({
 								run_modal: true
 							})
@@ -328,7 +325,7 @@ class Component extends React.Component {
 									<div
 										style={
 											{
-												color: this.state.categoryColor[idx],
+												color: this.props.CanvasReducer.colorLookup[category],
 												padding: "2vh",
 												textAlign: "center",
 												borderRadius: "1vh",
@@ -369,7 +366,7 @@ class Component extends React.Component {
 																type: node,
 																category: category
 															}}
-															color= {this.state.categoryColor[idx]}
+															color= {this.props.CanvasReducer.colorLookup[category]}
 															name={node}
 														/>
 													</React.Fragment>

@@ -4,7 +4,7 @@
     display: flex;
     cursor: move;
     overflow: hidden;
-    height: 93vh
+    height: 93vh;
 }
 
 .srd-diagram__selector {

@@ -17,6 +17,16 @@ describe('CanvasReducer', () => {
 			srdNodes: [],
 			srdLinks: [],
 			lookup: {},
+			colorLookup: {
+				API: "#f7f1e3",
+				Primitives:"#D24D57",
+				Arithmetics: "#4D8FAC",
+				Logic: "#ffda79",
+				Functional: "#218c74",
+				Object: "#cd6133",
+				Array: "#706fd3",
+				Database: "#aaa69d"
+			},
 			nodeTypes: {
 				API: {
 					EntryNode,
@@ -39,7 +49,8 @@ describe('CanvasReducer', () => {
 					// NegateNode
 				},
 				Functional: {
-					ProgramNode
+					ProgramNode,
+					ExecuteNode
 				},
 				Object: {
 					ObjectNode,
@@ -60,7 +71,7 @@ describe('CanvasReducer', () => {
 					// ColelctionRemoveNode,
 				}
 			},
-			select_id: ""
+			select_id: "",
 		});
 	});
 	it('Should add Nodes', () => {
