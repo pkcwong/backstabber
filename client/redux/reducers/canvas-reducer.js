@@ -16,6 +16,16 @@ const initialState = {
 	srdNodes: [],
 	srdLinks: [],
 	lookup: {},
+	colorLookup: {
+		API: "#f7f1e3",
+		Primitives:"#D24D57",
+		Arithmetics: "#4D8FAC",
+		Logic: "#ffda79",
+		Functional: "#218c74",
+		Object: "#cd6133",
+		Array: "#706fd3",
+		Database: "#aaa69d"
+	},
 	nodeTypes: {
 		API: {
 			EntryNode,
@@ -38,7 +48,8 @@ const initialState = {
 			// NegateNode
 		},
 		Functional: {
-			ProgramNode
+			ProgramNode,
+			ExecuteNode
 		},
 		Object: {
 			ObjectNode,
@@ -82,7 +93,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			if (action.payload.props !== 0) {
 				bsNode.setProps(action.payload.props);
 			}
-			let stormNode = new DefaultNodeModel(bsNode.class.name);
+			let stormNode = new DefaultNodeModel(bsNode.class.name, state.colorLookup[action.payload.category]);
 			stormNode.setPosition(action.payload.coordinates.x, action.payload.coordinates.y);
 			Object.keys(bsNode.class.ports.inputs).forEach((key) => {
 				stormNode.addPort(new DefaultPortModel(true, key));
