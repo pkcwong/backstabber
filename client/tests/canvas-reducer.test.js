@@ -13,6 +13,7 @@ describe('CanvasReducer', () => {
 	it('Should reset states', () => {
 		expect(CanvasReducer({}, CanvasAction.reset())).toEqual({
 			_id: null,
+			meta: null,
 			bsNodes: [],
 			srdNodes: [],
 			srdLinks: [],
