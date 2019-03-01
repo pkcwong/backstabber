@@ -30,7 +30,9 @@ class Component extends React.Component {
 			}, {}),
 			show: false,
 			run_modal: false,
+			API_KEY: false,
 			error_modal: false,
+			delete_modal: false,
 			error: ""
 		};
 		this.engine = new DiagramEngine();
@@ -90,13 +92,13 @@ class Component extends React.Component {
 						<br/>
 						{
 							(() => {
-								const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
-									return (sketch._id === this.props.CanvasReducer._id);
-								});
-								if (sketch === undefined) {
-									return [];
-								}
-								return sketch.tokens
+									const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+										return (sketch._id === this.props.CanvasReducer._id);
+									});
+									if (sketch === undefined) {
+										return [];
+									}
+									return sketch.tokens
 							})().map((item, index) => {
 								return (
 									<React.Fragment
@@ -200,6 +202,37 @@ class Component extends React.Component {
 					}>Submit</Button>
 				</Modal.Footer>
 			</Modal>
+			<Modal
+				show={this.state.delete_modal}
+				container={this}
+				onHide={() => {
+					this.setState({
+						delete_modal: false
+					})
+				}}
+			>
+				<Modal.Header closeButton>
+					<Modal.Title>
+						Delete Program
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					{'Please confirm deleting the program:'}
+					<br/>
+					<button onClick={() => {
+						this.props.store.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
+						this.setState({
+							delete_modal: false
+						})
+					}}>
+						Delete
+					</button>
+					<button>
+						Cancel
+					</button>
+					<br/>
+				</Modal.Body>
+			</Modal>
 			<div style={
 				{
 					minHeight: "7vh",
@@ -250,7 +283,8 @@ class Component extends React.Component {
 								this.props.dispatch(CanvasAction.update(_id, program, canvas));
 							}
 							this.setState({
-								show: true
+								show: true,
+								API_KEY: false
 							});
 						}}
 					>
@@ -260,7 +294,9 @@ class Component extends React.Component {
 						bsStyle="danger"
 						disabled={(this.props.CanvasReducer._id === null)}
 						onClick={() => {
-							this.props.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
+							this.setState({
+								delete_modal: true
+							})
 						}}
 					>
 						Delete Project
@@ -270,7 +306,8 @@ class Component extends React.Component {
 						onClick={() => {
 							this.props.dispatch(CanvasAction.generateApiKey(this.props.CanvasReducer._id));
 							this.setState({
-								show: true
+								show: true,
+								API_KEY: true
 							});
 						}}
 					>
