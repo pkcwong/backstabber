@@ -11,6 +11,7 @@ import { StringNode } from "../../../shared/lib/primitive/string-node";
 const initialState = {
 	dispatcher: null,
 	_id: null,
+	meta: null,
 	bsNodes: [],
 	srdNodes: [],
 	srdLinks: [],

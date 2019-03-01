@@ -26,6 +26,10 @@ class Component extends React.Component {
 			show: false,
 			run_modal: false,
 			error_modal: false,
+			config_modal: false,
+			title_modal: false,
+			program: {},
+			canvas: {},
 			error: ""
 		};
 		this.engine = new DiagramEngine();
@@ -58,6 +62,47 @@ class Component extends React.Component {
 						{'ERROR MESSAGE:'}
 						<br/>
 						{this.state.error}
+						<br/>
+					</Modal.Body>
+				</Modal>
+
+				<Modal
+					show={this.state.title_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							title_modal: false
+						})
+					}}
+				>
+					<Modal.Header closeButton>
+						<Modal.Title>
+							Title
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						{'Please enter the title:'}
+						<br/>
+						<FormGroup>
+							<FormControl type="text" id="title_input"/>
+						</FormGroup>{' '}
+						<button onClick={() => {
+							if($("#title_input").val() !== undefined){
+								this.setState({
+									title_modal: false
+								})
+								this.props.dispatch(CanvasAction.create(this.state.program, this.state.canvas, $("#title_input").val()));
+							}
+						}}>
+							Confirm
+						</button>
+						<button onClick={() => {
+							this.setState({
+								title_modal: false
+							})
+						}}>
+							Cancel
+						</button>
 						<br/>
 					</Modal.Body>
 				</Modal>
@@ -213,6 +258,17 @@ class Component extends React.Component {
 					}
 				}>
 					Welcome to <b>B</b>ack<b>S</b>tabber
+					<br></br>
+					{
+						(() => {
+							let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+								return sketch._id === this.props.CanvasReducer._id
+							});
+							if (sketch !== undefined) {
+								return sketch.meta;
+							}
+						})()
+					}
 				</div>
 				<div style={
 					{
@@ -240,13 +296,17 @@ class Component extends React.Component {
 								});
 							});
 							if (_id === null) {
-								this.props.dispatch(CanvasAction.create(program, canvas));
+								this.setState({
+									title_modal: true,
+									program: program,
+									canvas: canvas
+								})
 							} else {
 								this.props.dispatch(CanvasAction.update(_id, program, canvas));
+								this.setState({
+									show: true
+								});
 							}
-							this.setState({
-								show: true
-							});
 						}}
 					>
 						Save Project

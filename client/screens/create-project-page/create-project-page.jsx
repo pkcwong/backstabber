@@ -41,10 +41,15 @@ class Component extends React.Component {
 								<React.Fragment key={item}>
 									<li>
 										<button onClick={() =>{
-											this.props.store.dispatch(CanvasAction.load(item))
+											const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+												return (sketch._id === item);
+											});
+											this.props.store.dispatch(CanvasAction.load(sketch._id))
 											FlowRouter.go("/canvas")
 									}}>
-											{item}
+											{this.props.Meteor.collection.sketches.find((sketch) => {
+												return (sketch._id === item);
+											}).meta}
 										</button>
 									</li>
 								</React.Fragment>
