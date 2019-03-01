@@ -17,23 +17,67 @@ describe('CanvasReducer', () => {
 			srdNodes: [],
 			srdLinks: [],
 			lookup: {},
-			nodeTypes: {
-				BoolNode,
-				EntryNode,
-				ExecuteNode,
-				NumberNode,
-				ObjectNode,
-				ProgramNode,
-				ReturnNode,
-				StringNode
+			colorLookup: {
+				API: "#f7f1e3",
+				Primitives:"#D24D57",
+				Arithmetics: "#4D8FAC",
+				Logic: "#ffda79",
+				Functional: "#218c74",
+				Object: "#cd6133",
+				Array: "#706fd3",
+				Database: "#aaa69d"
 			},
-			select_id: ""
+			nodeTypes: {
+				API: {
+					EntryNode,
+					ReturnNode
+				},
+				Primitives: {
+					NumberNode,
+					BoolNode,
+					StringNode,
+					// NullNode,
+				},
+				Arithmetics: {
+					// PlusNode,
+					// MinusNode,
+					// MultipleNode,
+					// DivideNode,
+				},
+				Logic: {
+					// IfNode,
+					// NegateNode
+				},
+				Functional: {
+					ProgramNode,
+					ExecuteNode
+				},
+				Object: {
+					ObjectNode,
+					// ObjectAssignNode,
+					// ObjectValueNode,
+					// ObjectKeysNode
+				},
+				Array: {
+					// ArrayNode,
+					// ArrayPushNode,
+					// ArrayFilterNode,
+					// ArrayMapNode
+				},
+				Database: {
+					// CollectionFindNode,
+					// CollectionInsertNode,
+					// ColledctionUpdateNode,
+					// ColelctionRemoveNode,
+				}
+			},
+			select_id: "",
 		});
 	});
 	it('Should add Nodes', () => {
 		const initialState = CanvasReducer({}, CanvasAction.reset());
 		let state = Object.assign({}, initialState);
-		state = CanvasReducer(state, CanvasAction.addNode(StringNode.name, {
+		state = CanvasReducer(state, CanvasAction.addNode(StringNode.name, 'Primitives',{
 			x: 0,
 			y: 0
 		}));

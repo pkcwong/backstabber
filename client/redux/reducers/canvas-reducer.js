@@ -16,15 +16,59 @@ const initialState = {
 	srdNodes: [],
 	srdLinks: [],
 	lookup: {},
+	colorLookup: {
+		API: "#f7f1e3",
+		Primitives:"#D24D57",
+		Arithmetics: "#4D8FAC",
+		Logic: "#ffda79",
+		Functional: "#218c74",
+		Object: "#cd6133",
+		Array: "#706fd3",
+		Database: "#aaa69d"
+	},
 	nodeTypes: {
-		BoolNode,
-		EntryNode,
-		ExecuteNode,
-		NumberNode,
-		ObjectNode,
-		ProgramNode,
-		ReturnNode,
-		StringNode
+		API: {
+			EntryNode,
+			ReturnNode
+		},
+		Primitives: {
+			NumberNode,
+			BoolNode,
+			StringNode,
+			// NullNode,
+		},
+		Arithmetics: {
+			// PlusNode,
+			// MinusNode,
+			// MultipleNode,
+			// DivideNode,
+		},
+		Logic: {
+			// IfNode,
+			// NegateNode
+		},
+		Functional: {
+			ProgramNode,
+			ExecuteNode
+		},
+		Object: {
+			ObjectNode,
+			// ObjectAssignNode,
+			// ObjectValueNode,
+			// ObjectKeysNode
+		},
+		Array: {
+			// ArrayNode,
+			// ArrayPushNode,
+			// ArrayFilterNode,
+			// ArrayMapNode
+		},
+		Database: {
+			// CollectionFindNode,
+			// CollectionInsertNode,
+			// ColledctionUpdateNode,
+			// ColelctionRemoveNode,
+		}
 	},
 	select_id: ""
 };
@@ -42,14 +86,14 @@ export const CanvasReducer = (state = initialState, action) => {
 			return Object.assign({}, state, reset);
 		}
 		case CanvasAction.ADD_NODE: {
-			let bsNode = new state.nodeTypes[action.payload.nodeType]();
+			let bsNode = new state.nodeTypes[action.payload.category][action.payload.nodeType]();
 			if (action.payload._id !== 0) {
 				bsNode._id = action.payload._id;
 			}
 			if (action.payload.props !== 0) {
 				bsNode.setProps(action.payload.props);
 			}
-			let stormNode = new DefaultNodeModel(bsNode.class.name);
+			let stormNode = new DefaultNodeModel(bsNode.class.name, state.colorLookup[action.payload.category]);
 			stormNode.setPosition(action.payload.coordinates.x, action.payload.coordinates.y);
 			Object.keys(bsNode.class.ports.inputs).forEach((key) => {
 				stormNode.addPort(new DefaultPortModel(true, key));
