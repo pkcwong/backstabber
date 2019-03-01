@@ -23,6 +23,11 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			selected_category: Object.keys(this.props.CanvasReducer.nodeTypes).reduce((obj, current)=>{
+				return Object.assign(obj, {
+					[current]: false
+				})
+			}, {}),
 			show: false,
 			run_modal: false,
 			error_modal: false,
@@ -354,7 +359,6 @@ class Component extends React.Component {
 					<Button
 						bsStyle="success"
 						onClick={() => {
-							// TODO: Execute Program
 							this.setState({
 								run_modal: true
 							})
@@ -378,42 +382,82 @@ class Component extends React.Component {
 					flexDirection: "row",
 					height: "93vh",
 					margin: "0",
-					padding: "0"
+					padding: "0",
 				}
 			}>
 				<div style={
 					{
-						width: "12vw",
+						width: "15vw",
 						background: "#22313F",
 						// borderColor: "white",
 						borderStyle: "solid",
 						// borderWidth: "1vh"
+						overflowY: 'scroll',
+						// overflow: 'auto'
 					}
 				}>
-					<TrayWidget style={
-						{
-							margin: "10pt"
-						}
-					}>
-						{
-							Object.keys(this.props.CanvasReducer.nodeTypes).map((item, index) => {
-								return (
-									<React.Fragment
-										key={index}
+					{
+						Object.keys(this.props.CanvasReducer.nodeTypes).map((category, idx) => {
+							return (
+								<React.Fragment
+									key={idx}
+								>
+									<div
+										style={
+											{
+												color: this.props.CanvasReducer.colorLookup[category],
+												padding: "2vh",
+												textAlign: "center",
+												borderRadius: "1vh",
+												margin: "1vh",
+												fontWeight: "bold"
+											}
+										}
+										onClick={
+											()=>{
+												let selected_category = this.state.selected_category;
+												selected_category[category]= !this.state.selected_category[category];
+												this.setState({
+													selected_category: selected_category
+												});
+											}
+										}
 									>
-										<TrayItemWidget
-											model={{
-												type: item,
-
-											}}
-											name={item}
-											color='peru'
-										/>
-									</React.Fragment>
-								)
-							})
-						}
-					</TrayWidget>
+										{category}
+									</div>
+									<TrayWidget>
+										{
+											(()=>{
+												if(this.state.selected_category[category]){
+													return Object.keys(this.props.CanvasReducer.nodeTypes[category]).map((node)=>{
+														return node
+													})
+												}
+												else{
+													return []
+												}
+											})().map((node, index)=>{
+												return (
+													<React.Fragment
+														key={index}
+													>
+														<TrayItemWidget
+															model={{
+																type: node,
+																category: category
+															}}
+															color= {this.props.CanvasReducer.colorLookup[category]}
+															name={node}
+														/>
+													</React.Fragment>
+												)
+											})
+										}
+									</TrayWidget>
+								</React.Fragment>
+							)
+						})
+					}
 				</div>
 				<div
 					style={
@@ -427,7 +471,8 @@ class Component extends React.Component {
 					<div
 						className="diagram-layer"
 						onDrop={(event) => {
-							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
+							console.log(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type);
+							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, JSON.parse(event.dataTransfer.getData('storm-diagram-node')).category, this.engine.getRelativeMousePoint(event)));
 						}}
 						onDragOver={(event) => {
 							event.preventDefault();
@@ -532,18 +577,7 @@ class Component extends React.Component {
 										}>
 											<ControlLabel>Current {key} value:</ControlLabel>{' '}
 											{
-												(()=>{
-													if(bsNode.props[key] === true){
-														return 'true'
-													}
-													else if(bsNode.props[key] === false){
-														return 'false'
-													}
-													else{
-														return bsNode.props[key]
-													}
-												})()
-
+												JSON.stringify(bsNode.props[key])
 											}
 											<FormGroup>
 												<ControlLabel>{key} value:</ControlLabel>{' '}
