@@ -23,13 +23,20 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			selected_category: Object.keys(this.props.CanvasReducer.nodeTypes).reduce((obj, current)=>{
+				return Object.assign(obj, {
+					[current]: false
+				})
+			}, {}),
 			show: false,
 			run_modal: false,
+			API_KEY: false,
 			error_modal: false,
 			config_modal: false,
 			title_modal: false,
 			program: {},
 			canvas: {},
+			delete_modal: false,
 			error: ""
 		};
 		this.engine = new DiagramEngine();
@@ -139,13 +146,13 @@ class Component extends React.Component {
 						<br/>
 						{
 							(() => {
-								const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
-									return (sketch._id === this.props.CanvasReducer._id);
-								});
-								if (sketch === undefined) {
-									return [];
-								}
-								return sketch.tokens
+									const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+										return (sketch._id === this.props.CanvasReducer._id);
+									});
+									if (sketch === undefined) {
+										return [];
+									}
+									return sketch.tokens
 							})().map((item, index) => {
 								return (
 									<React.Fragment
@@ -249,6 +256,37 @@ class Component extends React.Component {
 					}>Submit</Button>
 				</Modal.Footer>
 			</Modal>
+			<Modal
+				show={this.state.delete_modal}
+				container={this}
+				onHide={() => {
+					this.setState({
+						delete_modal: false
+					})
+				}}
+			>
+				<Modal.Header closeButton>
+					<Modal.Title>
+						Delete Program
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					{'Please confirm deleting the program:'}
+					<br/>
+					<button onClick={() => {
+						this.props.store.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
+						this.setState({
+							delete_modal: false
+						})
+					}}>
+						Delete
+					</button>
+					<button>
+						Cancel
+					</button>
+					<br/>
+				</Modal.Body>
+			</Modal>
 			<div style={
 				{
 					minHeight: "7vh",
@@ -324,9 +362,9 @@ class Component extends React.Component {
 							} else {
 								this.props.dispatch(CanvasAction.update(_id, program, canvas));
 								this.setState({
-									show: true
-								});
-							}
+								show: true,
+								API_KEY: false
+							});
 						}}
 					>
 						Save Project
@@ -335,7 +373,9 @@ class Component extends React.Component {
 						bsStyle="danger"
 						disabled={(this.props.CanvasReducer._id === null)}
 						onClick={() => {
-							this.props.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
+							this.setState({
+								delete_modal: true
+							})
 						}}
 					>
 						Delete Project
@@ -345,7 +385,8 @@ class Component extends React.Component {
 						onClick={() => {
 							this.props.dispatch(CanvasAction.generateApiKey(this.props.CanvasReducer._id));
 							this.setState({
-								show: true
+								show: true,
+								API_KEY: true
 							});
 						}}
 					>
@@ -354,7 +395,6 @@ class Component extends React.Component {
 					<Button
 						bsStyle="success"
 						onClick={() => {
-							// TODO: Execute Program
 							this.setState({
 								run_modal: true
 							})
@@ -378,42 +418,82 @@ class Component extends React.Component {
 					flexDirection: "row",
 					height: "93vh",
 					margin: "0",
-					padding: "0"
+					padding: "0",
 				}
 			}>
 				<div style={
 					{
-						width: "12vw",
+						width: "15vw",
 						background: "#22313F",
 						// borderColor: "white",
 						borderStyle: "solid",
 						// borderWidth: "1vh"
+						overflowY: 'scroll',
+						// overflow: 'auto'
 					}
 				}>
-					<TrayWidget style={
-						{
-							margin: "10pt"
-						}
-					}>
-						{
-							Object.keys(this.props.CanvasReducer.nodeTypes).map((item, index) => {
-								return (
-									<React.Fragment
-										key={index}
+					{
+						Object.keys(this.props.CanvasReducer.nodeTypes).map((category, idx) => {
+							return (
+								<React.Fragment
+									key={idx}
+								>
+									<div
+										style={
+											{
+												color: this.props.CanvasReducer.colorLookup[category],
+												padding: "2vh",
+												textAlign: "center",
+												borderRadius: "1vh",
+												margin: "1vh",
+												fontWeight: "bold"
+											}
+										}
+										onClick={
+											()=>{
+												let selected_category = this.state.selected_category;
+												selected_category[category]= !this.state.selected_category[category];
+												this.setState({
+													selected_category: selected_category
+												});
+											}
+										}
 									>
-										<TrayItemWidget
-											model={{
-												type: item,
-
-											}}
-											name={item}
-											color='peru'
-										/>
-									</React.Fragment>
-								)
-							})
-						}
-					</TrayWidget>
+										{category}
+									</div>
+									<TrayWidget>
+										{
+											(()=>{
+												if(this.state.selected_category[category]){
+													return Object.keys(this.props.CanvasReducer.nodeTypes[category]).map((node)=>{
+														return node
+													})
+												}
+												else{
+													return []
+												}
+											})().map((node, index)=>{
+												return (
+													<React.Fragment
+														key={index}
+													>
+														<TrayItemWidget
+															model={{
+																type: node,
+																category: category
+															}}
+															color= {this.props.CanvasReducer.colorLookup[category]}
+															name={node}
+														/>
+													</React.Fragment>
+												)
+											})
+										}
+									</TrayWidget>
+								</React.Fragment>
+							)
+						})
+					}
 				</div>
 				<div
 					style={
@@ -427,7 +507,8 @@ class Component extends React.Component {
 					<div
 						className="diagram-layer"
 						onDrop={(event) => {
-							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
+							console.log(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type);
+							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, JSON.parse(event.dataTransfer.getData('storm-diagram-node')).category, this.engine.getRelativeMousePoint(event)));
 						}}
 						onDragOver={(event) => {
 							event.preventDefault();
@@ -532,18 +613,7 @@ class Component extends React.Component {
 										}>
 											<ControlLabel>Current {key} value:</ControlLabel>{' '}
 											{
-												(()=>{
-													if(bsNode.props[key] === true){
-														return 'true'
-													}
-													else if(bsNode.props[key] === false){
-														return 'false'
-													}
-													else{
-														return bsNode.props[key]
-													}
-												})()
-
+												JSON.stringify(bsNode.props[key])
 											}
 											<FormGroup>
 												<ControlLabel>{key} value:</ControlLabel>{' '}

@@ -37,11 +37,12 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (nodeType, points, bsNodeID = 0, props = 0) => {
+	static addNode = (nodeType, category, points, bsNodeID = 0, props = 0) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
 				nodeType: nodeType,
+				category: category,
 				coordinates: {
 					x: points.x,
 					y: points.y
