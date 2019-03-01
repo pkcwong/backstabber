@@ -1,6 +1,7 @@
 import { BoolNode } from "./primitive/bool-node";
 import { EntryNode } from "./api/entry-node";
 import { ExecuteNode } from "./functional/execute-node";
+import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
 import { ProgramNode } from "./functional/program-node";
@@ -111,6 +112,7 @@ export class Program {
 			BoolNode,
 			EntryNode,
 			ExecuteNode,
+			NullNode,
 			NumberNode,
 			ObjectNode,
 			ProgramNode,
