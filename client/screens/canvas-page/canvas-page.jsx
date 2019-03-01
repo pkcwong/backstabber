@@ -86,12 +86,21 @@ class Component extends React.Component {
 						<FormGroup>
 							<FormControl type="text" id="title_input"/>
 						</FormGroup>{' '}
+						{'Please enter the description:'}
+						<br/>
+						<FormGroup>
+							<FormControl type="text" id="description_input"/>
+						</FormGroup>{' '}
 						<button onClick={() => {
 							if($("#title_input").val() !== undefined){
 								this.setState({
 									title_modal: false
 								})
-								this.props.dispatch(CanvasAction.create(this.state.program, this.state.canvas, $("#title_input").val()));
+								let meta = {
+									title: $("#title_input").val(),
+									description: $("#description_input").val()
+								}
+								this.props.dispatch(CanvasAction.create(this.state.program, this.state.canvas, meta));
 							}
 						}}>
 							Confirm
@@ -265,7 +274,18 @@ class Component extends React.Component {
 								return sketch._id === this.props.CanvasReducer._id
 							});
 							if (sketch !== undefined) {
-								return sketch.meta;
+								return sketch.meta.title;
+							}
+						})()
+					}
+					<br></br>
+					{
+						(() => {
+							let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+								return sketch._id === this.props.CanvasReducer._id
+							});
+							if (sketch !== undefined) {
+								return sketch.meta.description;
 							}
 						})()
 					}

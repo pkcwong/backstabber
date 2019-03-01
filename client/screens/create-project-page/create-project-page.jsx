@@ -49,7 +49,7 @@ class Component extends React.Component {
 									}}>
 											{this.props.Meteor.collection.sketches.find((sketch) => {
 												return (sketch._id === item);
-											}).meta}
+											}).meta.title}
 										</button>
 									</li>
 								</React.Fragment>
