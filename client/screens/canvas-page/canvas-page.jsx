@@ -362,11 +362,11 @@ class Component extends React.Component {
 							} else {
 								this.props.dispatch(CanvasAction.update(_id, program, canvas));
 								this.setState({
-								show: true,
-								API_KEY: false
-							});
-						}}
-					>
+									show: true,
+									API_KEY: false
+								});
+							}
+					}}>
 						Save Project
 					</Button>
 					<Button
