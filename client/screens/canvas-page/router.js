@@ -4,6 +4,9 @@ import { CanvasPage } from "./canvas-page";
 
 FlowRouter.route('/canvas', {
 	action: (params) => {
+		if(!Meteor.userId() && FlowRouter.current().path === '/canvas'){
+			FlowRouter.go('/login');
+		}
 		mount(CanvasPage, {
 			store: store,
 			params: params
