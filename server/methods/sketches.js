@@ -15,7 +15,7 @@ Meteor.methods({
 		return new Promise((resolve, reject) => {
 			resolve(sketches_db.insert({
 				owner: Meteor.userId(),
-				meta: {},
+				meta: json['meta'],
 				program: json['program'],
 				canvas: json['canvas'],
 				tokens: [],
