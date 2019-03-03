@@ -3,6 +3,7 @@ import { CanvasAction } from "../actions/canvas-action";
 import { BoolNode } from "../../../shared/lib/primitive/bool-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../../shared/lib/functional/execute-node";
+import { NullNode } from "../../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../../shared/lib/primitive/number-node";
 import { ObjectNode } from "../../../shared/lib/object/object-node";
 import { ProgramNode } from "../../../shared/lib/functional/program-node";
@@ -19,7 +20,7 @@ const initialState = {
 	lookup: {},
 	colorLookup: {
 		API: "#f7f1e3",
-		Primitives:"#D24D57",
+		Primitives: "#D24D57",
 		Arithmetics: "#4D8FAC",
 		Logic: "#ffda79",
 		Functional: "#218c74",
@@ -36,7 +37,7 @@ const initialState = {
 			NumberNode,
 			BoolNode,
 			StringNode,
-			// NullNode,
+			NullNode,
 		},
 		Arithmetics: {
 			// PlusNode,
