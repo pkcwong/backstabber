@@ -99,7 +99,7 @@ class Component extends React.Component {
 							<FormControl type="text" id="description_input"/>
 						</FormGroup>{' '}
 						<button onClick={() => {
-							if($("#title_input").val() !== undefined){
+							if($("#title_input").val() !== undefined && $("#title_input").val() !== ""){
 								this.setState({
 									title_modal: false
 								})
@@ -281,7 +281,11 @@ class Component extends React.Component {
 					}}>
 						Delete
 					</button>
-					<button>
+					<button onClick={() => {
+						this.setState({
+							delete_modal: false
+						})
+					}}>
 						Cancel
 					</button>
 					<br/>
