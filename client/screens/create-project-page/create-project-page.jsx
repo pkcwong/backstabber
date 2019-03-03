@@ -95,7 +95,11 @@ class Component extends React.Component {
 							}}>
 								Delete
 							</button>
-							<button>
+							<button onClick={() => {
+								this.setState({
+									delete_modal: false
+								})
+							}}>
 								Cancel
 							</button>
 						<br/>
