@@ -68,7 +68,8 @@ export const CanvasSaga = function* () {
 				return new Promise((resolve, reject) => {
 					Meteor.call('Sketches/CREATE', {
 						program: payload['program'],
-						canvas: payload['canvas']
+						canvas: payload['canvas'],
+						meta: payload['meta']
 					}, (err, res) => {
 						if (!err) {
 							resolve(res);
@@ -79,7 +80,8 @@ export const CanvasSaga = function* () {
 				});
 			}, {
 				program: action['payload']['program'],
-				canvas: action['payload']['canvas']
+				canvas: action['payload']['canvas'],
+				meta: action['payload']['meta']
 			});
 			yield put(CanvasAction.load(res));
 		} catch (err) {

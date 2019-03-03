@@ -42,12 +42,17 @@ class Component extends React.Component {
 							return (
 								<React.Fragment key={item}>
 									<li>
-										<a onClick={() =>{
-											this.props.store.dispatch(CanvasAction.load(item))
+										<button onClick={() =>{
+											const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+												return (sketch._id === item);
+											});
+											this.props.store.dispatch(CanvasAction.load(sketch._id))
 											FlowRouter.go("/canvas")
-									}}>
-											{item}
-										</a>
+										}}>
+											{this.props.Meteor.collection.sketches.find((sketch) => {
+												return (sketch._id === item);
+											}).meta.title}
+										</button>
 										<button onClick={() => {
 											//TODO call CanvasAction.delete
 											this.setState({

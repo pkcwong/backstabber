@@ -167,14 +167,15 @@ export class CanvasAction {
 	 * Stores a new sketch into database
 	 * @param program
 	 * @param canvas
-	 * @returns {{type: string, payload: {program: *, position: *}}}
+	 * @returns {{type: string, payload: {program: *, position: *, title *}}}
 	 */
-	static create = (program, canvas) => {
+	static create = (program, canvas, title) => {
 		return {
 			type: CanvasAction.CREATE,
 			payload: {
 				program: program.serialize(),
-				canvas: canvas
+				canvas: canvas,
+				meta: title
 			}
 		};
 	};

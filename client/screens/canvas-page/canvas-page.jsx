@@ -32,6 +32,10 @@ class Component extends React.Component {
 			run_modal: false,
 			API_KEY: false,
 			error_modal: false,
+			config_modal: false,
+			title_modal: false,
+			program: {},
+			canvas: {},
 			delete_modal: false,
 			error: ""
 		};
@@ -65,6 +69,56 @@ class Component extends React.Component {
 						{'ERROR MESSAGE:'}
 						<br/>
 						{this.state.error}
+						<br/>
+					</Modal.Body>
+				</Modal>
+
+				<Modal
+					show={this.state.title_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							title_modal: false
+						})
+					}}
+				>
+					<Modal.Header closeButton>
+						<Modal.Title>
+							Title
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						{'Please enter the title:'}
+						<br/>
+						<FormGroup>
+							<FormControl type="text" id="title_input"/>
+						</FormGroup>{' '}
+						{'Please enter the description:'}
+						<br/>
+						<FormGroup>
+							<FormControl type="text" id="description_input"/>
+						</FormGroup>{' '}
+						<button onClick={() => {
+							if($("#title_input").val() !== undefined){
+								this.setState({
+									title_modal: false
+								})
+								let meta = {
+									title: $("#title_input").val(),
+									description: $("#description_input").val()
+								}
+								this.props.dispatch(CanvasAction.create(this.state.program, this.state.canvas, meta));
+							}
+						}}>
+							Confirm
+						</button>
+						<button onClick={() => {
+							this.setState({
+								title_modal: false
+							})
+						}}>
+							Cancel
+						</button>
 						<br/>
 					</Modal.Body>
 				</Modal>
@@ -251,6 +305,28 @@ class Component extends React.Component {
 					}
 				}>
 					Welcome to <b>B</b>ack<b>S</b>tabber
+					<br></br>
+					{
+						(() => {
+							let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+								return sketch._id === this.props.CanvasReducer._id
+							});
+							if (sketch !== undefined) {
+								return sketch.meta.title;
+							}
+						})()
+					}
+					<br></br>
+					{
+						(() => {
+							let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+								return sketch._id === this.props.CanvasReducer._id
+							});
+							if (sketch !== undefined) {
+								return sketch.meta.description;
+							}
+						})()
+					}
 				</div>
 				<div style={
 					{
@@ -278,16 +354,19 @@ class Component extends React.Component {
 								});
 							});
 							if (_id === null) {
-								this.props.dispatch(CanvasAction.create(program, canvas));
+								this.setState({
+									title_modal: true,
+									program: program,
+									canvas: canvas
+								})
 							} else {
 								this.props.dispatch(CanvasAction.update(_id, program, canvas));
+								this.setState({
+									show: true,
+									API_KEY: false
+								});
 							}
-							this.setState({
-								show: true,
-								API_KEY: false
-							});
-						}}
-					>
+					}}>
 						Save Project
 					</Button>
 					<Button
