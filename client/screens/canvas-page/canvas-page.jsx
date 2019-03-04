@@ -15,7 +15,7 @@ import "./srd.css";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import { sketches_db } from "../../../shared/collections/sketches";
-import { Button, ControlLabel, Form, FormControl, FormGroup, Modal, InputGroup } from "react-bootstrap";
+import { Button, ControlLabel, Dropdown, DropdownButton, Form, FormControl, FormGroup, InputGroup, MenuItem, Modal  } from "react-bootstrap";
 import { Program } from "../../../shared/lib/program";
 
 class Component extends React.Component {
@@ -557,7 +557,32 @@ class Component extends React.Component {
 									return (bsNode._id === this.props.CanvasReducer.select_id)
 								});
 								let button = (<React.Fragment/>);
+								let input = (<React.Fragment/>);
 								if (index === Object.keys(bsNode.props).length - 1) {
+									if(typeof bsNode.class.props[key] === "boolean"){
+										input = (
+											<React.Fragment>
+												<div>
+													<ControlLabel>{key} value:</ControlLabel>{' '}
+													<select id={key} title={"Boolean Value"} onClick={() => {
+
+													}}>
+														<option value="false">False</option>
+														<option value="true">True</option>
+													</select>
+												</div>
+											</React.Fragment>
+										);
+									}else{
+										input = (
+											<React.Fragment>
+												<FormGroup>
+													<ControlLabel>{key} value:</ControlLabel>{' '}
+													<FormControl type="text" id={key}/>
+												</FormGroup>{' '}
+											</React.Fragment>
+										);
+									}
 									button = (
 										<React.Fragment>
 											<Button
@@ -619,10 +644,7 @@ class Component extends React.Component {
 											{
 												JSON.stringify(bsNode.props[key])
 											}
-											<FormGroup>
-												<ControlLabel>{key} value:</ControlLabel>{' '}
-												<FormControl type="text" id={key}/>
-											</FormGroup>{' '}
+											{input}
 											{button}
 										</div>
 									</React.Fragment>
