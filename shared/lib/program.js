@@ -1,4 +1,5 @@
 import { BoolNode } from "./primitive/bool-node";
+import { BranchNode } from "./logic/branch-node";
 import { EntryNode } from "./api/entry-node";
 import { ExecuteNode } from "./functional/execute-node";
 import { NullNode } from "./primitive/null-node";
@@ -110,6 +111,7 @@ export class Program {
 	static deserialize(json) {
 		const constructor = {
 			BoolNode,
+			BranchNode,
 			EntryNode,
 			ExecuteNode,
 			NullNode,
