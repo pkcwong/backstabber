@@ -1,6 +1,7 @@
 import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
 import { BoolNode } from "../../../shared/lib/primitive/bool-node";
+import { BranchNode } from "../../../shared/lib/logic/branch-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../../shared/lib/functional/execute-node";
 import { NullNode } from "../../../shared/lib/primitive/null-node";
@@ -45,7 +46,7 @@ const initialState = {
 			// DivideNode,
 		},
 		Logic: {
-			// IfNode,
+			BranchNode,
 			// NegateNode
 		},
 		Functional: {

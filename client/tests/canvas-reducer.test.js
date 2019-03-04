@@ -1,6 +1,7 @@
 import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
 import { BoolNode } from "../../shared/lib/primitive/bool-node";
+import { BranchNode } from "../../shared/lib/logic/branch-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
 import { NullNode } from "../../shared/lib/primitive/null-node";
@@ -46,7 +47,7 @@ describe('CanvasReducer', () => {
 					// DivideNode,
 				},
 				Logic: {
-					// IfNode,
+					BranchNode,
 					// NegateNode
 				},
 				Functional: {
