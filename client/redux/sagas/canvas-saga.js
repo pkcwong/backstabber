@@ -44,9 +44,12 @@ export const CanvasSaga = function* () {
 				_id: action['payload']['_id']
 			});
 			if (res !== undefined) {
+				console.log(res)
 				yield put(CanvasAction.reset());
 				yield all(res.program.map(node => {
-					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, node._id, node.props));
+					console.log(node.class)
+					console.log(node.category)
+					return put(CanvasAction.addNode(node.class, node.category, res.canvas[node._id].coordinates, node._id, node.props));
 				}));
 				yield all(res.program.reduce((accumulator, node) => {
 					return [

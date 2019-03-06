@@ -2,7 +2,9 @@ import { BasicNode } from "../basic-node";
 
 export class ExecuteNode extends BasicNode {
 
-	static props = {};
+	static props = {
+		category: "functional"
+	};
 
 	static ports = {
 		inputs: {
