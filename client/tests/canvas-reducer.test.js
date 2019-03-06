@@ -79,7 +79,7 @@ describe('CanvasReducer', () => {
 	it('Should add Nodes', () => {
 		const initialState = CanvasReducer({}, CanvasAction.reset());
 		let state = Object.assign({}, initialState);
-		state = CanvasReducer(state, CanvasAction.addNode(StringNode.name, 'Primitives', {
+		state = CanvasReducer(state, CanvasAction.addNode(StringNode.name, {
 			x: 0,
 			y: 0
 		}));

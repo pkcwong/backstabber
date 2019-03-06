@@ -46,7 +46,7 @@ export const CanvasSaga = function* () {
 			if (res !== undefined) {
 				yield put(CanvasAction.reset());
 				yield all(res.program.map(node => {
-					return put(CanvasAction.addNode(node.class, node.category, res.canvas[node._id].coordinates, node._id, node.props));
+					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, node._id, node.props));
 				}));
 				yield all(res.program.reduce((accumulator, node) => {
 					return [

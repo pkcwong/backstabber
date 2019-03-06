@@ -75,6 +75,20 @@ const initialState = {
 	select_id: ""
 };
 
+const nodeTypeLookUp = (nodeType) => {
+	if(nodeType === "EntryNode" || nodeType === "ReturnNode"){
+		return "API";
+	}else if(nodeType === "NumberNode" || nodeType === "BoolNode" || nodeType === "StringNode" || nodeType === "NullNode"){
+		return "Primitives";
+	}if(nodeType === "BranchNode"){
+		return "Logic";
+	}if(nodeType === "ProgramNode" || nodeType === "ExecuteNode"){
+		return "Functional";
+	}if(nodeType === "ObjectNode"){
+		return "Object";
+	}
+};
+
 export const CanvasReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case CanvasAction.INIT: {
@@ -88,7 +102,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			return Object.assign({}, state, reset);
 		}
 		case CanvasAction.ADD_NODE: {
-			let bsNode = new state.nodeTypes[action.payload.category][action.payload.nodeType]();
+			let bsNode = new state.nodeTypes[nodeTypeLookUp(action.payload.nodeType)][action.payload.nodeType]();
 			if (action.payload._id !== 0) {
 				bsNode._id = action.payload._id;
 			}

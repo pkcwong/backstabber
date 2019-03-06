@@ -2,9 +2,7 @@ import { BasicNode } from "../basic-node";
 
 export class NullNode extends BasicNode {
 
-	static props = {
-		category: "Primitives"
-	};
+	static props = {};
 
 	static ports = {
 		inputs: {},

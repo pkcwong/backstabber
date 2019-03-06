@@ -201,7 +201,6 @@ export class BasicNode {
 		return {
 			_id: this._id,
 			class: this.class.name,
-			category: this.props.category,
 			props: this.props,
 			observers: this.observers.map((item) => {
 				return {

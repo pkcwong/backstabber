@@ -3,7 +3,6 @@ import { BasicNode } from "../basic-node";
 export class NumberNode extends BasicNode {
 
 	static props = {
-		category: "Primitives",
 		number: 0
 	};
 
