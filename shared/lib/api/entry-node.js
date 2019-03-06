@@ -3,7 +3,7 @@ import { BasicNode } from "../basic-node";
 export class EntryNode extends BasicNode {
 
 	static props = {
-		category: "api"
+		category: "API"
 	};
 
 	static ports = {

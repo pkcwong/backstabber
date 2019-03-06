@@ -3,7 +3,7 @@ import { BasicNode } from "../basic-node";
 export class ObjectNode extends BasicNode {
 
 	static props = {
-		category: "object",
+		category: "Object",
 		json: {}
 	};
 

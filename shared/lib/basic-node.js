@@ -1,8 +1,6 @@
 export class BasicNode {
 
 	constructor(args) {
-		console.log(args['class'])
-		console.log(args['props'])
 		this._id = Math.random().toString(36).substr(2, 16);
 		this.class = args['class'];
 		this.program = null;
@@ -10,8 +8,6 @@ export class BasicNode {
 		this.instance = {};
 		this.callbacks = [];
 		this.setProps(args['props']);
-		console.log(this.props);
-		this.category = this.props.category;
 	}
 
 	reset() {

@@ -3,7 +3,7 @@ import { BasicNode } from "../basic-node";
 export class BoolNode extends BasicNode {
 
 	static props = {
-		category: "primitive",
+		category: "Primitives",
 		bool: false
 	};
 
