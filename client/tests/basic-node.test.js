@@ -34,6 +34,7 @@ describe('BasicNode', function () {
 		expect(Object.keys(json[0])).toEqual([
 			'_id',
 			'class',
+			'category',
 			'props',
 			'observers'
 		]);
