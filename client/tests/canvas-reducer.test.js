@@ -5,6 +5,7 @@ import { BoolNode } from "../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../shared/lib/logic/branch-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
+import { NegateNode } from "../../shared/lib/logic/negate-node";
 import { NullNode } from "../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../shared/lib/primitive/number-node";
 import { ObjectNode } from "../../shared/lib/object/object-node";
@@ -49,7 +50,7 @@ describe('CanvasReducer', () => {
 				},
 				Logic: {
 					BranchNode,
-					// NegateNode
+					NegateNode
 				},
 				Functional: {
 					ProgramNode,
