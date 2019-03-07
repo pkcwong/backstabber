@@ -7,14 +7,7 @@ export class NegateNode extends BasicNode {
 	static ports = {
 		inputs: {
 			negate: (x) => {
-				if(typeof x === "boolean"){
-					return (!x);
-				}else if(typeof x === "number"){
-					return (-x);
-				}else{
-					return (x);
-				}
-
+				return x;
 			}
 		},
 		outputs: {
@@ -27,7 +20,7 @@ export class NegateNode extends BasicNode {
 	static executor = (props = NegateNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				result: inputs.negate
+				result: (typeof inputs.negate == 'number') ? -inputs.negate : !Boolean(inputs.negate)
 			});
 		});
 	};

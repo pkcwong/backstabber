@@ -1,4 +1,4 @@
-import { NegateNode } from "../../shared/lib/logic/branch-node";
+import { NegateNode } from "../../shared/lib/logic/negate-node";
 
 describe('NegateNode', function () {
 	it('should return negative number', async function () {
@@ -9,17 +9,24 @@ describe('NegateNode', function () {
 		});
 	});
 	it('should return true', async function () {
-		expect(await BranchNode.executor({}, {
+		expect(await NegateNode.executor({}, {
 			negate: false
 		})).toEqual({
 			result: true
 		});
 	});
-	it('should return string', async function () {
-		expect(await BranchNode.executor({}, {
+	it('should return falsy', async function () {
+		expect(await NegateNode.executor({}, {
 			negate: "test"
 		})).toEqual({
-			result: "test"
+			result: false
+		});
+	});
+	it('should return truthy', async function () {
+		expect(await NegateNode.executor({}, {
+			negate: ""
+		})).toEqual({
+			result: true
 		});
 	});
 });
