@@ -17,12 +17,20 @@ describe('AdditionNode', function () {
 			sum: 0
 		});
 	});
-	it('should return sum of zero', async function () {
+	it('should return sum of zeros', async function () {
 		expect(await AdditionNode.executor({}, {
 			addend: 0,
 			augend: 0
 		})).toEqual({
 			sum: 0
+		});
+	});
+	it('should concatenate strings', async function () {
+		expect(await AdditionNode.executor({}, {
+			augend: "hello ",
+			addend: "world"
+		})).toEqual({
+			sum: "hello world"
 		});
 	});
 });
