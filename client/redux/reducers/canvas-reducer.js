@@ -97,7 +97,9 @@ export const CanvasReducer = (state = initialState, action) => {
 			if (action.payload.props !== 0) {
 				bsNode.setProps(action.payload.props);
 			}
-			let stormNode = new DefaultNodeModel(bsNode.class.name, state.colorLookup[action.payload.category]);
+			let stormNode = new DefaultNodeModel(bsNode.class.name, state.colorLookup[Object.keys(state.nodeTypes).find((category) => {
+				return Object.keys(state.nodeTypes[category]).includes(action.payload.nodeType);
+			})]);
 			stormNode.setPosition(action.payload.coordinates.x, action.payload.coordinates.y);
 			Object.keys(bsNode.class.ports.inputs).forEach((key) => {
 				stormNode.addPort(new DefaultPortModel(true, key));
