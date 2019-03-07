@@ -512,7 +512,7 @@ class Component extends React.Component {
 						className="diagram-layer"
 						onDrop={(event) => {
 							console.log(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type);
-							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, JSON.parse(event.dataTransfer.getData('storm-diagram-node')).category, this.engine.getRelativeMousePoint(event)));
+							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
 						}}
 						onDragOver={(event) => {
 							event.preventDefault();
