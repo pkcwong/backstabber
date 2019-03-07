@@ -1,5 +1,6 @@
 import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
+import { AdditionNode } from "../../shared/lib/arithmetics/addition-node";
 import { BoolNode } from "../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../shared/lib/logic/branch-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
@@ -41,7 +42,7 @@ describe('CanvasReducer', () => {
 					NullNode,
 				},
 				Arithmetics: {
-					// PlusNode,
+					AdditionNode,
 					// MinusNode,
 					// MultipleNode,
 					// DivideNode,
