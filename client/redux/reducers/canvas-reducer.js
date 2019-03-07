@@ -88,7 +88,9 @@ export const CanvasReducer = (state = initialState, action) => {
 			return Object.assign({}, state, reset);
 		}
 		case CanvasAction.ADD_NODE: {
-			let bsNode = new state.nodeTypes[action.payload.category][action.payload.nodeType]();
+			let bsNode = new state.nodeTypes[Object.keys(state.nodeTypes).find((category) => {
+				return Object.keys(state.nodeTypes[category]).includes(action.payload.nodeType);
+			})][action.payload.nodeType]();
 			if (action.payload._id !== 0) {
 				bsNode._id = action.payload._id;
 			}
