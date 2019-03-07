@@ -2,6 +2,7 @@ import { BoolNode } from "./primitive/bool-node";
 import { BranchNode } from "./logic/branch-node";
 import { EntryNode } from "./api/entry-node";
 import { ExecuteNode } from "./functional/execute-node";
+import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
@@ -114,6 +115,7 @@ export class Program {
 			BranchNode,
 			EntryNode,
 			ExecuteNode,
+			NegateNode,
 			NullNode,
 			NumberNode,
 			ObjectNode,
