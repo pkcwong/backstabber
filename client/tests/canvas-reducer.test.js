@@ -1,6 +1,7 @@
 import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
 import { AdditionNode } from "../../shared/lib/arithmetics/addition-node";
+import { ArrayNode } from "../../shared/lib/array/array-node";
 import { BoolNode } from "../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../shared/lib/logic/branch-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
@@ -64,7 +65,7 @@ describe('CanvasReducer', () => {
 					// ObjectKeysNode
 				},
 				Array: {
-					// ArrayNode,
+					ArrayNode,
 					// ArrayPushNode,
 					// ArrayFilterNode,
 					// ArrayMapNode

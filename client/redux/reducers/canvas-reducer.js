@@ -1,6 +1,7 @@
 import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
 import { AdditionNode } from "../../../shared/lib/arithmetics/addition-node";
+import { ArrayNode } from "../../../shared/lib/array/array-node";
 import { BoolNode } from "../../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../../shared/lib/logic/branch-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
@@ -63,7 +64,7 @@ const initialState = {
 			// ObjectKeysNode
 		},
 		Array: {
-			// ArrayNode,
+			ArrayNode,
 			// ArrayPushNode,
 			// ArrayFilterNode,
 			// ArrayMapNode

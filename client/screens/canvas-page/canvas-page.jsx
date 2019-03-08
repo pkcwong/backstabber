@@ -607,6 +607,11 @@ class Component extends React.Component {
 																	});
 																}
 															}
+															else if (typeof bsNode.class.props[key] === 'object') {
+																props = Object.assign({}, props, {
+																	[key]: JSON.parse($("#" + key).val())
+																});
+															}
 															else{
 																props = Object.assign({}, props, {
 																	[key]: $("#" + key).val()
