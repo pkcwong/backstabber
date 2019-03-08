@@ -14,6 +14,7 @@ import { ObjectGetNode as ObjectGetNode } from "../../shared/lib/object/object-g
 import { ProgramNode } from "../../shared/lib/functional/program-node";
 import { ReturnNode } from "../../shared/lib/api/return-node";
 import { StringNode } from "../../shared/lib/primitive/string-node";
+import { SubtractionNode } from "../../shared/lib/arithmetics/subtraction-node";
 
 describe('CanvasReducer', () => {
 	it('Should reset states', () => {
@@ -46,7 +47,7 @@ describe('CanvasReducer', () => {
 				},
 				Arithmetics: {
 					AdditionNode,
-					// MinusNode,
+					SubtractionNode,
 					// MultipleNode,
 					// DivideNode,
 				},

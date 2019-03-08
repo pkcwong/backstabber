@@ -12,6 +12,7 @@ import { ObjectGetNode as ObjectGetNode } from "./object/object-get-node";
 import { ProgramNode } from "./functional/program-node";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
+import { SubtractionNode } from "./arithmetics/subtraction-node";
 
 export class Program {
 
@@ -127,7 +128,8 @@ export class Program {
 			ObjectGetNode,
 			ProgramNode,
 			ReturnNode,
-			StringNode
+			StringNode,
+			SubtractionNode
 		};
 		let map = json.reduce((accumulator, current) => {
 			let node = new constructor[current.class](current.props);
