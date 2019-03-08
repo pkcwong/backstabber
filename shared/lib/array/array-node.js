@@ -18,9 +18,9 @@ export class ArrayNode extends BasicNode {
 	static executor = (props = ArrayNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				json: Array.isArray(JSON.parse(JSON.stringify(props.array))) ? JSON.parse(JSON.stringify(props.array)) : [
-					JSON.parse(JSON.stringify(props.array))
-				]
+					json: Array.isArray(JSON.parse(JSON.stringify(props.array))) ? JSON.parse(JSON.stringify(props.array)) : [
+						JSON.parse(JSON.stringify(props.array))
+					]
 			});
 		});
 	};
