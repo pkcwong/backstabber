@@ -7,6 +7,7 @@ import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
+import { GetNode as ObjectGetNode } from "./object/get-node";
 import { ProgramNode } from "./functional/program-node";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
@@ -121,6 +122,7 @@ export class Program {
 			NullNode,
 			NumberNode,
 			ObjectNode,
+			ObjectGetNode,
 			ProgramNode,
 			ReturnNode,
 			StringNode
