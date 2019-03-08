@@ -1,6 +1,6 @@
 import { BasicNode } from "../basic-node";
 
-export class GetNode extends BasicNode {
+export class ObjectGetNode extends BasicNode {
 
 	static props = {};
 
@@ -20,7 +20,7 @@ export class GetNode extends BasicNode {
 		}
 	};
 
-	static executor = (props = GetNode.props, inputs) => {
+	static executor = (props = ObjectGetNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
 				value: inputs.json[inputs.key]
@@ -30,7 +30,7 @@ export class GetNode extends BasicNode {
 
 	constructor(props) {
 		super({
-			class: GetNode,
+			class: ObjectGetNode,
 			props: props
 		});
 	}
