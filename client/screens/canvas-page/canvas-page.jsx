@@ -511,7 +511,6 @@ class Component extends React.Component {
 					<div
 						className="diagram-layer"
 						onDrop={(event) => {
-							console.log(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type);
 							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
 						}}
 						onDragOver={(event) => {
@@ -608,6 +607,11 @@ class Component extends React.Component {
 																		[key]: false
 																	});
 																}
+															}
+															else if (typeof bsNode.class.props[key] === 'object') {
+																props = Object.assign({}, props, {
+																	[key]: JSON.parse($("#" + key).val())
+																});
 															}
 															else{
 																props = Object.assign({}, props, {

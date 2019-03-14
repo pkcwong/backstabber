@@ -1,4 +1,6 @@
 import { AdditionNode } from "./arithmetics/addition-node";
+import { ArrayNode } from "./array/array-node";
+import { ArrayPushNode } from "./array/array-push-node";
 import { BoolNode } from "./primitive/bool-node";
 import { BranchNode } from "./logic/branch-node";
 import { EntryNode } from "./api/entry-node";
@@ -7,6 +9,7 @@ import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
+import { ObjectGetNode as ObjectGetNode } from "./object/object-get-node";
 import { ProgramNode } from "./functional/program-node";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
@@ -113,6 +116,8 @@ export class Program {
 	static deserialize(json) {
 		const constructor = {
 			AdditionNode,
+			ArrayNode,
+			ArrayPushNode,
 			BoolNode,
 			BranchNode,
 			EntryNode,
@@ -121,6 +126,7 @@ export class Program {
 			NullNode,
 			NumberNode,
 			ObjectNode,
+			ObjectGetNode,
 			ProgramNode,
 			ReturnNode,
 			StringNode
