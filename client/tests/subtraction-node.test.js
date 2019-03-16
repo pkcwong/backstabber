@@ -25,31 +25,23 @@ describe('SubtractionNode', function () {
 			difference: 0
 		});
 	});
-	it('should replace string', async function () {
+	it('should not accept string', async function () {
 		expect(await SubtractionNode.executor({}, {
 			minuend: "Hello World",
 			subtrahend: "World"
 		})).toEqual({
-			difference: "Hello "
+			difference: null
 		});
 	});
-	it('should return subtrahend', async function () {
+	it('should return null', async function () {
 		expect(await SubtractionNode.executor({}, {
 			minuend: null,
 			subtrahend: "World"
 		})).toEqual({
-			difference: "World"
+			difference: null
 		});
 	});
-	it('should return boolean subtraction', async function () {
-		expect(await SubtractionNode.executor({}, {
-			minuend: false,
-			subtrahend: true
-		})).toEqual({
-			difference: -1
-		});
-	});
-	it('should return null for non boolean and boolean', async function () {
+	it('should return null for boolean', async function () {
 		expect(await SubtractionNode.executor({}, {
 			minuend: false,
 			subtrahend: 23
