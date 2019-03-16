@@ -7,10 +7,18 @@ export class SubtractionNode extends BasicNode {
 	static ports = {
 		inputs: {
 			minuend: (x) => {
-				return x;
+				if(typeof x !== "number"){
+					throw "Incorrect Type";
+				}else{
+					return x;
+				}
 			},
 			subtrahend: (x) => {
-				return x;
+				if(typeof x !== "number"){
+					throw "Incorrect Type";
+				}else{
+					return x;
+				}
 			}
 		},
 		outputs: {
@@ -23,7 +31,7 @@ export class SubtractionNode extends BasicNode {
 	static executor = (props = SubtractionNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				difference: (typeof inputs.minuend === "number" && typeof inputs.subtrahend === "number") ? inputs.minuend - inputs.subtrahend : null
+				difference: inputs.minuend - inputs.subtrahend
 			});
 		});
 	};
