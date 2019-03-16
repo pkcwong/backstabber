@@ -6,13 +6,15 @@ import { ArrayPushNode } from "../../../shared/lib/array/array-push-node";
 import { BoolNode } from "../../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../../shared/lib/logic/branch-node";
 import { DatabaseNode } from "../../../shared/lib/database/database-node";
+import { DatabaseFetchNode } from "../../../shared/lib/database/database-fetch-node";
+import { DatabaseInsertNode } from "../../../shared/lib/database/database-insert-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../../shared/lib/functional/execute-node";
 import { NegateNode } from "../../../shared/lib/logic/negate-node";
 import { NullNode } from "../../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../../shared/lib/primitive/number-node";
 import { ObjectNode } from "../../../shared/lib/object/object-node";
-import { ObjectGetNode as ObjectGetNode } from "../../../shared/lib/object/object-get-node";
+import { ObjectGetNode } from "../../../shared/lib/object/object-get-node";
 import { ProgramNode } from "../../../shared/lib/functional/program-node";
 import { ReturnNode } from "../../../shared/lib/api/return-node";
 import { StringNode } from "../../../shared/lib/primitive/string-node";
@@ -72,9 +74,9 @@ const initialState = {
 			// ArrayMapNode
 		},
 		Database: {
-			DatabaseNode
-			// CollectionFindNode,
-			// CollectionInsertNode,
+			DatabaseNode,
+			DatabaseFetchNode,
+			DatabaseInsertNode
 			// ColledctionUpdateNode,
 			// ColelctionRemoveNode,
 		}

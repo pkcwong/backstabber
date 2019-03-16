@@ -24,7 +24,7 @@ Meteor.methods({
 				_id: json._id
 			});
 			if (!bucket) {
-				reject();
+				reject('404 Not Found');
 			}
 			documents_db.remove({
 				bucket: bucket._id
@@ -32,6 +32,8 @@ Meteor.methods({
 			resolve(buckets_db.remove({
 				_id: bucket._id
 			}));
+		}).catch((err) => {
+			throw new Meteor.Error(err);
 		});
 	}
 });

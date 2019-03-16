@@ -4,6 +4,8 @@ import { ArrayPushNode } from "./array/array-push-node";
 import { BoolNode } from "./primitive/bool-node";
 import { BranchNode } from "./logic/branch-node";
 import { DatabaseNode } from "./database/database-node";
+import { DatabaseFetchNode } from "./database/database-fetch-node";
+import { DatabaseInsertNode } from "./database/database-insert-node";
 import { EntryNode } from "./api/entry-node";
 import { ExecuteNode } from "./functional/execute-node";
 import { NegateNode } from "./logic/negate-node";
@@ -122,6 +124,8 @@ export class Program {
 			BoolNode,
 			BranchNode,
 			DatabaseNode,
+			DatabaseFetchNode,
+			DatabaseInsertNode,
 			EntryNode,
 			ExecuteNode,
 			NegateNode,
