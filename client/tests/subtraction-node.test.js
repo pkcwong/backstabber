@@ -25,22 +25,6 @@ describe('SubtractionNode', function () {
 			difference: 0
 		});
 	});
-	it('should not accept string', async function () {
-		expect(await SubtractionNode.executor({}, {
-			minuend: "Hello World",
-			subtrahend: "World"
-		})).toEqual({
-			difference: NaN
-		});
-	});
-	it('should return NaN', async function () {
-		expect(await SubtractionNode.executor({}, {
-			minuend: null,
-			subtrahend: "World"
-		})).toEqual({
-			difference: NaN
-		});
-	});
 	it('should return boolean', async function () {
 		expect(await SubtractionNode.executor({}, {
 			minuend: false,
