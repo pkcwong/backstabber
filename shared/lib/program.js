@@ -1,7 +1,9 @@
 import { AdditionNode } from "./arithmetics/addition-node";
 import { ArrayNode } from "./array/array-node";
+import { ArrayPushNode } from "./array/array-push-node";
 import { BoolNode } from "./primitive/bool-node";
 import { BranchNode } from "./logic/branch-node";
+import { DatabaseNode } from "./database/database-node";
 import { EntryNode } from "./api/entry-node";
 import { ExecuteNode } from "./functional/execute-node";
 import { MultiplicationNode } from "./arithmetics/multiplication-node";
@@ -117,8 +119,10 @@ export class Program {
 		const constructor = {
 			AdditionNode,
 			ArrayNode,
+			ArrayPushNode,
 			BoolNode,
 			BranchNode,
+			DatabaseNode,
 			EntryNode,
 			ExecuteNode,
 			MultiplicationNode,

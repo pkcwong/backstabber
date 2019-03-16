@@ -511,7 +511,6 @@ class Component extends React.Component {
 					<div
 						className="diagram-layer"
 						onDrop={(event) => {
-							console.log(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type);
 							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
 						}}
 						onDragOver={(event) => {
@@ -522,6 +521,8 @@ class Component extends React.Component {
 							allowLooseLinks={false}
 							maxNumberPointsPerLink={0}
 							diagramEngine={this.engine}
+							deleteKeys={[46]}
+							smartRouting={true}
 						/>
 					</div>
 				</div>
