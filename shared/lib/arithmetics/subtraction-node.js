@@ -15,7 +15,7 @@ export class SubtractionNode extends BasicNode {
 		},
 		outputs: {
 			difference: (x) => {
-				return x;
+				return (typeof x === 'number');
 			}
 		}
 	};
