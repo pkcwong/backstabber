@@ -1,4 +1,3 @@
-import { Meteor } from "meteor/meteor";
 import { BasicNode } from "../basic-node";
 
 export class DatabaseFetchNode extends BasicNode {
