@@ -5,6 +5,7 @@ import { ArrayNode } from "../../shared/lib/array/array-node";
 import { ArrayPushNode } from "../../shared/lib/array/array-push-node";
 import { BoolNode } from "../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../shared/lib/logic/branch-node";
+import { DatabaseNode } from "../../shared/lib/database/database-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
 import { NegateNode } from "../../shared/lib/logic/negate-node";
@@ -72,6 +73,7 @@ describe('CanvasReducer', () => {
 					// ArrayMapNode
 				},
 				Database: {
+					DatabaseNode
 					// CollectionFindNode,
 					// CollectionInsertNode,
 					// ColledctionUpdateNode,
