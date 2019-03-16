@@ -7,15 +7,23 @@ export class MultiplicationNode extends BasicNode {
 	static ports = {
 		inputs: {
 			multiplier: (x) => {
-				return x;
+				if(typeof x !== "number"){
+					throw "Incorrect Type"
+				} else{
+					return x;
+				}
 			},
 			multiplicand: (x) => {
-				return x;
+				if(typeof x !== "number"){
+					throw "Incorrect Type"
+				} else{
+					return x;
+				}
 			}
 		},
 		outputs: {
 			product: (x) => {
-				return x;
+				return (typeof x === "number");
 			}
 		}
 	};

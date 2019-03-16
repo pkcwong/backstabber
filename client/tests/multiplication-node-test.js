@@ -25,20 +25,20 @@ describe('MultiplicationNode', function () {
 			product: 0
 		});
 	});
-	it('should return null for strings', async function () {
+	it('should return NaN for strings', async function () {
 		expect(await MultiplicationNode.executor({}, {
 			multiplier: "hello",
 			multiplicand: "world"
 		})).toEqual({
-			product: null
+			product: NaN
 		});
 	});
-	it('should return zero for null', async function () {
+	it('should return NaN for null', async function () {
 		expect(await MultiplicationNode.executor({}, {
 			multiplier: 23,
 			multiplicand: null
 		})).toEqual({
-			product: 0
+			product: NaN
 		});
 	});
 	it('should return boolean', async function () {
