@@ -23,7 +23,7 @@ export class SubtractionNode extends BasicNode {
 	static executor = (props = SubtractionNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				difference: (inputs.minuend === null) ? inputs.subtrahend : (inputs.subtrahend === null) ? inputs.minuend : (typeof inputs.minuend === "number" && typeof inputs.subtrahend === "number") || (typeof inputs.minuend === "boolean" && typeof inputs.subtrahend === "boolean") ? inputs.minuend - inputs.subtrahend : (typeof inputs.minuend !== "boolean" && typeof inputs.subtrahend === "boolean") || (typeof inputs.minuend === "boolean" && typeof inputs.subtrahend !== "boolean") ? null : (typeof inputs.minuend !== "boolean" && typeof inputs.minuend !== "number" && typeof inputs.minuend !== "string") || (typeof inputs.subtrahend !== "boolean" && typeof inputs.subtrahend !== "number" && typeof inputs.subtrahend !== "string") ? null : inputs.minuend.replace(inputs.subtrahend, '')
+				difference: (typeof inputs.minuend === "number" && typeof inputs.subtrahend === "number") ? inputs.minuend - inputs.subtrahend : null
 			});
 		});
 	};
