@@ -115,7 +115,7 @@ export class BasicNode {
 			} catch (err) {
 				console.error(err);
 				throw {
-					message: "invalid parameter",
+					message: "invalid parameter: " + err,
 					error: {
 						ref: this,
 						port: port,
@@ -148,7 +148,7 @@ export class BasicNode {
 			if (this.class.props.hasOwnProperty(current)) {
 				if (typeof this.class.props[current] !== typeof props[current]) {
 					throw {
-						message: "invalid prop",
+						message: "invalid property",
 						error: {
 							ref: this,
 							prop: current,

@@ -233,7 +233,8 @@ class Component extends React.Component {
 								bsNode.callbacks = [];
 								bsNode.registerCallback((err, res) => {
 									if (err) {
-										alert(err);
+										alert(err.message);
+										alert(JSON.stringify(err, undefined, 4));
 									}
 									bsNode.observers.forEach((observer, index) => {
 										if (err) {
