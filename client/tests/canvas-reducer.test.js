@@ -6,6 +6,8 @@ import { ArrayPushNode } from "../../shared/lib/array/array-push-node";
 import { BoolNode } from "../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../shared/lib/logic/branch-node";
 import { DatabaseNode } from "../../shared/lib/database/database-node";
+import { DatabaseFetchNode } from "../../shared/lib/database/database-fetch-node";
+import { DatabaseInsertNode } from "../../shared/lib/database/database-insert-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
 import { MultiplicationNode } from "../../shared/lib/arithmetics/multiplication-node";
@@ -74,9 +76,9 @@ describe('CanvasReducer', () => {
 					// ArrayMapNode
 				},
 				Database: {
-					DatabaseNode
-					// CollectionFindNode,
-					// CollectionInsertNode,
+					DatabaseNode,
+					DatabaseFetchNode,
+					DatabaseInsertNode
 					// ColledctionUpdateNode,
 					// ColelctionRemoveNode,
 				}
