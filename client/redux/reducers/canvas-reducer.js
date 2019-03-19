@@ -2,6 +2,7 @@ import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams';
 import { CanvasAction } from "../actions/canvas-action";
 import { AdditionNode } from "../../../shared/lib/arithmetics/addition-node";
 import { ArrayNode } from "../../../shared/lib/array/array-node";
+import { ArrayMapNode } from "../../../shared/lib/array/array-map-node";
 import { ArrayPushNode } from "../../../shared/lib/array/array-push-node";
 import { ArrayReduceNode } from "../../../shared/lib/array/array-reduce-node";
 import { BoolNode } from "../../../shared/lib/primitive/bool-node";
@@ -74,9 +75,9 @@ const initialState = {
 		},
 		Array: {
 			ArrayNode,
+			ArrayMapNode,
 			ArrayPushNode,
 			// ArrayFilterNode,
-			// ArrayMapNode
 			ArrayReduceNode
 		},
 		Database: {
