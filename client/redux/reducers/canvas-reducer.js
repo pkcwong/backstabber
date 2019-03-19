@@ -10,6 +10,7 @@ import { DatabaseFetchNode } from "../../../shared/lib/database/database-fetch-n
 import { DatabaseInsertNode } from "../../../shared/lib/database/database-insert-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../../shared/lib/functional/execute-node";
+import { MultiplicationNode } from "../../../shared/lib/arithmetics/multiplication-node";
 import { NegateNode } from "../../../shared/lib/logic/negate-node";
 import { NullNode } from "../../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../../shared/lib/primitive/number-node";
@@ -19,6 +20,7 @@ import { ObjectPutNode } from "../../../shared/lib/object/object-put-node";
 import { ProgramNode } from "../../../shared/lib/functional/program-node";
 import { ReturnNode } from "../../../shared/lib/api/return-node";
 import { StringNode } from "../../../shared/lib/primitive/string-node";
+import { SubtractionNode } from "../../../shared/lib/arithmetics/subtraction-node";
 
 const initialState = {
 	dispatcher: null,
@@ -50,8 +52,8 @@ const initialState = {
 		},
 		Arithmetics: {
 			AdditionNode,
-			// MinusNode,
-			// MultipleNode,
+			SubtractionNode,
+			MultiplicationNode,
 			// DivideNode,
 		},
 		Logic: {

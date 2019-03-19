@@ -8,6 +8,7 @@ import { DatabaseFetchNode } from "./database/database-fetch-node";
 import { DatabaseInsertNode } from "./database/database-insert-node";
 import { EntryNode } from "./api/entry-node";
 import { ExecuteNode } from "./functional/execute-node";
+import { MultiplicationNode } from "./arithmetics/multiplication-node";
 import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
@@ -17,6 +18,7 @@ import { ObjectPutNode } from "./object/object-put-node";
 import { ProgramNode } from "./functional/program-node";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
+import { SubtractionNode } from "./arithmetics/subtraction-node";
 
 export class Program {
 
@@ -129,6 +131,7 @@ export class Program {
 			DatabaseInsertNode,
 			EntryNode,
 			ExecuteNode,
+			MultiplicationNode,
 			NegateNode,
 			NullNode,
 			NumberNode,
@@ -137,7 +140,8 @@ export class Program {
 			ObjectPutNode,
 			ProgramNode,
 			ReturnNode,
-			StringNode
+			StringNode,
+			SubtractionNode
 		};
 		let map = json.reduce((accumulator, current) => {
 			let node = new constructor[current.class](current.props);
