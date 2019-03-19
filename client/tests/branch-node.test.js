@@ -7,7 +7,8 @@ describe('BranchNode', function () {
 			true: true,
 			false: false
 		})).toEqual({
-			result: true
+			truthy: true,
+			falsy: undefined
 		});
 	});
 	it('should return false', async function () {
@@ -16,7 +17,8 @@ describe('BranchNode', function () {
 			true: true,
 			false: false
 		})).toEqual({
-			result: false
+			truthy: undefined,
+			falsy: false
 		});
 	});
 });
