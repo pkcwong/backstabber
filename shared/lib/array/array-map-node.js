@@ -9,7 +9,7 @@ export class ArrayMapNode extends BasicNode {
 			array: (x) => {
 				return x;
 			},
-			function: (x) => {
+			program: (x) => {
 				if(typeof x !== "object"){
 					throw "Incorrect Test"
 				}else{
