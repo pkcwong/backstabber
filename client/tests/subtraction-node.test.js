@@ -25,12 +25,4 @@ describe('SubtractionNode', function () {
 			difference: 0
 		});
 	});
-	it('should return boolean', async function () {
-		expect(await SubtractionNode.executor({}, {
-			minuend: false,
-			subtrahend: 23
-		})).toEqual({
-			difference: -23
-		});
-	});
 });
