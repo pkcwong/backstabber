@@ -25,12 +25,4 @@ describe('MultiplicationNode', function () {
 			product: 0
 		});
 	});
-	it('should return boolean', async function () {
-		expect(await MultiplicationNode.executor({}, {
-			multiplier: 23,
-			multiplicand: true
-		})).toEqual({
-			product: 23
-		});
-	});
 });
