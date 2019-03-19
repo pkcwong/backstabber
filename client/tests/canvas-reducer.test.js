@@ -15,7 +15,8 @@ import { NegateNode } from "../../shared/lib/logic/negate-node";
 import { NullNode } from "../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../shared/lib/primitive/number-node";
 import { ObjectNode } from "../../shared/lib/object/object-node";
-import { ObjectGetNode as ObjectGetNode } from "../../shared/lib/object/object-get-node";
+import { ObjectGetNode } from "../../shared/lib/object/object-get-node";
+import { ObjectPutNode } from "../../shared/lib/object/object-put-node";
 import { ProgramNode } from "../../shared/lib/functional/program-node";
 import { ReturnNode } from "../../shared/lib/api/return-node";
 import { StringNode } from "../../shared/lib/primitive/string-node";
@@ -66,8 +67,8 @@ describe('CanvasReducer', () => {
 				},
 				Object: {
 					ObjectNode,
-					// ObjectAssignNode,
 					ObjectGetNode,
+					ObjectPutNode,
 					// ObjectKeysNode
 				},
 				Array: {
