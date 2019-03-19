@@ -2,6 +2,7 @@ import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
 import { AdditionNode } from "../../shared/lib/arithmetics/addition-node";
 import { ArrayNode } from "../../shared/lib/array/array-node";
+import { ArrayGetNode } from "../../shared/lib/array/array-get-node";
 import { ArrayMapNode } from "../../shared/lib/array/array-map-node";
 import { ArrayPushNode } from "../../shared/lib/array/array-push-node";
 import { ArrayReduceNode } from "../../shared/lib/array/array-reduce-node";
@@ -76,6 +77,7 @@ describe('CanvasReducer', () => {
 				},
 				Array: {
 					ArrayNode,
+					ArrayGetNode,
 					ArrayMapNode,
 					ArrayPushNode,
 					// ArrayFilterNode,

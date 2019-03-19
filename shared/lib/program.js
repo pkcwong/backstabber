@@ -1,6 +1,7 @@
 import { AdditionNode } from "./arithmetics/addition-node";
 import { ArrayNode } from "./array/array-node";
 import { ArrayMapNode } from "./array/array-map-node";
+import { ArrayGetNode } from "./array/array-get-node";
 import { ArrayPushNode } from "./array/array-push-node";
 import { ArrayReduceNode } from "./array/array-reduce-node";
 import { BoolNode } from "./primitive/bool-node";
@@ -127,6 +128,7 @@ export class Program {
 			AdditionNode,
 			ArrayNode,
 			ArrayMapNode,
+			ArrayGetNode,
 			ArrayPushNode,
 			ArrayReduceNode,
 			BoolNode,
