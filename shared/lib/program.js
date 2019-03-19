@@ -1,5 +1,6 @@
 import { AdditionNode } from "./arithmetics/addition-node";
 import { ArrayNode } from "./array/array-node";
+import { ArrayFilterNode } from "./array/array-filter-node";
 import { ArrayMapNode } from "./array/array-map-node";
 import { ArrayGetNode } from "./array/array-get-node";
 import { ArrayPushNode } from "./array/array-push-node";
@@ -127,6 +128,7 @@ export class Program {
 		const constructor = {
 			AdditionNode,
 			ArrayNode,
+			ArrayFilterNode,
 			ArrayMapNode,
 			ArrayGetNode,
 			ArrayPushNode,

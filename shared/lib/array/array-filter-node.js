@@ -1,6 +1,6 @@
 import { BasicNode } from "../basic-node";
 
-export class ArrayReduceNode extends BasicNode {
+export class ArrayFilterNode extends BasicNode {
 
 	static props = {};
 
@@ -17,28 +17,25 @@ export class ArrayReduceNode extends BasicNode {
 					throw "Invalid program.";
 				}
 				return x;
-			},
-			accumulator: (x) => {
-				return x;
 			}
 		},
 		outputs: {
 			result: (x) => {
-				return (x !== undefined);
+				return (Array.isArray(x));
 			}
 		}
 	};
 
-	static executor = (props = ArrayReduceNode.props, inputs) => {
+	static executor = (props = ArrayFilterNode.props, inputs) => {
 		return new Promise(async (resolve, reject) => {
 			resolve({
 				result: await Promise.resolve(inputs.array.reduce(async (accumulator, current) => {
+					const acc = await Promise.resolve(accumulator);
 					return Promise.resolve(await new Promise(async (resolve) => {
 						Meteor.call('sketches/EXECUTE', {
 							_id: inputs.program._id,
 							token: inputs.program.token,
 							entry: {
-								accumulator: await Promise.resolve(accumulator),
 								current: current
 							}
 						}, (err, res) => {
@@ -46,17 +43,24 @@ export class ArrayReduceNode extends BasicNode {
 								reject(err);
 								return;
 							}
-							resolve(res.accumulator);
+							if (res.current === true) {
+								resolve([
+									...acc,
+									current
+								]);
+							} else {
+								resolve(acc);
+							}
 						});
 					}));
-				}, Promise.resolve(inputs.accumulator)))
+				}, Promise.resolve([])))
 			});
 		});
 	};
 
 	constructor(props) {
 		super({
-			class: ArrayReduceNode,
+			class: ArrayFilterNode,
 			props: props
 		});
 	}
