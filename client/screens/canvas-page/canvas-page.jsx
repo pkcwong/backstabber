@@ -233,7 +233,8 @@ class Component extends React.Component {
 								bsNode.callbacks = [];
 								bsNode.registerCallback((err, res) => {
 									if (err) {
-										alert(err);
+										alert(err.message);
+										alert(JSON.stringify(err, undefined, 4));
 									}
 									bsNode.observers.forEach((observer, index) => {
 										if (err) {
@@ -511,7 +512,6 @@ class Component extends React.Component {
 					<div
 						className="diagram-layer"
 						onDrop={(event) => {
-							console.log(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type);
 							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
 						}}
 						onDragOver={(event) => {
@@ -522,6 +522,8 @@ class Component extends React.Component {
 							allowLooseLinks={false}
 							maxNumberPointsPerLink={0}
 							diagramEngine={this.engine}
+							deleteKeys={[46]}
+							smartRouting={true}
 						/>
 					</div>
 				</div>

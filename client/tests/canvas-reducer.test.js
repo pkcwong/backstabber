@@ -2,10 +2,15 @@ import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
 import { AdditionNode } from "../../shared/lib/arithmetics/addition-node";
 import { ArrayNode } from "../../shared/lib/array/array-node";
+import { ArrayPushNode } from "../../shared/lib/array/array-push-node";
 import { BoolNode } from "../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../shared/lib/logic/branch-node";
+import { DatabaseNode } from "../../shared/lib/database/database-node";
+import { DatabaseFetchNode } from "../../shared/lib/database/database-fetch-node";
+import { DatabaseInsertNode } from "../../shared/lib/database/database-insert-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
+import { MultiplicationNode } from "../../shared/lib/arithmetics/multiplication-node";
 import { NegateNode } from "../../shared/lib/logic/negate-node";
 import { NullNode } from "../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../shared/lib/primitive/number-node";
@@ -48,7 +53,7 @@ describe('CanvasReducer', () => {
 				Arithmetics: {
 					AdditionNode,
 					SubtractionNode,
-					// MultipleNode,
+					MultiplicationNode,
 					// DivideNode,
 				},
 				Logic: {
@@ -67,13 +72,14 @@ describe('CanvasReducer', () => {
 				},
 				Array: {
 					ArrayNode,
-					// ArrayPushNode,
+					ArrayPushNode,
 					// ArrayFilterNode,
 					// ArrayMapNode
 				},
 				Database: {
-					// CollectionFindNode,
-					// CollectionInsertNode,
+					DatabaseNode,
+					DatabaseFetchNode,
+					DatabaseInsertNode
 					// ColledctionUpdateNode,
 					// ColelctionRemoveNode,
 				}
