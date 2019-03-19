@@ -25,24 +25,24 @@ export class ArrayMapNode extends BasicNode {
 	};
 
 	static executor = (props = ArrayMapNode.props, inputs) => {
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			resolve({
-				result: Promise.all(inputs.array.map(x => 
-					new Promise(
+				result: await Promise.all(inputs.array.map(x => {
+					return new Promise((resolve, reject) => {
 						Meteor.call('sketches/EXECUTE', {
 							_id: inputs.function._id,
 							token: inputs.function.token,
-							entry: x
+							entry: {
+								current: x
+							}
 						}, (err, res) => {
 							if (err) {
 								reject(err);
 								return;
 							}
-							resolve({
-								result: res
-							});
-						})
-					)
+							resolve(res.current);
+						})}
+					);}
 				))
 			});
 		});
