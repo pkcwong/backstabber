@@ -3,6 +3,7 @@ import { CanvasAction } from "../actions/canvas-action";
 import { AdditionNode } from "../../../shared/lib/arithmetics/addition-node";
 import { ArrayNode } from "../../../shared/lib/array/array-node";
 import { ArrayPushNode } from "../../../shared/lib/array/array-push-node";
+import { ArrayReduceNode } from "../../../shared/lib/array/array-reduce-node";
 import { BoolNode } from "../../../shared/lib/primitive/bool-node";
 import { BranchNode } from "../../../shared/lib/logic/branch-node";
 import { DatabaseNode } from "../../../shared/lib/database/database-node";
@@ -75,6 +76,7 @@ const initialState = {
 			ArrayPushNode,
 			// ArrayFilterNode,
 			// ArrayMapNode
+			ArrayReduceNode
 		},
 		Database: {
 			DatabaseNode,
