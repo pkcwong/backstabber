@@ -17,8 +17,11 @@ export class BranchNode extends BasicNode {
 			}
 		},
 		outputs: {
-			result: (x) => {
-				return (x !== undefined);
+			truthy: (x) => {
+				return true;
+			},
+			falsy: (x) => {
+				return true;
 			}
 		}
 	};
@@ -26,7 +29,8 @@ export class BranchNode extends BasicNode {
 	static executor = (props = BranchNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				result: inputs.condition ? inputs.true : inputs.false
+				truthy: inputs.condition ? inputs.true : undefined,
+				falsy: inputs.condition ? undefined : inputs.false
 			});
 		});
 	};

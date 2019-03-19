@@ -523,7 +523,6 @@ class Component extends React.Component {
 							maxNumberPointsPerLink={0}
 							diagramEngine={this.engine}
 							deleteKeys={[46]}
-							smartRouting={true}
 						/>
 					</div>
 				</div>
