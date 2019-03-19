@@ -10,6 +10,7 @@ import { DatabaseFetchNode } from "../../../shared/lib/database/database-fetch-n
 import { DatabaseInsertNode } from "../../../shared/lib/database/database-insert-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../../shared/lib/functional/execute-node";
+import { MultiplicationNode } from "../../../shared/lib/arithmetics/multiplication-node";
 import { NegateNode } from "../../../shared/lib/logic/negate-node";
 import { NullNode } from "../../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../../shared/lib/primitive/number-node";
@@ -50,7 +51,7 @@ const initialState = {
 		Arithmetics: {
 			AdditionNode,
 			// MinusNode,
-			// MultipleNode,
+			MultiplicationNode,
 			// DivideNode,
 		},
 		Logic: {

@@ -8,6 +8,7 @@ import { DatabaseFetchNode } from "./database/database-fetch-node";
 import { DatabaseInsertNode } from "./database/database-insert-node";
 import { EntryNode } from "./api/entry-node";
 import { ExecuteNode } from "./functional/execute-node";
+import { MultiplicationNode } from "./arithmetics/multiplication-node";
 import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
@@ -128,6 +129,7 @@ export class Program {
 			DatabaseInsertNode,
 			EntryNode,
 			ExecuteNode,
+			MultiplicationNode,
 			NegateNode,
 			NullNode,
 			NumberNode,
