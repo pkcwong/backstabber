@@ -7,12 +7,15 @@ export class ArrayMapNode extends BasicNode {
 	static ports = {
 		inputs: {
 			array: (x) => {
+				if (!Array.isArray(x)) {
+					throw "Invalid array.";
+				}
 				return x;
 			},
 			program: (x) => {
-				if(typeof x !== "object"){
-					throw "Incorrect Test"
-				}else{
+				if (x._id === undefined || x.token === undefined) {
+					throw "Invalid program.";
+				} else {
 					return x;
 				}
 			}
@@ -30,8 +33,8 @@ export class ArrayMapNode extends BasicNode {
 				result: await Promise.all(inputs.array.map(x => {
 					return new Promise((resolve, reject) => {
 						Meteor.call('sketches/EXECUTE', {
-							_id: inputs.function._id,
-							token: inputs.function.token,
+							_id: inputs.program._id,
+							token: inputs.program.token,
 							entry: {
 								current: x
 							}
@@ -41,9 +44,9 @@ export class ArrayMapNode extends BasicNode {
 								return;
 							}
 							resolve(res.current);
-						})}
-					);}
-				))
+						})
+					});
+				}))
 			});
 		});
 	};
