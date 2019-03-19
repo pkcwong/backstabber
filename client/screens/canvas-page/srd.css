@@ -43,7 +43,7 @@
     -webkit-user-select: none;
     user-select: none;
     cursor: move;
-    pointer-events: all
+    pointer-events: all;
 }
 
 .srd-node--selected > * {
@@ -67,7 +67,7 @@
     color: white;
     border: solid 2px black;
     overflow: visible;
-    font-size: 11px
+    font-size: 90%;
 }
 
 .srd-default-node__title {
@@ -100,11 +100,19 @@
     background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2))
 }
 
-.srd-default-node__in, .srd-default-node__out {
+.srd-default-node__in,{
     flex-grow: 1;
     display: flex;
     flex-direction: column
 }
+
+.srd-default-node__out {
+    padding-left: 1vw;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column
+}
+
 
 .srd-default-port {
     display: flex;
@@ -116,7 +124,7 @@
 }
 
 .srd-default-port__name {
-    padding: 0 5px
+    padding: 0 5px;
 }
 
 .srd-default-port--out {
