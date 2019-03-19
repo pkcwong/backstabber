@@ -6,6 +6,7 @@ import { BranchNode } from "./logic/branch-node";
 import { DatabaseNode } from "./database/database-node";
 import { DatabaseFetchNode } from "./database/database-fetch-node";
 import { DatabaseInsertNode } from "./database/database-insert-node";
+import { DivisionNode } from "./arithmetics/division-node";
 import { EntryNode } from "./api/entry-node";
 import { ExecuteNode } from "./functional/execute-node";
 import { MultiplicationNode } from "./arithmetics/multiplication-node";
@@ -128,6 +129,7 @@ export class Program {
 			DatabaseNode,
 			DatabaseFetchNode,
 			DatabaseInsertNode,
+			DivisionNode,
 			EntryNode,
 			ExecuteNode,
 			MultiplicationNode,

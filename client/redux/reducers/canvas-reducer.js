@@ -8,6 +8,7 @@ import { BranchNode } from "../../../shared/lib/logic/branch-node";
 import { DatabaseNode } from "../../../shared/lib/database/database-node";
 import { DatabaseFetchNode } from "../../../shared/lib/database/database-fetch-node";
 import { DatabaseInsertNode } from "../../../shared/lib/database/database-insert-node";
+import { DivisionNode } from "../../../shared/lib/arithmetics/division-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
 import { ExecuteNode } from "../../../shared/lib/functional/execute-node";
 import { MultiplicationNode } from "../../../shared/lib/arithmetics/multiplication-node";
@@ -53,7 +54,7 @@ const initialState = {
 			AdditionNode,
 			SubtractionNode,
 			MultiplicationNode,
-			// DivideNode,
+			DivisionNode,
 		},
 		Logic: {
 			BranchNode,
