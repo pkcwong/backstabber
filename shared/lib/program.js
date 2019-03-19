@@ -12,7 +12,8 @@ import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
-import { ObjectGetNode as ObjectGetNode } from "./object/object-get-node";
+import { ObjectGetNode } from "./object/object-get-node";
+import { ObjectPutNode } from "./object/object-put-node";
 import { ProgramNode } from "./functional/program-node";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
@@ -133,6 +134,7 @@ export class Program {
 			NumberNode,
 			ObjectNode,
 			ObjectGetNode,
+			ObjectPutNode,
 			ProgramNode,
 			ReturnNode,
 			StringNode
