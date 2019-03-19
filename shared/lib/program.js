@@ -1,6 +1,7 @@
 import { AdditionNode } from "./arithmetics/addition-node";
 import { ArrayNode } from "./array/array-node";
 import { ArrayPushNode } from "./array/array-push-node";
+import { ArrayReduceNode } from "./array/array-reduce-node";
 import { BoolNode } from "./primitive/bool-node";
 import { BranchNode } from "./logic/branch-node";
 import { DatabaseNode } from "./database/database-node";
@@ -125,6 +126,7 @@ export class Program {
 			AdditionNode,
 			ArrayNode,
 			ArrayPushNode,
+			ArrayReduceNode,
 			BoolNode,
 			BranchNode,
 			DatabaseNode,
