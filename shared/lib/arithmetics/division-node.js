@@ -33,7 +33,7 @@ export class DivisionNode extends BasicNode {
 	static executor = (props = DivisionNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				difference: inputs.dividend / inputs.divisor
+				quotient: inputs.dividend / inputs.divisor
 			});
 		});
 	};
