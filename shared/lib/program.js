@@ -1,5 +1,6 @@
 import { AdditionNode } from "./arithmetics/addition-node";
 import { ArrayNode } from "./array/array-node";
+import { ArrayMapNode } from "./array/array-map-node";
 import { ArrayPushNode } from "./array/array-push-node";
 import { BoolNode } from "./primitive/bool-node";
 import { BranchNode } from "./logic/branch-node";
@@ -122,6 +123,7 @@ export class Program {
 		const constructor = {
 			AdditionNode,
 			ArrayNode,
+			ArrayMapNode,
 			ArrayPushNode,
 			BoolNode,
 			BranchNode,
