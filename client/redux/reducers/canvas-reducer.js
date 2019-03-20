@@ -242,7 +242,7 @@ export const CanvasReducer = (state = initialState, action) => {
 				srdLink.labels = [];
 			});
 			return Object.assign({}, state, {
-				srdLink: state.srdLinks
+				srdLinks: state.srdLinks
 			});
 		}
 		case CanvasAction.LOAD_COMPLETE: {
