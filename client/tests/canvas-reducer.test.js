@@ -1,6 +1,7 @@
 import { CanvasReducer } from "../redux/reducers/canvas-reducer";
 import { CanvasAction } from "../redux/actions/canvas-action";
 import { AdditionNode } from "../../shared/lib/arithmetics/addition-node";
+import { AndNode } from "../../shared/lib/logic/and-node";
 import { ArrayNode } from "../../shared/lib/array/array-node";
 import { ArrayFilterNode } from "../../shared/lib/array/array-filter-node";
 import { ArrayGetNode } from "../../shared/lib/array/array-get-node";
@@ -17,7 +18,9 @@ import { DivisionNode } from "../../shared/lib/arithmetics/division-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { EqualityNode } from "../../shared/lib/logic/equality-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
+import { GreaterThanNode } from "../../shared/lib/logic/greater-than-node";
 import { KestrelNode } from "../../shared/lib/functional/kestrel-node";
+import { LessThanNode } from "../../shared/lib/logic/less-than-node";
 import { MultiplicationNode } from "../../shared/lib/arithmetics/multiplication-node";
 import { NegateNode } from "../../shared/lib/logic/negate-node";
 import { NullNode } from "../../shared/lib/primitive/null-node";
@@ -25,6 +28,7 @@ import { NumberNode } from "../../shared/lib/primitive/number-node";
 import { ObjectNode } from "../../shared/lib/object/object-node";
 import { ObjectGetNode } from "../../shared/lib/object/object-get-node";
 import { ObjectPutNode } from "../../shared/lib/object/object-put-node";
+import { OrNode } from "../../shared/lib/logic/or-node";
 import { ProgramNode } from "../../shared/lib/functional/program-node";
 import { ReturnNode } from "../../shared/lib/api/return-node";
 import { StringNode } from "../../shared/lib/primitive/string-node";
@@ -66,9 +70,13 @@ describe('CanvasReducer', () => {
 					DivisionNode,
 				},
 				Logic: {
+					AndNode,
 					BranchNode,
 					EqualityNode,
-					NegateNode
+					GreaterThanNode,
+					LessThanNode,
+					NegateNode,
+					OrNode
 				},
 				Functional: {
 					ProgramNode,
