@@ -7,18 +7,14 @@ export class KestrelNode extends BasicNode {
 	static ports = {
 		inputs: {
 			kestrel: (x) => {
-				if(x === undefined){
+				if (x === undefined) {
 					throw "Input undefined";
-				}else{
+				} else {
 					return x;
 				}
 			},
 			trigger: (x) => {
-				if(x === undefined){
-					throw "Input undefined";
-				}else{
-					return x;
-				}
+				return x;
 			}
 		},
 		outputs: {

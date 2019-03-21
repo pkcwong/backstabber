@@ -94,7 +94,7 @@ export class Program {
 					clearTimeout(_id);
 					this.halt();
 					reject('Timeout');
-				}, 1000);
+				}, 10000);
 			})
 		]);
 	}
