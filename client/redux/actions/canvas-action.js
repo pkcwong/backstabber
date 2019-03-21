@@ -121,14 +121,13 @@ export class CanvasAction {
 		};
 	};
 
-	static addLabel = (bsNode, index, portName, label) => {
+	static addLabel = (bsNode, portName, label) => {
 		return {
 			type: CanvasAction.ADD_LABEL,
 			payload: {
 				bsNode: bsNode,
 				label: JSON.stringify(label),
 				portName: portName,
-				index: index
 			}
 		}
 	};
