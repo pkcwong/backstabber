@@ -232,10 +232,10 @@ export const CanvasReducer = (state = initialState, action) => {
 			let srdNode = state.srdNodes.find((srdNode) => {
 				return (srdNode.id === state.lookup[action.payload.bsNode._id])
 			});
-			let labelPort = srdNode.ports[action.payload.portName].links[Object.keys(srdNode.ports[action.payload.portName].links)];
 			if(action.payload.label === undefined){
 				return state;
 			}
+			let labelPort = srdNode.ports[action.payload.portName].links[Object.keys(srdNode.ports[action.payload.portName].links)[action.payload.index]];
 			labelPort.addLabel(action.payload.label);
 			return Object.assign({}, state, {
 				srdNodes: state.srdNodes
