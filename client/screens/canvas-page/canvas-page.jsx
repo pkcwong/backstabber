@@ -236,13 +236,13 @@ class Component extends React.Component {
 										alert(err.message);
 										alert(JSON.stringify(err, undefined, 4));
 									}
-									bsNode.observers.forEach((observer, index) => {
+									bsNode.observers.forEach((observer) => {
 										if (err) {
-											this.props.dispatch(CanvasAction.addLabel(bsNode, index, observer.outbound, err));
+											this.props.dispatch(CanvasAction.addLabel(bsNode, observer.outbound, err));
 											return;
 										}
 										if (typeof bsNode.getOutboundPort(observer.outbound).getter() !== 'undefined') {
-											this.props.dispatch(CanvasAction.addLabel(bsNode, index, observer.outbound, bsNode.getOutboundPort(observer.outbound).getter()));
+											this.props.dispatch(CanvasAction.addLabel(bsNode, observer.outbound, bsNode.getOutboundPort(observer.outbound).getter()));
 										}
 									});
 								});
