@@ -9,7 +9,7 @@ export class KestrelNode extends BasicNode {
 			kestrel: (x) => {
 				return (x !== undefined);
 			},
-			discard: (x) => {
+			trigger: (x) => {
 				return (x !== undefined);
 			}
 		},
