@@ -11,6 +11,9 @@ export class ProgramNode extends BasicNode {
 			},
 			token: (x) => {
 				return x;
+			},
+			entry: (x) => {
+				return x;
 			}
 		},
 		outputs: {
@@ -26,7 +29,8 @@ export class ProgramNode extends BasicNode {
 			resolve({
 				program: {
 					_id: inputs._id,
-					token: inputs.token
+					token: inputs.token,
+					entry: inputs.entry
 				}
 			});
 		});
