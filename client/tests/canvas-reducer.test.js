@@ -17,6 +17,7 @@ import { DivisionNode } from "../../shared/lib/arithmetics/division-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { EqualityNode } from "../../shared/lib/logic/equality-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
+import { KestrelNode } from "../../shared/lib/functional/kestrel-node";
 import { MultiplicationNode } from "../../shared/lib/arithmetics/multiplication-node";
 import { NegateNode } from "../../shared/lib/logic/negate-node";
 import { NullNode } from "../../shared/lib/primitive/null-node";
@@ -71,7 +72,8 @@ describe('CanvasReducer', () => {
 				},
 				Functional: {
 					ProgramNode,
-					ExecuteNode
+					ExecuteNode,
+					KestrelNode
 				},
 				Object: {
 					ObjectNode,
