@@ -37,7 +37,10 @@ class Component extends React.Component {
 			program: {},
 			canvas: {},
 			delete_modal: false,
-			error: ""
+			error: "",
+			zoom: 100,
+			offsetX: 0,
+			offsetY: 0
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -671,6 +674,12 @@ class Component extends React.Component {
 
 	componentDidMount() {
 		this.props.dispatch(CanvasAction.init(this.props.dispatch));
+		this.engine.zoomToFit();
+	}
+
+	componentDidUpdate() {
+		this.engine.diagramModel.setZoomLevel(this.state.zoom);
+		this.engine.diagramModel.setOffset(this.state.offsetX, this.state.offsetY);
 	}
 
 	/**
@@ -720,6 +729,21 @@ class Component extends React.Component {
 					}
 				});
 			},
+			zoomUpdated: (event) => {
+				if (event.zoom !== this.state.zoom) {
+					this.setState({
+						zoom: event.zoom
+					});
+				}
+			},
+			offsetUpdated: (event) => {
+				if (event.offsetX !== this.state.offsetX || event.offsetY !== this.state.offsetY) {
+					this.setState({
+						offsetX: event.offsetX,
+						offsetY: event.offsetY
+					});
+				}
+			}
 		});
 		return model;
 	};
