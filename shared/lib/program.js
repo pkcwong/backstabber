@@ -15,6 +15,7 @@ import { DivisionNode } from "./arithmetics/division-node";
 import { EntryNode } from "./api/entry-node";
 import { EqualityNode } from "./logic/equality-node";
 import { ExecuteNode } from "./functional/execute-node";
+import { KestrelNode } from "./functional/kestrel-node";
 import { MultiplicationNode } from "./arithmetics/multiplication-node";
 import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
@@ -145,6 +146,7 @@ export class Program {
 			EntryNode,
 			EqualityNode,
 			ExecuteNode,
+			KestrelNode,
 			MultiplicationNode,
 			NegateNode,
 			NullNode,
