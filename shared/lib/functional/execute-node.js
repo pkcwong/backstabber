@@ -8,9 +8,6 @@ export class ExecuteNode extends BasicNode {
 		inputs: {
 			program: (x) => {
 				return x;
-			},
-			entry: (x) => {
-				return x;
 			}
 		},
 		outputs: {
@@ -25,7 +22,7 @@ export class ExecuteNode extends BasicNode {
 			Meteor.call('sketches/EXECUTE', {
 				_id: inputs.program._id,
 				token: inputs.program.token,
-				entry: inputs.entry
+				entry: inputs.program.entry
 			}, (err, res) => {
 				if (err) {
 					reject(err);

@@ -35,9 +35,9 @@ export class ArrayFilterNode extends BasicNode {
 						Meteor.call('sketches/EXECUTE', {
 							_id: inputs.program._id,
 							token: inputs.program.token,
-							entry: {
+							entry: Object.assign({}, inputs.program.entry, {
 								current: current
-							}
+							})
 						}, (err, res) => {
 							if (err) {
 								reject(err);
