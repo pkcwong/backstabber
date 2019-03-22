@@ -1,4 +1,5 @@
 import { AdditionNode } from "./arithmetics/addition-node";
+import { AndNode } from "./logic/and-node";
 import { ArrayNode } from "./array/array-node";
 import { ArrayFilterNode } from "./array/array-filter-node";
 import { ArrayGetNode } from "./array/array-get-node";
@@ -15,7 +16,9 @@ import { DivisionNode } from "./arithmetics/division-node";
 import { EntryNode } from "./api/entry-node";
 import { EqualityNode } from "./logic/equality-node";
 import { ExecuteNode } from "./functional/execute-node";
+import { GreaterThanNode } from "./logic/greater-than-node";
 import { KestrelNode } from "./functional/kestrel-node";
+import { LessThanNode } from "./logic/less-than-node";
 import { MultiplicationNode } from "./arithmetics/multiplication-node";
 import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
@@ -23,6 +26,7 @@ import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
 import { ObjectGetNode } from "./object/object-get-node";
 import { ObjectPutNode } from "./object/object-put-node";
+import { OrNode } from "./logic/or-node";
 import { ProgramNode } from "./functional/program-node";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
@@ -130,6 +134,7 @@ export class Program {
 	static deserialize(json) {
 		const constructor = {
 			AdditionNode,
+			AndNode,
 			ArrayNode,
 			ArrayFilterNode,
 			ArrayGetNode,
@@ -146,7 +151,9 @@ export class Program {
 			EntryNode,
 			EqualityNode,
 			ExecuteNode,
+			GreaterThanNode,
 			KestrelNode,
+			LessThanNode,
 			MultiplicationNode,
 			NegateNode,
 			NullNode,
@@ -154,6 +161,7 @@ export class Program {
 			ObjectNode,
 			ObjectGetNode,
 			ObjectPutNode,
+			OrNode,
 			ProgramNode,
 			ReturnNode,
 			StringNode,
