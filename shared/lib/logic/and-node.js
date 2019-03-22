@@ -31,7 +31,8 @@ export class AndNode extends BasicNode {
 	static executor = (props = AndNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				output: (inputs.a && inputs.b)
+				truthy: (inputs.a && inputs.b)? true: undefined,
+				falsy: (inputs.a && inputs.b)? undefined: false
 			});
 		});
 	};

@@ -31,7 +31,8 @@ export class OrNode extends BasicNode {
 	static executor = (props = OrNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				output: (inputs.a || inputs.b)
+				truthy: (inputs.a || inputs.b)? true: undefined,
+				falsy: (inputs.a || inputs.b)? undefined: false
 			});
 		});
 	};

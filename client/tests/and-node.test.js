@@ -6,7 +6,8 @@ describe('AndNode', function () {
 			a: true,
 			b: true
 		})).toEqual({
-			output: true
+			truthy: true,
+			falsy: undefined
 		});
 	});
 	it('should return false', async function () {
@@ -14,7 +15,8 @@ describe('AndNode', function () {
 			a: true,
 			b: false
 		})).toEqual({
-			output: false
+			truthy: undefined,
+			falsy: false
 		});
 	});
 });

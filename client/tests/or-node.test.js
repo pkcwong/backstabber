@@ -6,7 +6,8 @@ describe('OrNode', function () {
 			a: true,
 			b: true
 		})).toEqual({
-			output: true
+			truthy: true,
+			falsy: undefined
 		});
 	});
 	it('should return true if either one is true', async function () {
@@ -14,7 +15,8 @@ describe('OrNode', function () {
 			a: true,
 			b: false
 		})).toEqual({
-			output: true
+			truthy: true,
+			falsy: undefined
 		});
 	});
 	it('should return false', async function () {
@@ -22,7 +24,8 @@ describe('OrNode', function () {
 			a: false,
 			b: false
 		})).toEqual({
-			output: false
+			truthy: undefined,
+			falsy: false
 		});
 	});
 });
