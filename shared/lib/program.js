@@ -16,6 +16,7 @@ import { DivisionNode } from "./arithmetics/division-node";
 import { EntryNode } from "./api/entry-node";
 import { EqualityNode } from "./logic/equality-node";
 import { ExecuteNode } from "./functional/execute-node";
+import { ExponentialNode } from "./arithmetics/exponential-node";
 import { GreaterThanNode } from "./logic/greater-than-node";
 import { KestrelNode } from "./functional/kestrel-node";
 import { LessThanNode } from "./logic/less-than-node";
@@ -151,6 +152,7 @@ export class Program {
 			EntryNode,
 			EqualityNode,
 			ExecuteNode,
+			ExponentialNode,
 			GreaterThanNode,
 			KestrelNode,
 			LessThanNode,

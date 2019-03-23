@@ -18,6 +18,7 @@ import { DivisionNode } from "../../shared/lib/arithmetics/division-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { EqualityNode } from "../../shared/lib/logic/equality-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
+import { ExponentialNode } from "../../shared/lib/arithmetics/exponential-node";
 import { GreaterThanNode } from "../../shared/lib/logic/greater-than-node";
 import { KestrelNode } from "../../shared/lib/functional/kestrel-node";
 import { LessThanNode } from "../../shared/lib/logic/less-than-node";
@@ -68,6 +69,7 @@ describe('CanvasReducer', () => {
 					SubtractionNode,
 					MultiplicationNode,
 					DivisionNode,
+					ExponentialNode
 				},
 				Logic: {
 					AndNode,
