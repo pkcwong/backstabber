@@ -9,8 +9,6 @@ export class ExponentialNode extends BasicNode {
 			base: (x) => {
 				if(typeof x !== "number"){
 					throw "Incorrect Type";
-				}else if(x < 0){
-					throw "Base cannot be less than zero"
 				}else{
 					return x;
 				}

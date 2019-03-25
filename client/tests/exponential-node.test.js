@@ -17,4 +17,12 @@ describe('ExponentialNode', function () {
 			product: 0.25
 		});
 	});
+	it('should return product of negative base', async function () {
+		expect(await ExponentialNode.executor({}, {
+			base: -2,
+			exponent: 2
+		})).toEqual({
+			product: 4
+		});
+	});
 });
