@@ -20,6 +20,7 @@ import { GreaterThanNode } from "./logic/greater-than-node";
 import { KestrelNode } from "./functional/kestrel-node";
 import { LessThanNode } from "./logic/less-than-node";
 import { MultiplicationNode } from "./arithmetics/multiplication-node";
+import { ModuloNode } from "./arithmetics/modulo-node";
 import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
@@ -155,6 +156,7 @@ export class Program {
 			KestrelNode,
 			LessThanNode,
 			MultiplicationNode,
+			ModuloNode,
 			NegateNode,
 			NullNode,
 			NumberNode,
