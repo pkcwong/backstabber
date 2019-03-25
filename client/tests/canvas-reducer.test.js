@@ -14,6 +14,7 @@ import { BranchNode } from "../../shared/lib/logic/branch-node";
 import { DatabaseNode } from "../../shared/lib/database/database-node";
 import { DatabaseFetchNode } from "../../shared/lib/database/database-fetch-node";
 import { DatabaseInsertNode } from "../../shared/lib/database/database-insert-node";
+import { DatabaseRemoveNode } from "../../shared/lib/database/database-remove-node";
 import { DivisionNode } from "../../shared/lib/arithmetics/division-node";
 import { EntryNode } from "../../shared/lib/api/entry-node";
 import { EqualityNode } from "../../shared/lib/logic/equality-node";
@@ -101,9 +102,9 @@ describe('CanvasReducer', () => {
 				Database: {
 					DatabaseNode,
 					DatabaseFetchNode,
-					DatabaseInsertNode
+					DatabaseInsertNode,
 					// ColledctionUpdateNode,
-					// ColelctionRemoveNode,
+					DatabaseRemoveNode,
 				}
 			},
 			select_id: "",

@@ -14,6 +14,7 @@ import { BranchNode } from "../../../shared/lib/logic/branch-node";
 import { DatabaseNode } from "../../../shared/lib/database/database-node";
 import { DatabaseFetchNode } from "../../../shared/lib/database/database-fetch-node";
 import { DatabaseInsertNode } from "../../../shared/lib/database/database-insert-node";
+import { DatabaseRemoveNode } from "../../../shared/lib/database/database-remove-node";
 import { DivisionNode } from "../../../shared/lib/arithmetics/division-node";
 import { EntryNode } from "../../../shared/lib/api/entry-node";
 import { EqualityNode } from "../../../shared/lib/logic/equality-node";
@@ -100,9 +101,9 @@ const initialState = {
 		Database: {
 			DatabaseNode,
 			DatabaseFetchNode,
-			DatabaseInsertNode
+			DatabaseInsertNode,
 			// ColledctionUpdateNode,
-			// ColelctionRemoveNode,
+			DatabaseRemoveNode
 		}
 	},
 	select_id: ""
@@ -242,15 +243,14 @@ export const CanvasReducer = (state = initialState, action) => {
 			let srdNode = state.srdNodes.find((srdNode) => {
 				return (srdNode.id === state.lookup[action.payload.bsNode._id])
 			});
-			if(action.payload.label === undefined){
+			if (action.payload.label === undefined) {
 				return state;
 			}
-			Object.keys(srdNode.ports[action.payload.portName].links).map((port)=>{
+			Object.keys(srdNode.ports[action.payload.portName].links).map((port) => {
 				let labelPort = srdNode.ports[action.payload.portName].links[port];
-				if(labelPort.labels.length === 0){
+				if (labelPort.labels.length === 0) {
 					labelPort.addLabel(action.payload.label);
-				}
-				else{
+				} else {
 					labelPort.labels[0].label = action.payload.label;
 				}
 
