@@ -34,10 +34,13 @@ class Component extends React.Component {
 			error_modal: false,
 			config_modal: false,
 			title_modal: false,
+			program_modal: false,
+			selected_program_id: null,
+			selected_program_token: null,
 			program: {},
 			canvas: {},
 			delete_modal: false,
-			error: "",
+			error: null,
 			zoom: 100,
 			offsetX: 0,
 			offsetY: 0
@@ -73,6 +76,129 @@ class Component extends React.Component {
 						<br/>
 						{this.state.error}
 						<br/>
+					</Modal.Body>
+				</Modal>
+
+				<Modal
+					show={this.state.program_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							program_modal: false
+						})
+					}}
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="program-modal-title">
+							ProgramNode
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<div style={
+							{
+								display: "flex",
+							}
+						}>
+							<div>
+								{'Please enter the program id:'}
+								<br/>
+								<FormGroup>
+									<FormControl type="text" id="program_id"/>
+								</FormGroup>{' '}
+								{'Please enter the token:'}
+								<br/>
+								<FormGroup>
+									<FormControl type="text" id="program_token"/>
+								</FormGroup>{' '}
+							</div>
+							<div>
+								{'Please select the program id:'}
+								<br/>
+								<select id="program_select_id" title={"Program ID"} defaultValue="default" onChange={(e) => {
+									this.setState({
+										selected_program_id: e.target.value,
+										selected_program_token: null
+									});
+								}}>
+									{(() => {
+										if (this.state.selected_program_id === null){
+											return (
+												<option value="default">
+													Please select your program ID
+												</option>
+											)
+										}
+									})()}
+									{Object.values(this.props.Meteor.collection.sketches.filter(sketch => sketch.owner === this.props.Meteor.userId && sketch._id !== this.props.CanvasReducer._id)).map((sketch, index) =>{
+										return (sketch._id);
+									}).map((item, index) => {
+										return (
+											<React.Fragment key={item}>
+												<option value={item}>
+													{this.props.Meteor.collection.sketches.find((sketch) => {
+														return (sketch._id === item);
+													}).meta.title}
+												</option>
+											</React.Fragment>
+										)
+									})}
+								</select>
+								<br/>
+								{'Please select the token:'}
+								<br/>
+								<select id="program_select_token" title={"Program token"} defaultValue="default" onChange={(e) => {
+									this.setState({
+										selected_program_token: e.target.value
+									});
+								}}>
+									{(() => {
+										if (this.state.selected_program_token === null){
+											return (
+												<option value="default">
+													Please select your program token
+												</option>
+											)
+										}
+									})()}
+									{
+										(() => {
+											const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+												return (sketch._id === this.state.selected_program_id);
+											});
+											if (sketch) {
+												return sketch.tokens.map((token) => {
+													return (
+														<React.Fragment key={token}>
+															<option value={token}>
+																{token}
+															</option>
+														</React.Fragment>
+													);
+												})
+											}
+										})()
+									}
+								</select>
+								<br/>
+							</div>
+						</div>
+						<br/>
+						<button onClick={() => {
+							if($("#program_id").val() !== undefined && $("#program_token").val() !== ""){
+								this.setState({
+									program_modal: false
+								})
+							}
+						}}>
+							Confirm
+						</button>
+						<button onClick={() => {
+							this.setState({
+								program_modal: false
+							})
+						}}>
+							Cancel
+						</button>
 					</Modal.Body>
 				</Modal>
 
@@ -516,6 +642,13 @@ class Component extends React.Component {
 						className="diagram-layer"
 						onDrop={(event) => {
 							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
+							if(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "ProgramNode"){
+								this.setState({
+									program_modal: true,
+									selected_program_id: null,
+									selected_program_token: null
+								})
+							}
 						}}
 						onDragOver={(event) => {
 							event.preventDefault();
