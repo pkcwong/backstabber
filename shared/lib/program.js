@@ -12,10 +12,12 @@ import { BranchNode } from "./logic/branch-node";
 import { DatabaseNode } from "./database/database-node";
 import { DatabaseFetchNode } from "./database/database-fetch-node";
 import { DatabaseInsertNode } from "./database/database-insert-node";
+import { DatabaseRemoveNode } from "./database/database-remove-node";
 import { DivisionNode } from "./arithmetics/division-node";
 import { EntryNode } from "./api/entry-node";
 import { EqualityNode } from "./logic/equality-node";
 import { ExecuteNode } from "./functional/execute-node";
+import { ExponentialNode } from "./arithmetics/exponential-node";
 import { GreaterThanNode } from "./logic/greater-than-node";
 import { KestrelNode } from "./functional/kestrel-node";
 import { LessThanNode } from "./logic/less-than-node";
@@ -148,10 +150,12 @@ export class Program {
 			DatabaseNode,
 			DatabaseFetchNode,
 			DatabaseInsertNode,
+			DatabaseRemoveNode,
 			DivisionNode,
 			EntryNode,
 			EqualityNode,
 			ExecuteNode,
+			ExponentialNode,
 			GreaterThanNode,
 			KestrelNode,
 			LessThanNode,
