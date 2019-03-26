@@ -418,6 +418,58 @@ class Component extends React.Component {
 					>
 						Finish
 					</Button>
+					<Button
+						bsStyle="primary"
+						onClick={() => {
+							(() => {
+								const upload = document.createElement('input');
+								upload.type = 'file';
+								upload.onchange = (e) => {
+									const reader = new FileReader();
+									reader.onload = (e) => {
+										this.props.dispatch(CanvasAction.render(JSON.parse(e.target.result)));
+									};
+									reader.readAsText(e.target.files[0]);
+								};
+								upload.click();
+							})();
+						}}
+					>
+						Import
+					</Button>
+					<Button
+						bsStyle="primary"
+						onClick={() => {
+							const program = new Program(this.props.CanvasReducer.bsNodes);
+							let canvas = {};
+							this.props.CanvasReducer.bsNodes.map((bsNode) => {
+								const srdNode = this.props.CanvasReducer.srdNodes.find((srdNode) => {
+									return (this.props.CanvasReducer.lookup[bsNode._id] === srdNode.id)
+								});
+								canvas = Object.assign({}, canvas, {
+									[bsNode._id]: {
+										coordinates: {
+											x: srdNode.x,
+											y: srdNode.y
+										}
+									}
+								});
+							});
+							((uri, filename) => {
+								const link = document.createElement('a');
+								link.href = uri;
+								link.download = filename;
+								document.body.appendChild(link);
+								link.click();
+								document.body.removeChild(link);
+							})('data:application/octet-stream;charset=utf-8,' + encodeURIComponent(JSON.stringify({
+								program: program.serialize(),
+								canvas: canvas
+							})), 'export.bs');
+						}}
+					>
+						Export
+					</Button>
 				</div>
 			</div>
 			<div style={

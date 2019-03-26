@@ -44,23 +44,27 @@ export const CanvasSaga = function* () {
 				_id: action['payload']['_id']
 			});
 			if (res !== undefined) {
-				yield put(CanvasAction.reset());
-				yield all(res.program.map(node => {
-					return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, node._id, node.props));
-				}));
-				yield all(res.program.reduce((accumulator, node) => {
-					return [
-						...accumulator,
-						...node.observers.map(link => {
-							return put(CanvasAction.addLink(node._id, link.outbound, link._id, link.inbound));
-						})
-					];
-				}, []));
-				yield put(CanvasAction.loadComplete(action.payload._id));
+				yield put(CanvasAction.render(res));
 			}
 		} catch (err) {
 			console.error(err);
 		}
+	});
+	yield takeLatest(CanvasAction.RENDER, function* (action) {
+		const res = action.payload;
+		yield put(CanvasAction.reset());
+		yield all(res.program.map(node => {
+			return put(CanvasAction.addNode(node.class, res.canvas[node._id].coordinates, node._id, node.props));
+		}));
+		yield all(res.program.reduce((accumulator, node) => {
+			return [
+				...accumulator,
+				...node.observers.map(link => {
+					return put(CanvasAction.addLink(node._id, link.outbound, link._id, link.inbound));
+				})
+			];
+		}, []));
+		yield put(CanvasAction.loadComplete(action.payload._id));
 	});
 	yield takeLatest(CanvasAction.CREATE, function* (action) {
 		try {
