@@ -23,6 +23,7 @@ import { GreaterThanNode } from "../../shared/lib/logic/greater-than-node";
 import { KestrelNode } from "../../shared/lib/functional/kestrel-node";
 import { LessThanNode } from "../../shared/lib/logic/less-than-node";
 import { MultiplicationNode } from "../../shared/lib/arithmetics/multiplication-node";
+import { ModuloNode } from "../../shared/lib/arithmetics/modulo-node";
 import { NegateNode } from "../../shared/lib/logic/negate-node";
 import { NullNode } from "../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../shared/lib/primitive/number-node";
@@ -62,14 +63,15 @@ describe('CanvasReducer', () => {
 					NumberNode,
 					BoolNode,
 					StringNode,
-					NullNode,
+					NullNode
 				},
 				Arithmetics: {
 					AdditionNode,
 					SubtractionNode,
 					MultiplicationNode,
 					DivisionNode,
-					ExponentialNode
+					ExponentialNode,
+					ModuloNode
 				},
 				Logic: {
 					AndNode,
@@ -88,7 +90,7 @@ describe('CanvasReducer', () => {
 				Object: {
 					ObjectNode,
 					ObjectGetNode,
-					ObjectPutNode,
+					ObjectPutNode
 					// ObjectKeysNode
 				},
 				Array: {
