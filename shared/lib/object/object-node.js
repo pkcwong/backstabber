@@ -7,7 +7,7 @@ export class ObjectNode extends BasicNode {
 	static ports = {
 		inputs: {
 			key: (x) => {
-				if (typeof x !== 'string') {
+				if (typeof x !== 'string' && x !== null) {
 					throw "Invalid key";
 				}
 				return x;
@@ -25,10 +25,16 @@ export class ObjectNode extends BasicNode {
 
 	static executor = (props = ObjectNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
+			if (inputs.key !== null) {
+				resolve({
+					json: {
+						[inputs.key]: inputs.value
+					}
+				});
+				return;
+			}
 			resolve({
-				json: {
-					[inputs.key]: inputs.value
-				}
+				json: {}
 			});
 		});
 	};
