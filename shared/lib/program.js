@@ -12,6 +12,7 @@ import { BranchNode } from "./logic/branch-node";
 import { DatabaseNode } from "./database/database-node";
 import { DatabaseFetchNode } from "./database/database-fetch-node";
 import { DatabaseInsertNode } from "./database/database-insert-node";
+import { DatabaseRemoveNode } from "./database/database-remove-node";
 import { DivisionNode } from "./arithmetics/division-node";
 import { EntryNode } from "./api/entry-node";
 import { EqualityNode } from "./logic/equality-node";
@@ -149,6 +150,7 @@ export class Program {
 			DatabaseNode,
 			DatabaseFetchNode,
 			DatabaseInsertNode,
+			DatabaseRemoveNode,
 			DivisionNode,
 			EntryNode,
 			EqualityNode,
