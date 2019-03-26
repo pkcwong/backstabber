@@ -8,6 +8,7 @@ export class CanvasAction {
 	static ADD_LINK = 'Canvas/ADD_LINK';
 	static DELETE_LINK = 'Canvas/DELETE_LINK';
 	static LOAD = 'Canvas/LOAD';
+	static RENDER = 'Canvas/RENDER';
 	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
@@ -149,6 +150,17 @@ export class CanvasAction {
 			type: CanvasAction.LOAD,
 			payload: {
 				_id: _id
+			}
+		};
+	};
+
+	static render = (document) => {
+		return {
+			type: CanvasAction.RENDER,
+			payload: {
+				_id: document._id,
+				program: document.program,
+				canvas: document.canvas
 			}
 		};
 	};
