@@ -38,6 +38,12 @@ class Component extends React.Component {
 			selected_program_id: null,
 			selected_program_token: null,
 			program: {},
+			program_node: null,
+			program_coor: {},
+			id_coor: {},
+			token_coor: {},
+			canvas_nodes: null,
+			pending: [],
 			canvas: {},
 			delete_modal: false,
 			error: null,
@@ -184,9 +190,38 @@ class Component extends React.Component {
 						</div>
 						<br/>
 						<button onClick={() => {
-							if($("#program_id").val() !== undefined && $("#program_token").val() !== ""){
+							if(this.state.selected_program_id !== null && this.state.selected_program_token !== null){
 								this.setState({
 									program_modal: false
+								})
+								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
+									bsNode.setProps({
+										string: this.state.selected_program_id
+									});
+									let temp = this.state.pending;
+									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "_id"))
+									this.setState({
+										pending: temp
+									})
+								}));
+								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.token_coor, 0, 0, (bsNode) => {
+									bsNode.setProps({
+										string: this.state.selected_program_token
+									});
+									let temp = this.state.pending;
+									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "token"))
+									this.setState({
+										pending: temp
+									})
+								}));
+							}else if($("#program_id").val() !== undefined && $("#program_token").val() !== ""){
+								this.setState({
+									program_modal: false
+								})
+							}else{
+								this.setState({
+									error: "Please input program ID and token",
+									error_modal: true
 								})
 							}
 						}}>
@@ -641,14 +676,29 @@ class Component extends React.Component {
 					<div
 						className="diagram-layer"
 						onDrop={(event) => {
-							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
-							if(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "ProgramNode"){
-								this.setState({
-									program_modal: true,
-									selected_program_id: null,
-									selected_program_token: null
-								})
-							}
+							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event), 0, 0, (bsNode) => {
+								if(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "ProgramNode"){
+									this.setState({
+										program_modal: true,
+										selected_program_id: null,
+										selected_program_token: null,
+										program_node: bsNode,
+										program_coor: {
+											x: this.engine.getRelativeMousePoint(event).x,
+											y: this.engine.getRelativeMousePoint(event).y
+										},
+										token_coor: {
+											x: this.engine.getRelativeMousePoint(event).x - 220,
+											y: this.engine.getRelativeMousePoint(event).y + 19
+										},
+										id_coor: {
+											x: this.engine.getRelativeMousePoint(event).x - 120,
+											y: this.engine.getRelativeMousePoint(event).y - 4
+										}
+									})
+								}
+							}));
+
 						}}
 						onDragOver={(event) => {
 							event.preventDefault();
@@ -813,6 +863,14 @@ class Component extends React.Component {
 	componentDidUpdate() {
 		this.engine.diagramModel.setZoomLevel(this.state.zoom);
 		this.engine.diagramModel.setOffset(this.state.offsetX, this.state.offsetY);
+		if(this.state.pending.length !== 0){
+			this.props.dispatch(this.state.pending[0]);
+			let temp = this.state.pending.filter(action => action !== this.state.pending[0])
+			this.setState({
+				pending: temp
+			})
+
+		}
 	}
 
 	/**
