@@ -916,12 +916,7 @@ class Component extends React.Component {
 		this.engine.diagramModel.setZoomLevel(this.state.zoom);
 		this.engine.diagramModel.setOffset(this.state.offsetX, this.state.offsetY);
 		if(this.state.pending.length !== 0){
-			this.props.dispatch(this.state.pending[0]);
-			let temp = this.state.pending.filter(action => action !== this.state.pending[0])
-			this.setState({
-				pending: temp
-			})
-
+			this.props.dispatch(this.state.pending.splice(0, 1)[0]);
 		}
 	}
 
