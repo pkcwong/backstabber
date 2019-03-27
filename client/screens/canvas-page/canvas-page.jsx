@@ -17,6 +17,8 @@ import TrayItemWidget from './components/TrayItemWidget';
 import { sketches_db } from "../../../shared/collections/sketches";
 // import { Button, ControlLabel, Dropdown, DropdownButton, Form, FormControl, FormGroup, InputGroup, MenuItem, Modal  } from "react-bootstrap";
 import { Program } from "../../../shared/lib/program";
+import { Button } from 'antd';
+import 'antd/dist/antd.css';
 
 class Component extends React.Component {
 
@@ -52,6 +54,7 @@ class Component extends React.Component {
 		// this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
 		return (
 			<React.Fragment>
+				<Button type="primary">Primary</Button>
 
 				{/*<Modal*/}
 					{/*show={this.state.error_modal}*/}
