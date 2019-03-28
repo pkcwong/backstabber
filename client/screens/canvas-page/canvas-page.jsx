@@ -34,10 +34,19 @@ class Component extends React.Component {
 			error_modal: false,
 			config_modal: false,
 			title_modal: false,
+			program_modal: false,
+			selected_program_id: null,
+			selected_program_token: null,
 			program: {},
+			program_node: null,
+			program_coor: {},
+			id_coor: {},
+			token_coor: {},
+			canvas_nodes: null,
+			pending: [],
 			canvas: {},
 			delete_modal: false,
-			error: "",
+			error: null,
 			zoom: 100,
 			offsetX: 0,
 			offsetY: 0
@@ -73,6 +82,180 @@ class Component extends React.Component {
 						<br/>
 						{this.state.error}
 						<br/>
+					</Modal.Body>
+				</Modal>
+
+				<Modal
+					show={this.state.program_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							program_modal: false
+						})
+					}}
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="program-modal-title">
+							ProgramNode
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<div style={
+							{
+								display: "flex",
+							}
+						}>
+							<div>
+								{'Please enter the program id:'}
+								<br/>
+								<FormGroup>
+									<FormControl type="text" id="program_id"/>
+								</FormGroup>{' '}
+								{'Please enter the token:'}
+								<br/>
+								<FormGroup>
+									<FormControl type="text" id="program_token"/>
+								</FormGroup>{' '}
+							</div>
+							<div>
+								{'Please select the program id:'}
+								<br/>
+								<select id="program_select_id" title={"Program ID"} defaultValue="default" onChange={(e) => {
+									this.setState({
+										selected_program_id: e.target.value,
+										selected_program_token: null
+									});
+								}}>
+									{(() => {
+										if (this.state.selected_program_id === null){
+											return (
+												<option value="default">
+													Please select your program ID
+												</option>
+											)
+										}
+									})()}
+									{Object.values(this.props.Meteor.collection.sketches.filter(sketch => sketch.owner === this.props.Meteor.userId && sketch._id !== this.props.CanvasReducer._id)).map((sketch, index) =>{
+										return (sketch._id);
+									}).map((item, index) => {
+										return (
+											<React.Fragment key={item}>
+												<option value={item}>
+													{this.props.Meteor.collection.sketches.find((sketch) => {
+														return (sketch._id === item);
+													}).meta.title}
+												</option>
+											</React.Fragment>
+										)
+									})}
+								</select>
+								<br/>
+								{'Please select the token:'}
+								<br/>
+								<select id="program_select_token" title={"Program token"} defaultValue="default" onChange={(e) => {
+									this.setState({
+										selected_program_token: e.target.value
+									});
+								}}>
+									{(() => {
+										if (this.state.selected_program_token === null){
+											return (
+												<option value="default">
+													Please select your program token
+												</option>
+											)
+										}
+									})()}
+									{
+										(() => {
+											const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+												return (sketch._id === this.state.selected_program_id);
+											});
+											if (sketch) {
+												return sketch.tokens.map((token) => {
+													return (
+														<React.Fragment key={token}>
+															<option value={token}>
+																{token}
+															</option>
+														</React.Fragment>
+													);
+												})
+											}
+										})()
+									}
+								</select>
+								<br/>
+							</div>
+						</div>
+						<br/>
+						<button onClick={() => {
+							if(this.state.selected_program_id !== null && this.state.selected_program_token !== null){
+								this.setState({
+									program_modal: false
+								})
+								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
+									bsNode.setProps({
+										string: this.state.selected_program_id
+									});
+									let temp = this.state.pending;
+									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "_id"))
+									this.setState({
+										pending: temp
+									})
+								}));
+								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.token_coor, 0, 0, (bsNode) => {
+									bsNode.setProps({
+										string: this.state.selected_program_token
+									});
+									let temp = this.state.pending;
+									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "token"))
+									this.setState({
+										pending: temp
+									})
+								}));
+							}else if($("#program_id").val() !== undefined && $("#program_token").val() !== ""){
+								let input_id = $("#program_id").val();
+								let input_token = $("#program_token").val();
+                                this.setState({
+                                    program_modal: false
+                                })
+                                this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
+                                    bsNode.setProps({
+                                        string: input_id
+                                    });
+                                    let temp = this.state.pending;
+                                    temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "_id"))
+                                    this.setState({
+                                        pending: temp
+                                    })
+                                }));
+                                this.props.dispatch(CanvasAction.addNode("StringNode", this.state.token_coor, 0, 0, (bsNode) => {
+                                    bsNode.setProps({
+                                        string: input_token
+                                    });
+                                    let temp = this.state.pending;
+                                    temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "token"))
+                                    this.setState({
+                                        pending: temp
+                                    })
+                                }));
+							}else{
+								this.setState({
+									error: "Please input program ID and token",
+									error_modal: true
+								})
+							}
+						}}>
+							Confirm
+						</button>
+						<button onClick={() => {
+							this.setState({
+								program_modal: false
+							})
+						}}>
+							Cancel
+						</button>
 					</Modal.Body>
 				</Modal>
 
@@ -567,7 +750,29 @@ class Component extends React.Component {
 					<div
 						className="diagram-layer"
 						onDrop={(event) => {
-							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event)));
+							this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event), 0, 0, (bsNode) => {
+								if(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "ProgramNode"){
+									this.setState({
+										program_modal: true,
+										selected_program_id: null,
+										selected_program_token: null,
+										program_node: bsNode,
+										program_coor: {
+											x: this.engine.getRelativeMousePoint(event).x,
+											y: this.engine.getRelativeMousePoint(event).y
+										},
+										token_coor: {
+											x: this.engine.getRelativeMousePoint(event).x - 220,
+											y: this.engine.getRelativeMousePoint(event).y + 19
+										},
+										id_coor: {
+											x: this.engine.getRelativeMousePoint(event).x - 120,
+											y: this.engine.getRelativeMousePoint(event).y - 4
+										}
+									})
+								}
+							}));
+
 						}}
 						onDragOver={(event) => {
 							event.preventDefault();
@@ -732,6 +937,9 @@ class Component extends React.Component {
 	componentDidUpdate() {
 		this.engine.diagramModel.setZoomLevel(this.state.zoom);
 		this.engine.diagramModel.setOffset(this.state.offsetX, this.state.offsetY);
+		if(this.state.pending.length !== 0){
+			this.props.dispatch(this.state.pending.splice(0, 1)[0]);
+		}
 	}
 
 	/**

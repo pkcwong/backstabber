@@ -38,7 +38,7 @@ export class CanvasAction {
 		};
 	};
 
-	static addNode = (nodeType, points, bsNodeID = 0, props = 0) => {
+	static addNode = (nodeType, points, bsNodeID = 0, props = 0, callback = null) => {
 		return {
 			type: CanvasAction.ADD_NODE,
 			payload: {
@@ -49,7 +49,8 @@ export class CanvasAction {
 				},
 				_id: bsNodeID,
 				props: props
-			}
+			},
+			callback: callback ? callback : () => {}
 		};
 	};
 
