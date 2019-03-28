@@ -215,9 +215,6 @@ class Component extends React.Component {
 									})
 								}));
 							}else if($("#program_id").val() !== undefined && $("#program_token").val() !== ""){
-								this.setState({
-									program_modal: false
-								})
 								let input_id = $("#program_id").val();
 								let input_token = $("#program_token").val();
 								let valid_id = this.props.Meteor.collection.sketches.find((sketch) => {
@@ -225,9 +222,12 @@ class Component extends React.Component {
 								});
 								if(valid_id){
 									let valid_token = valid_id.tokens.find((token) => {
-										return (token._id === input_token)
+										return (token === input_token)
 									})
 									if(valid_token){
+										this.setState({
+											program_modal: false
+										})
 										this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
 											bsNode.setProps({
 												string: input_id
@@ -248,7 +248,17 @@ class Component extends React.Component {
 												pending: temp
 											})
 										}));
+									}else{
+										this.setState({
+											error: "Please input correct program token",
+											error_modal: true
+										})
 									}
+								}else{
+									this.setState({
+										error: "Please input correct program ID",
+										error_modal: true
+									})
 								}
 
 							}else{
