@@ -153,6 +153,7 @@ export const CanvasReducer = (state = initialState, action) => {
 					state.dispatcher(CanvasAction.nodeSelected(stormNode.id))
 				}
 			});
+			action.callback(bsNode);
 			return Object.assign({}, state, {
 				bsNodes: [
 					...state.bsNodes,
