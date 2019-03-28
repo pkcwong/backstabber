@@ -217,50 +217,29 @@ class Component extends React.Component {
 							}else if($("#program_id").val() !== undefined && $("#program_token").val() !== ""){
 								let input_id = $("#program_id").val();
 								let input_token = $("#program_token").val();
-								let valid_id = this.props.Meteor.collection.sketches.find((sketch) => {
-									return (sketch._id === input_id);
-								});
-								if(valid_id){
-									let valid_token = valid_id.tokens.find((token) => {
-										return (token === input_token)
-									})
-									if(valid_token){
-										this.setState({
-											program_modal: false
-										})
-										this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
-											bsNode.setProps({
-												string: input_id
-											});
-											let temp = this.state.pending;
-											temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "_id"))
-											this.setState({
-												pending: temp
-											})
-										}));
-										this.props.dispatch(CanvasAction.addNode("StringNode", this.state.token_coor, 0, 0, (bsNode) => {
-											bsNode.setProps({
-												string: input_token
-											});
-											let temp = this.state.pending;
-											temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "token"))
-											this.setState({
-												pending: temp
-											})
-										}));
-									}else{
-										this.setState({
-											error: "Please input correct program token",
-											error_modal: true
-										})
-									}
-								}else{
-									this.setState({
-										error: "Please input correct program ID",
-										error_modal: true
-									})
-								}
-
+                                this.setState({
+                                    program_modal: false
+                                })
+                                this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
+                                    bsNode.setProps({
+                                        string: input_id
+                                    });
+                                    let temp = this.state.pending;
+                                    temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "_id"))
+                                    this.setState({
+                                        pending: temp
+                                    })
+                                }));
+                                this.props.dispatch(CanvasAction.addNode("StringNode", this.state.token_coor, 0, 0, (bsNode) => {
+                                    bsNode.setProps({
+                                        string: input_token
+                                    });
+                                    let temp = this.state.pending;
+                                    temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "token"))
+                                    this.setState({
+                                        pending: temp
+                                    })
+                                }));
 							}else{
 								this.setState({
 									error: "Please input program ID and token",
