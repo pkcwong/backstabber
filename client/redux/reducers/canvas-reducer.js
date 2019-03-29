@@ -283,6 +283,11 @@ export const CanvasReducer = (state = initialState, action) => {
 				})
 			});
 		}
+		case CanvasAction.NODE_DESELECT: {
+			return Object.assign({}, state, {
+				select_id: ""
+			});
+		}
 		default: {
 			return state;
 		}
