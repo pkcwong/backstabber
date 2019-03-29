@@ -9,6 +9,7 @@ import { LoggerSaga } from "./sagas/logger-saga";
 import { FilesSaga } from "./sagas/files-saga";
 import { CanvasSaga } from "./sagas/canvas-saga";
 import { BucketsSaga } from "./sagas/buckets-saga";
+import { DocumentsSaga } from "./sagas/documents-sage";
 
 const saga = createSagaMiddleware();
 
@@ -25,7 +26,8 @@ saga.run(function* () {
 		...[
 			FilesSaga,
 			CanvasSaga,
-			BucketsSaga
+			BucketsSaga,
+			DocumentsSaga
 		].map(fork)
 	]);
 });
