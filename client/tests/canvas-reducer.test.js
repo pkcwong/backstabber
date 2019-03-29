@@ -21,6 +21,7 @@ import { EqualityNode } from "../../shared/lib/logic/equality-node";
 import { ExecuteNode } from "../../shared/lib/functional/execute-node";
 import { ExponentialNode } from "../../shared/lib/arithmetics/exponential-node";
 import { GreaterThanNode } from "../../shared/lib/logic/greater-than-node";
+import { HttpGetNode } from "../../shared/lib/web/http-get-node";
 import { KestrelNode } from "../../shared/lib/functional/kestrel-node";
 import { LessThanNode } from "../../shared/lib/logic/less-than-node";
 import { MultiplicationNode } from "../../shared/lib/arithmetics/multiplication-node";
@@ -53,7 +54,8 @@ describe('CanvasReducer', () => {
 				Functional: "#218c74",
 				Object: "#cd6133",
 				Array: "#706fd3",
-				Database: "#aaa69d"
+				Database: "#aaa69d",
+				Web: "#00bfff"
 			},
 			nodeTypes: {
 				API: {
@@ -109,6 +111,9 @@ describe('CanvasReducer', () => {
 					DatabaseInsertNode,
 					// ColledctionUpdateNode,
 					DatabaseRemoveNode,
+				},
+				Web: {
+					HttpGetNode
 				}
 			},
 			select_id: "",
