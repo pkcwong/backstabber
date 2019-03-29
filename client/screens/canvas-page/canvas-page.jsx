@@ -15,6 +15,7 @@ import "./srd.css";
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 import { sketches_db } from "../../../shared/collections/sketches";
+import { buckets_db } from "../../../shared/collections/buckets";
 import { Button, ControlLabel, Dropdown, DropdownButton, Form, FormControl, FormGroup, InputGroup, MenuItem, Modal  } from "react-bootstrap";
 import { Program } from "../../../shared/lib/program";
 
@@ -37,11 +38,16 @@ class Component extends React.Component {
 			program_modal: false,
 			selected_program_id: null,
 			selected_program_token: null,
-			program: {},
+			database_modal: false,
+			selected_database_id: null,
+			selected_database_token: null,
 			program_node: null,
+			database_node: null,
 			program_coor: {},
+			database_coor: {},
 			id_coor: {},
 			token_coor: {},
+			program: {},
 			canvas_nodes: null,
 			pending: [],
 			canvas: {},
@@ -252,6 +258,179 @@ class Component extends React.Component {
 						<button onClick={() => {
 							this.setState({
 								program_modal: false
+							})
+						}}>
+							Cancel
+						</button>
+					</Modal.Body>
+				</Modal>
+
+				<Modal
+					show={this.state.database_modal}
+					container={this}
+					onHide={() => {
+						this.setState({
+							database_modal: false
+						})
+					}}
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="database-modal-title">
+							DatabaseNode
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<div style={
+							{
+								display: "flex",
+							}
+						}>
+							<div>
+								{'Please enter the database id:'}
+								<br/>
+								<FormGroup>
+									<FormControl type="text" id="database_id"/>
+								</FormGroup>{' '}
+								{'Please enter the token:'}
+								<br/>
+								<FormGroup>
+									<FormControl type="text" id="database_token"/>
+								</FormGroup>{' '}
+							</div>
+							<div>
+								{'Please select the database id:'}
+								<br/>
+								<select id="database_select_id" title={"Database ID"} defaultValue="default" onChange={(e) => {
+									this.setState({
+										selected_database_id: e.target.value,
+										selected_database_token: null
+									});
+								}}>
+									{(() => {
+										if (this.state.selected_database_id === null){
+											return (
+												<option value="default">
+													Please select your database ID
+												</option>
+											)
+										}
+									})()}
+									{Object.values(this.props.Meteor.collection.buckets.filter(bucket => bucket.owner === this.props.Meteor.userId && bucket._id !== this.props.CanvasReducer._id)).map((bucket, index) =>{
+										return (bucket._id);
+									}).map((item, index) => {
+										//TODO rename title when database has name
+										return (
+											<React.Fragment key={item}>
+												<option value={item}>
+													{this.props.Meteor.collection.buckets.find((bucket) => {
+														return (bucket._id === item);
+													})._id}
+												</option>
+											</React.Fragment>
+										)
+									})}
+								</select>
+								<br/>
+								{'Please select the token:'}
+								<br/>
+								<select id="database_select_token" title={"Database token"} defaultValue="default" onChange={(e) => {
+									this.setState({
+										selected_database_token: e.target.value
+									});
+								}}>
+									{(() => {
+										if (this.state.selected_database_token === null){
+											return (
+												<option value="default">
+													Please select your database token
+												</option>
+											)
+										}
+									})()}
+									{
+										(() => {
+											const bucket = this.props.Meteor.collection.buckets.find((bucket) => {
+												return (bucket._id === this.state.selected_database_id);
+											});
+											if (bucket) {
+												return (
+													<React.Fragment key="token">
+														<option value={"token"}>
+															{bucket.token}
+														</option>
+													</React.Fragment>
+												)
+											}
+										})()
+									}
+								</select>
+								<br/>
+							</div>
+						</div>
+						<br/>
+						<button onClick={() => {
+							if(this.state.selected_database_id !== null && this.state.selected_database_token !== null){
+								this.setState({
+									database_modal: false
+								})
+								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
+									bsNode.setProps({
+										string: this.state.selected_database_id
+									});
+									let temp = this.state.pending;
+									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.database_node._id, "_id"))
+									this.setState({
+										pending: temp
+									})
+								}));
+								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.token_coor, 0, 0, (bsNode) => {
+									bsNode.setProps({
+										string: this.state.selected_database_token
+									});
+									let temp = this.state.pending;
+									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.database_node._id, "token"))
+									this.setState({
+										pending: temp
+									})
+								}));
+							}else if($("#database_id").val() !== undefined && $("#database_token").val() !== ""){
+								let input_id = $("#database_id").val();
+								let input_token = $("#database_token").val();
+								this.setState({
+									database_modal: false
+								})
+								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
+									bsNode.setProps({
+										string: input_id
+									});
+									let temp = this.state.pending;
+									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.database_node._id, "_id"))
+									this.setState({
+										pending: temp
+									})
+								}));
+								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.token_coor, 0, 0, (bsNode) => {
+									bsNode.setProps({
+										string: input_token
+									});
+									let temp = this.state.pending;
+									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.database_node._id, "token"))
+									this.setState({
+										pending: temp
+									})
+								}));
+							}else{
+								this.setState({
+									error: "Please input database ID and token",
+									error_modal: true
+								})
+							}
+						}}>
+							Confirm
+						</button>
+						<button onClick={() => {
+							this.setState({
+								database_modal: false
 							})
 						}}>
 							Cancel
@@ -770,6 +949,26 @@ class Component extends React.Component {
 											y: this.engine.getRelativeMousePoint(event).y - 4
 										}
 									})
+								}else if(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "DatabaseNode"){
+									this.setState({
+										database_modal: true,
+										selected_database_id: null,
+										selected_database_token: null,
+										database_node: bsNode,
+										database_coor: {
+											x: this.engine.getRelativeMousePoint(event).x,
+											y: this.engine.getRelativeMousePoint(event).y
+										},
+										token_coor: {
+											x: this.engine.getRelativeMousePoint(event).x - 220,
+											y: this.engine.getRelativeMousePoint(event).y + 19
+										},
+										id_coor: {
+											x: this.engine.getRelativeMousePoint(event).x - 120,
+											y: this.engine.getRelativeMousePoint(event).y - 4
+										}
+									})
+
 								}
 							}));
 
@@ -1012,10 +1211,12 @@ class Component extends React.Component {
 
 const Tracker = withTracker(() => {
 	Meteor.subscribe('sketches_db');
+	Meteor.subscribe('buckets_db');
 	return {
 		Meteor: {
 			collection: {
-				sketches: sketches_db.find().fetch()
+				sketches: sketches_db.find().fetch(),
+				buckets: buckets_db.find().fetch()
 			},
 			user: Meteor.user(),
 			userId: Meteor.userId(),
