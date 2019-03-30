@@ -1123,8 +1123,8 @@ class Component extends React.Component {
 										});
 										if (bucket) {
 											return (
-												<React.Fragment key="token">
-													<option value={"token"}>
+												<React.Fragment key={bucket.token}>
+													<option value={bucket.token}>
 														{bucket.token}
 													</option>
 												</React.Fragment>
