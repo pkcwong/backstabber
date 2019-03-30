@@ -149,8 +149,10 @@ export const CanvasReducer = (state = initialState, action) => {
 				entityRemoved: () => {
 					state.dispatcher(CanvasAction.purgeNode(bsNode._id));
 				},
-				selectionChanged: () => {
-					state.dispatcher(CanvasAction.nodeSelected(stormNode.id))
+				selectionChanged: (e) => {
+					if(e.isSelected){
+						state.dispatcher(CanvasAction.nodeSelected(stormNode.id))
+					}
 				}
 			});
 			return Object.assign({}, state, {

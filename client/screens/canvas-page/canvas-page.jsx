@@ -55,6 +55,7 @@ class Component extends React.Component {
 			<div style={
 				{
 					minHeight: "7vh",
+					maxHeight: "7vh",
 					background: "#22313F",
 					// background: "#3B5B93",
 					padding: 0,
@@ -72,7 +73,12 @@ class Component extends React.Component {
 					}
 				}>
 					<Button
-						size="large"
+						style={
+							{
+								height: "4vh"
+							}
+						}
+						// size="large"
 						onClick={
 						()=>{
 							FlowRouter.go("/create");
@@ -80,46 +86,6 @@ class Component extends React.Component {
 					}>
 						<b>B </b> a c k<b> S </b> t a b b e r
 					</Button>
-					{/*<Input*/}
-						{/*id={"program_name"}*/}
-						{/*size = {"large"}*/}
-						{/*style = {*/}
-							{/*{*/}
-								{/*width: "25vw",*/}
-								{/*marginLeft: "1.5%",*/}
-								{/*height: "4vh"*/}
-							{/*}*/}
-						{/*}*/}
-						{/*placeholder={*/}
-							{/*(()=>{*/}
-								{/*if(this.props.Meteor.collection.sketches.find((sketch) => {*/}
-										{/*return sketch._id === this.props.CanvasReducer._id*/}
-									{/*})){*/}
-									{/*return this.props.Meteor.collection.sketches.find((sketch) => {*/}
-										{/*return sketch._id === this.props.CanvasReducer._id*/}
-									{/*});*/}
-								{/*}*/}
-								{/*else{*/}
-									{/*return "Untitled"*/}
-								{/*}*/}
-							{/*})()*/}
-						{/*}*/}
-					{/*/>*/}
-					{/*<Button*/}
-						{/*ghost*/}
-						{/*onClick={*/}
-							{/*()=>{*/}
-								{/*FlowRouter.go("/create");*/}
-							{/*}*/}
-						{/*}*/}
-						{/*style={*/}
-							{/*{*/}
-								{/*border: "None",*/}
-								{/*marginLeft: "2vw"*/}
-							{/*}*/}
-						{/*}>*/}
-							{/*Home*/}
-					{/*</Button>*/}
 					<Dropdown overlay={
 						()=>{
 							return(
