@@ -16,6 +16,7 @@ export class CanvasAction {
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static REVOKE_KEY = 'Canvas/REVOKE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
+	static NODE_DESELECT= 'canvas/NODE_DESELECT';
 	static ADD_LABEL = 'canvas/ADD_LABEL';
 	static DELETE_LABEL = 'canvas/DELETE_LABEL';
 
@@ -94,6 +95,12 @@ export class CanvasAction {
 			payload: {
 				_id: _id
 			}
+		}
+	};
+
+	static clearNodeSelect = ()=>{
+		return {
+			type: CanvasAction.NODE_DESELECT,
 		}
 	};
 

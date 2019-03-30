@@ -2,7 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { sketches_db } from "../../../shared/collections/sketches";
-import { Modal } from 'react-bootstrap';
+import { Button, Card, Modal } from 'antd';
+import 'antd/dist/antd.css';
 import {CanvasAction} from "../../redux/actions/canvas-action";
 
 class Component extends React.Component {
@@ -12,241 +13,303 @@ class Component extends React.Component {
 		this.state = {
 			open_modal: false,
 			delete_modal: false,
-			delete: ""
+			setting_modal: false,
+			delete: "",
+			program_info: {},
 		};
 	}
 
 	render() {
 		return (
 			<React.Fragment>
-				<Modal
-					show={this.state.open_modal}
-					container={this}
-					onHide={() => {
-						this.setState({
-							open_modal: false
-						})
-					}}
-				>
-					<Modal.Header closeButton>
-						<Modal.Title>
-							Open Existing Program
-						</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						{'Existing Program:'}
-						<br/>
-						{Object.values(this.props.Meteor.collection.sketches.filter(user => user.owner == this.props.Meteor.userId)).map((value, index) =>{
-							return (value._id)
-						}).map((item, index) => {
-							return (
-								<React.Fragment key={item}>
-									<li>
-										<button onClick={() =>{
-											const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
-												return (sketch._id === item);
-											});
-											this.props.store.dispatch(CanvasAction.load(sketch._id))
-											FlowRouter.go("/canvas")
-										}}>
-											{this.props.Meteor.collection.sketches.find((sketch) => {
-												return (sketch._id === item);
-											}).meta.title}
-										</button>
-										<button onClick={() => {
-											//TODO call CanvasAction.delete
-											this.setState({
-												delete_modal: true,
-												delete: item
-											})
-										}}>
-											Delete
-										</button>
-									</li>
-								</React.Fragment>
-							)
-						})}
-						<br/>
-					</Modal.Body>
-				</Modal>
-				<Modal
-					show={this.state.delete_modal}
-					container={this}
-					onHide={() => {
-						this.setState({
-							open_modal: true,
-							delete_modal: false
-						})
-					}}
-				>
-					<Modal.Header closeButton>
-						<Modal.Title>
-							Delete Program
-						</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						{'Please confirm deleting the program:'}
-						<br/>
-							<button onClick={() => {
-								this.props.store.dispatch(CanvasAction.delete(this.state.delete));
-								this.setState({
-									delete_modal: false
-								})
-							}}>
-								Delete
-							</button>
-							<button onClick={() => {
-								this.setState({
-									delete_modal: false
-								})
-							}}>
-								Cancel
-							</button>
-						<br/>
-					</Modal.Body>
-				</Modal>
 				<div style={
 					{
+						background: "#202124",
+						height: "100vh",
+						paddingTop: "0.5%",
+						paddingBottom: "0.5%",
+						paddingLeft: "2%",
+						paddingRight: "2%",
 					}
 				}>
-					<h1 style={
+					<div style={
 						{
-							margin: "2%"
+							fontSize: "3em",
+							color: "white",
+							minHeight: "8%",
 						}
 					}>
-						Welcome To BackStabber
-					</h1>
-
-					<div className="Dialog"
+						<b>B </b> a c k<b> S </b> t a b b e r
+					</div>
+					<div
 						style={
+							{
+								minHeight: "6%"
+							}
+						}>
+						<Button
+							size={"large"}
+							icon="plus"
+							onClick={
+								()=>{
+									this.props.store.dispatch(CanvasAction.reset());
+									FlowRouter.go("/canvas")
+								}
+							}>
+							Create New Program
+						</Button>
+						<Button
+							style={
+								{
+									marginLeft: "1vw"
+								}
+							}
+							size={"large"}
+							icon="file-text"
+							onClick={
+								()=>{
+									FlowRouter.go("/buckets")
+								}
+							}>
+							Data Buckets
+						</Button>
+					</div>
+					<div style={
 						{
-							align: "center",
-							width: "360px",
-							height: "240px",
-							margin: "0 auto",
-							borderWidth: "5px",
-							borderStyle: "outset double",
-							borderColor: "purple"
+							height: "82%",
+							backgroundColor: "#C5C6C7",
+							background: "white",
+							padding: 0,
+							overflowY: 'scroll',
+							display: "flex",
+							flexWrap: "wrap",
+							flexDirection: "row"
+							// alignItems: "center",
+							// justifyContent: "center"
 						}
 					}>
-						<div style={
-						     	{
-									textAlign: "center",
-									maxHeight: "100%"
-						     	}
-						    }>
-							<div title="Language"
-							     style={
-								     {
-									     position: "absolute",
-									     cursor: "pointer",
-									     bottom: "19px",
-									     right: "24px",
-									     direction: "rtl",
-									     textAlign: "right"
-								     }
-							     }>
-							        <span style={
-								        {
-									        display: "inline-block",
-									        fontSize: "12px",
-									        margin: "5px 24px 0px 0px",
-									        color: "gray"
-								        }
-							        }>
-								        Language
-							        </span>
-							</div>
-							<a href="https://github.com/pkcwong/backstabber/issues"
-							   title="Help"
-							   target="_blank"
-							   style={
-								   {
-									   position: "absolute",
-									   fontSize: "12px",
-									   textDecoration: "none",
-									   cursor: "pointer",
-									   bottom: "22px",
-									   left: "26px",
-									   color: "gray"
-								   }
-							   }>
-								Help
-							</a>
-							<p style={
-								{
-									fontSize: "16pt",
-									padding: "2px 0px 0px",
-									margin: "0px",
-									color: "gray"
-								}
-							}>
-								BackStabber
-							</p>
-							<div style={
-								{
-									margin: "4px 0px 0px",
-									borderWidth: "1px 0px",
-									borderStyle: "solid" ,
-									borderColor: "rgb(211, 211, 211)",
-									borderImage: "initial",
-									padding: "18px 0px"
-								}
-							}>
-								<button style={
-									{
-						                overflow: "hidden",
-								        width: "340px",
-								        marginBottom: "8px"
-									}
-								} onClick={() => {
-									this.props.store.dispatch(CanvasAction.reset())
-									FlowRouter.go("/canvas")
-								}}>
-									Create New Program
-								</button>
-								<br></br>
-								<button style={
-							        {
-								        overflow: "hidden",
-								        width: "340px",
-								        marginBottom: "8px"
-							        }
-						        } onClick={
-									() => {
-										this.setState({
-											open_modal: true,
-										});
-										//FIXME enforce authentication
-										let sketches = this.props.Meteor.collection.sketches.filter(user => user.owner == this.props.Meteor.userId)
-										sketches = Object.values(sketches).map((value, index) =>{
-											return (value._id)
-										})
-										this.setState({
-											open: sketches
-										})
-									}
-								}
-								>
-									Open Existing Program
-								</button>
-								<a onClick={() => {
-									Meteor.logout()
-									FlowRouter.go("/login")
-								}}
-								   style={
-									   {
-										   display: "inline-block",
-										   marginTop: "6px"
-									   }
-								   }>
-									Sign out
-								</a>
-							</div>
-						</div>
+						{
+							Object.values(this.props.Meteor.collection.sketches.filter(user => user.owner == this.props.Meteor.userId)).map((value, index) =>{
+								return (value._id)
+							}).map((item, index) => {
+								return (
+									<React.Fragment key={item}>
+										<Card
+											style={
+												{
+													margin: "1em",
+													width: "30vw",
+													border: "none",
+												}
+											}
+											type="inner"
+											title={
+												<a onClick={
+													()=>{
+														const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+															return (sketch._id === item);
+														});
+														this.props.store.dispatch(CanvasAction.load(sketch._id));
+														FlowRouter.go("/canvas")
+													}
+												}
+												style={
+													{
+														color: "white"
+													}
+												}>
+													{
+														this.props.Meteor.collection.sketches.find((sketch) => {
+															return (sketch._id === item);
+														}).meta.title
+													}
+												</a>
+											}
+											headStyle={
+												{
+													// backgroundColor: "#C5C6C7",
+													backgroundColor: '#607D8B',
+													color: 'white'
+												}
+											}
+											bodyStyle={
+												{
+													backgroundColor: "#1F2833",
+													color: 'white'
+												}
+											}
+											extra={
+												<Button
+													onClick={
+														()=>{
+															console.log(this.props.Meteor.collection.sketches.find((sketch) => {
+																return (sketch._id === item);
+															}));
+															this.setState({
+																setting_modal: !this.state.setting_modal,
+																program_info: this.props.Meteor.collection.sketches.find((sketch) => {
+																	return (sketch._id === item)
+																})
+															})
+														}
+													}
+													icon="setting"
+												>
+											 	</Button>
+											}
+										>
+											{
+												(()=>{
+													if(this.props.Meteor.collection.sketches.find((sketch) => {
+															return (sketch._id === item);
+														}).meta.description === ""){
+														return (
+															<div style={
+																{
+																	fontStyle: "italic",
+																	opacity: 0.3
+																}
+															}>
+																No description
+															</div>
+														)
+													}
+													else{
+														return (
+															<div>
+																{
+																	this.props.Meteor.collection.sketches.find((sketch) => {
+																		return (sketch._id === item);
+																	}).meta.description
+																}
+															</div>
+														)
+													}
+												})()
+											}
+										<Button
+											style={
+												{
+													float: "right",
+													bottom: 0,
+													color: "red",
+													borderColor: "red"
+												}
+											}
+											onClick={
+												()=>{
+													this.setState({
+														delete: item,
+														delete_modal: true,
+													});
+												}
+											}
+											icon="delete">
+										</Button>
+										</Card>
+									</React.Fragment>
+								)
+							})
+						}
 					</div>
 				</div>
-
+				{/*Delete Modal*/}
+				<Modal
+					title="Delete Program"
+					visible={this.state.delete_modal}
+					onOk={
+						()=>{
+							this.props.store.dispatch(CanvasAction.delete(this.state.delete));
+							this.setState({
+								delete_modal: !this.state.delete_modal
+							})
+						}
+					}
+					onCancel={
+						()=>{
+							this.setState({
+								delete_modal: !this.state.delete_modal
+							})
+						}
+					}
+				>
+					<p>Are you sure you want to delete this program?</p>
+				</Modal>
+				{/*Setting Modal*/}
+				<Modal
+					title="Setting"
+					visible={this.state.setting_modal}
+					onOk={
+						()=>{
+							this.setState({
+								setting_modal: !this.state.setting_modal
+							})
+						}
+					}
+					onCancel={
+						()=>{
+							this.setState({
+								setting_modal: !this.state.setting_modal
+							})
+						}
+					}
+				>
+					<div>
+						{
+							<React.Fragment>
+								<b>API URL:</b>
+								<br/>
+								{window.location.protocol + "//" + window.location.host + '/api/program/'+ this.state.program_info._id}
+								<br/>
+								<br/>
+								<b>API Key(s):</b>
+								<br/>
+								{
+									(()=>{
+										if(this.state.program_info.tokens === undefined){
+											return []
+										}
+										else{
+											return this.state.program_info.tokens
+										}
+									})().map((token, index)=>{
+										return(
+											<React.Fragment
+												key={index}>
+												{
+													token
+												}
+											</React.Fragment>
+										);
+									})
+								}
+								<br/>
+								<br/>
+								<b>Log(s):</b>
+								<br/>
+								{
+									(()=>{
+										if(this.state.program_info.logs === undefined){
+											return []
+										}
+										else{
+											return this.state.program_info.logs
+										}
+									})().map((logs, index)=>{
+										return(
+											<React.Fragment
+												key={index}>
+												{
+													logs
+												}
+											</React.Fragment>
+										);
+									})
+								}
+							</React.Fragment>
+						}
+					</div>
+				</Modal>
 			</React.Fragment>
 		);
 	}

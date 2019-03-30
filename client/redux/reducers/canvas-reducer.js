@@ -154,8 +154,10 @@ export const CanvasReducer = (state = initialState, action) => {
 				entityRemoved: () => {
 					state.dispatcher(CanvasAction.purgeNode(bsNode._id));
 				},
-				selectionChanged: () => {
-					state.dispatcher(CanvasAction.nodeSelected(stormNode.id))
+				selectionChanged: (e) => {
+					if(e.isSelected){
+						state.dispatcher(CanvasAction.nodeSelected(stormNode.id))
+					}
 				}
 			});
 			action.callback(bsNode);
@@ -287,6 +289,11 @@ export const CanvasReducer = (state = initialState, action) => {
 				select_id: Object.keys(state.lookup).find((bs_id) => {
 					return (state.lookup[bs_id] === action.payload._id)
 				})
+			});
+		}
+		case CanvasAction.NODE_DESELECT: {
+			return Object.assign({}, state, {
+				select_id: ""
 			});
 		}
 		default: {
