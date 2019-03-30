@@ -1152,9 +1152,6 @@ class Component extends React.Component {
 				return (bsNode._id === this.props.CanvasReducer.select_id)
 			});
 			if(Object.keys(bsNode.props).length !== 0){
-				if(this.props.CanvasReducer.select_id === prevProps.CanvasReducer.select_id %2 == 0){
-
-				}
 				this.setState(
 					{
 						props: bsNode.props,
