@@ -19,6 +19,7 @@ import { EqualityNode } from "./logic/equality-node";
 import { ExecuteNode } from "./functional/execute-node";
 import { ExponentialNode } from "./arithmetics/exponential-node";
 import { GreaterThanNode } from "./logic/greater-than-node";
+import { HttpGetNode } from "./web/http-get-node";
 import { KestrelNode } from "./functional/kestrel-node";
 import { LessThanNode } from "./logic/less-than-node";
 import { MultiplicationNode } from "./arithmetics/multiplication-node";
@@ -156,6 +157,7 @@ export class Program {
 			EqualityNode,
 			ExecuteNode,
 			ExponentialNode,
+			HttpGetNode,
 			GreaterThanNode,
 			KestrelNode,
 			LessThanNode,
