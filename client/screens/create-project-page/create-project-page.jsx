@@ -142,9 +142,6 @@ class Component extends React.Component {
 												<Button
 													onClick={
 														()=>{
-															console.log(this.props.Meteor.collection.sketches.find((sketch) => {
-																return (sketch._id === item);
-															}));
 															this.setState({
 																setting_modal: !this.state.setting_modal,
 																program_info: this.props.Meteor.collection.sketches.find((sketch) => {
@@ -237,7 +234,7 @@ class Component extends React.Component {
 				</Modal>
 				{/*Setting Modal*/}
 				<Modal
-					title="Setting"
+					title="Extra Program Information"
 					visible={this.state.setting_modal}
 					onOk={
 						()=>{
@@ -257,6 +254,13 @@ class Component extends React.Component {
 					<div>
 						{
 							<React.Fragment>
+								<b>Program ID:</b>
+								<br/>
+								{
+									this.state.program_info._id
+								}
+								<br/>
+								<br/>
 								<b>API URL:</b>
 								<br/>
 								{window.location.protocol + "//" + window.location.host + '/api/program/'+ this.state.program_info._id}
@@ -273,17 +277,19 @@ class Component extends React.Component {
 											return this.state.program_info.tokens
 										}
 									})().map((token, index)=>{
+										console.log(token);
 										return(
 											<React.Fragment
 												key={index}>
-												{
-													token
-												}
+												<div>
+													{
+														token
+													}
+												</div>
 											</React.Fragment>
 										);
 									})
 								}
-								<br/>
 								<br/>
 								<b>Log(s):</b>
 								<br/>
@@ -295,13 +301,15 @@ class Component extends React.Component {
 										else{
 											return this.state.program_info.logs
 										}
-									})().map((logs, index)=>{
+									})().map((log, index)=>{
 										return(
 											<React.Fragment
 												key={index}>
-												{
-													logs
-												}
+												<div>
+													{
+														log
+													}
+												</div>
 											</React.Fragment>
 										);
 									})
