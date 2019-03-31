@@ -142,9 +142,6 @@ class Component extends React.Component {
 												<Button
 													onClick={
 														()=>{
-															console.log(this.props.Meteor.collection.sketches.find((sketch) => {
-																return (sketch._id === item);
-															}));
 															this.setState({
 																setting_modal: !this.state.setting_modal,
 																program_info: this.props.Meteor.collection.sketches.find((sketch) => {
