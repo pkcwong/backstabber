@@ -19,6 +19,8 @@ export class CanvasAction {
 	static NODE_DESELECT= 'canvas/NODE_DESELECT';
 	static ADD_LABEL = 'canvas/ADD_LABEL';
 	static DELETE_LABEL = 'canvas/DELETE_LABEL';
+	static DRAWER_STATE_CHANGE = 'canvas/DRAWER_STATE_CHANGE';
+	static UPDATE_PROPS = 'canvas/UPDATE_PROPS';
 
 	static init = (dispatcher) => {
 		return {
@@ -259,5 +261,21 @@ export class CanvasAction {
 			}
 		};
 	};
+
+	static drawerStateChange = ()=>{
+		return {
+			type: CanvasAction.DRAWER_STATE_CHANGE
+		};
+	};
+
+	static updateProps = (prop, target)=>{
+		return{
+			type: CanvasAction.UPDATE_PROPS,
+			payload: {
+				prop: prop,
+				target: target
+			}
+		}
+	}
 
 }

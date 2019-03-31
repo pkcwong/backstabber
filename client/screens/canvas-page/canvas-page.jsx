@@ -406,11 +406,9 @@ class Component extends React.Component {
 						placement={'bottom'}
 						closable={false}
 						onClose={()=>{
-							this.setState({
-								drawer: false
-							});
+							this.props.dispatch(CanvasAction.drawerStateChange());
 						}}
-						visible={this.state.drawer}
+						visible={this.props.CanvasReducer.drawer_modal}
 					>
 						<div style={
 							{
@@ -453,14 +451,10 @@ class Component extends React.Component {
 																		}
 																		onChange={
 																			(event)=>{
-																				this.setState({
-																					props: Object.assign({}, this.state.props, {
-																						[prop]: event.target.value
-																					})
-																				})
+																				this.props.dispatch(CanvasAction.updateProps(prop, event.target.value));
 																			}
 																		}
-																		value={this.state.props[prop]}>
+																		value={this.props.CanvasReducer.node_props[prop]}>
 																		<Radio value={true}>true</Radio>
 																		<Radio value={false}>false</Radio>
 																	</Radio.Group>
@@ -479,14 +473,10 @@ class Component extends React.Component {
 																				else if (typeof bsNode.class.props[prop] === 'object') {
 																					value = JSON.parse(value);
 																				}
-																				this.setState({
-																					props: Object.assign({}, this.state.props, {
-																						[prop]: value
-																					})
-																				})
+																				this.props.dispatch(CanvasAction.updateProps(prop, value));
 																			}
 																		}
-																		value={(typeof this.state.props[prop] === 'string') ? this.state.props[prop] : JSON.stringify(this.state.props[prop])}
+																		value={(typeof this.props.CanvasReducer.node_props[prop] === 'string') ? this.props.CanvasReducer.node_props[prop] : JSON.stringify(this.props.CanvasReducer.node_props[prop])}
 																	/>
 																);
 															}
@@ -494,7 +484,7 @@ class Component extends React.Component {
 													}
 													{
 														(()=>{
-															if(this.state.props[prop] === bsNode.props[prop]){
+															if(this.props.CanvasReducer.node_props[prop] === bsNode.props[prop]){
 																return(
 																	<Icon
 																		style={
@@ -540,16 +530,12 @@ class Component extends React.Component {
 											return (bsNode._id === this.props.CanvasReducer.select_id)
 										});
 										try{
-											bsNode.setProps(this.state.props)
+											bsNode.setProps(this.props.CanvasReducer.node_props)
 										}
 										catch(e){
 											alert("Parameter Error");
 										}
-										this.setState(
-											{
-												drawer: false
-											}
-										)
+										this.props.dispatch(CanvasAction.drawerStateChange());
 									}
 								}
 							>
@@ -1147,19 +1133,19 @@ class Component extends React.Component {
 	componentDidUpdate(prevProps) {
 		this.engine.diagramModel.setZoomLevel(this.state.zoom);
 		this.engine.diagramModel.setOffset(this.state.offsetX, this.state.offsetY);
-		if(this.props !== prevProps && this.props.CanvasReducer.select_id !== ""){
-			let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) => {
-				return (bsNode._id === this.props.CanvasReducer.select_id)
-			});
-			if(Object.keys(bsNode.props).length !== 0){
-				this.setState(
-					{
-						props: bsNode.props,
-						drawer: !this.state.props.drawer,
-					}
-				);
-			}
-		}
+		// if(this.props !== prevProps && this.props.CanvasReducer.select_id !== ""){
+		// 	let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) => {
+		// 		return (bsNode._id === this.props.CanvasReducer.select_id)
+		// 	});
+		// 	if(Object.keys(bsNode.props).length !== 0){
+		// 		this.setState(
+		// 			{
+		// 				props: bsNode.props,
+		// 				drawer: !this.state.props.drawer,
+		// 			}
+		// 		);
+		// 	}
+		// }
 		if(this.state.pending.length !== 0){
 			this.props.dispatch(this.state.pending.splice(0, 1)[0]);
 		}

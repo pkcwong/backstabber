@@ -119,6 +119,8 @@ describe('CanvasReducer', () => {
 				}
 			},
 			select_id: "",
+			drawer_modal: false,
+			node_props: {}
 		});
 	});
 	it('Should add Nodes', () => {

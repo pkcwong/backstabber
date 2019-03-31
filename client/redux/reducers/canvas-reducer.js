@@ -117,7 +117,9 @@ const initialState = {
 			HttpPostNode
 		}
 	},
-	select_id: ""
+	select_id: "",
+	drawer_modal: false,
+	node_props: {}
 };
 
 export const CanvasReducer = (state = initialState, action) => {
@@ -158,7 +160,10 @@ export const CanvasReducer = (state = initialState, action) => {
 				},
 				selectionChanged: (e) => {
 					if (e.isSelected) {
-						state.dispatcher(CanvasAction.nodeSelected(stormNode.id))
+						state.dispatcher(CanvasAction.nodeSelected(stormNode.id));
+					}
+					else {
+						state.dispatcher(CanvasAction.clearNodeSelect());
 					}
 				}
 			});
@@ -267,7 +272,6 @@ export const CanvasReducer = (state = initialState, action) => {
 				} else {
 					labelPort.labels[0].label = action.payload.label;
 				}
-
 			});
 			return Object.assign({}, state, {
 				srdNodes: state.srdNodes
@@ -287,15 +291,41 @@ export const CanvasReducer = (state = initialState, action) => {
 			});
 		}
 		case CanvasAction.NODE_SELECT: {
-			return Object.assign({}, state, {
-				select_id: Object.keys(state.lookup).find((bs_id) => {
-					return (state.lookup[bs_id] === action.payload._id)
-				})
+			let select_id = Object.keys(state.lookup).find((bs_id) => {
+				return (state.lookup[bs_id] === action.payload._id);
 			});
+
+			const bsNode = state.bsNodes.find((bsNode) => {
+				return (bsNode._id === select_id)
+			});
+			if(Object.keys(bsNode.props).length !== 0){
+				return Object.assign({}, state, {
+					select_id: select_id,
+					drawer_modal: !state.drawer_modal,
+					node_props: bsNode.props
+				});
+			}
+			else{
+				return Object.assign({}, state, {
+					select_id: select_id
+				});
+			}
 		}
 		case CanvasAction.NODE_DESELECT: {
 			return Object.assign({}, state, {
 				select_id: ""
+			});
+		}
+		case CanvasAction.DRAWER_STATE_CHANGE: {
+			return Object.assign({}, state, {
+				drawer_modal: !state.drawer_modal
+			});
+		}
+		case CanvasAction.UPDATE_PROPS: {
+			return Object.assign({}, state, {
+				node_props: Object.assign({}, state.node_props, {
+					[action.payload.prop]: action.payload.target
+				})
 			});
 		}
 		default: {
