@@ -2,9 +2,10 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { sketches_db } from "../../../shared/collections/sketches";
-import { Button, Card, Modal } from 'antd';
+import { Button, Card, Input, Modal } from 'antd';
+import lunr from 'lunr';
 import 'antd/dist/antd.css';
-import {CanvasAction} from "../../redux/actions/canvas-action";
+import { CanvasAction } from "../../redux/actions/canvas-action";
 
 class Component extends React.Component {
 
@@ -16,6 +17,7 @@ class Component extends React.Component {
 			setting_modal: false,
 			delete: "",
 			program_info: {},
+			search: ''
 		};
 	}
 
@@ -51,7 +53,7 @@ class Component extends React.Component {
 							size={"large"}
 							icon="plus"
 							onClick={
-								()=>{
+								() => {
 									this.props.store.dispatch(CanvasAction.reset());
 									FlowRouter.go("/canvas")
 								}
@@ -67,12 +69,23 @@ class Component extends React.Component {
 							size={"large"}
 							icon="file-text"
 							onClick={
-								()=>{
+								() => {
 									FlowRouter.go("/buckets")
 								}
 							}>
 							Data Buckets
 						</Button>
+						<Input.Search
+							style={{
+								width: '20%',
+								float: 'right'
+							}}
+							onChange={(e) => {
+								this.setState({
+									search: e.target.value
+								});
+							}}
+						/>
 					</div>
 					<div style={
 						{
@@ -89,124 +102,149 @@ class Component extends React.Component {
 						}
 					}>
 						{
-							Object.values(this.props.Meteor.collection.sketches.filter(user => user.owner == this.props.Meteor.userId)).map((value, index) =>{
-								return (value._id)
-							}).map((item, index) => {
-								return (
-									<React.Fragment key={item}>
-										<Card
-											style={
-												{
-													margin: "1em",
-													width: "30vw",
-													border: "none",
-												}
-											}
-											type="inner"
-											title={
-												<a onClick={
-													()=>{
-														const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
-															return (sketch._id === item);
-														});
-														this.props.store.dispatch(CanvasAction.load(sketch._id));
-														FlowRouter.go("/canvas")
-													}
-												}
+							(() => {
+								const sketches = this.props.Meteor.collection.sketches.filter((sketch) => {
+									return (sketch.owner === this.props.Meteor.userId);
+								});
+								const idx = ((sketches) => {
+									return lunr(function () {
+										this.ref('_id');
+										this.field('_id');
+										this.field('title');
+										this.field('description');
+										sketches.map((sketch) => {
+											return {
+												_id: sketch._id,
+												title: sketch.meta.title,
+												description: sketch.meta.description
+											};
+										}).forEach((sketch) => {
+											this.add(sketch);
+										});
+									});
+								})(sketches);
+								return sketches.filter((sketch) => {
+									return idx.search(this.state.search).map((search) => {
+										return search.ref;
+									}).includes(sketch._id);
+								}).map((value, index) => {
+									return (value._id)
+								}).map((item, index) => {
+									return (
+										<React.Fragment key={item}>
+											<Card
 												style={
 													{
-														color: "white"
+														margin: "1em",
+														width: "30vw",
+														border: "none",
 													}
-												}>
-													{
-														this.props.Meteor.collection.sketches.find((sketch) => {
-															return (sketch._id === item);
-														}).meta.title
-													}
-												</a>
-											}
-											headStyle={
-												{
-													// backgroundColor: "#C5C6C7",
-													backgroundColor: '#607D8B',
-													color: 'white'
 												}
-											}
-											bodyStyle={
-												{
-													backgroundColor: "#1F2833",
-													color: 'white'
-												}
-											}
-											extra={
-												<Button
-													onClick={
-														()=>{
-															this.setState({
-																setting_modal: !this.state.setting_modal,
-																program_info: this.props.Meteor.collection.sketches.find((sketch) => {
-																	return (sketch._id === item)
-																})
-															})
+												type="inner"
+												title={
+													<a onClick={
+														() => {
+															const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+																return (sketch._id === item);
+															});
+															this.props.store.dispatch(CanvasAction.load(sketch._id));
+															FlowRouter.go("/canvas")
 														}
 													}
-													icon="setting"
-												>
-											 	</Button>
-											}
-										>
-											{
-												(()=>{
-													if(this.props.Meteor.collection.sketches.find((sketch) => {
-															return (sketch._id === item);
-														}).meta.description === ""){
-														return (
-															<div style={
-																{
-																	fontStyle: "italic",
-																	opacity: 0.3
-																}
-															}>
-																No description
-															</div>
-														)
+													   style={
+														   {
+															   color: "white"
+														   }
+													   }>
+														{
+															this.props.Meteor.collection.sketches.find((sketch) => {
+																return (sketch._id === item);
+															}).meta.title
+														}
+													</a>
+												}
+												headStyle={
+													{
+														// backgroundColor: "#C5C6C7",
+														backgroundColor: '#607D8B',
+														color: 'white'
 													}
-													else{
-														return (
-															<div>
-																{
-																	this.props.Meteor.collection.sketches.find((sketch) => {
-																		return (sketch._id === item);
-																	}).meta.description
-																}
-															</div>
-														)
+												}
+												bodyStyle={
+													{
+														backgroundColor: "#1F2833",
+														color: 'white'
 													}
-												})()
-											}
-										<Button
-											style={
+												}
+												extra={
+													<Button
+														onClick={
+															() => {
+																this.setState({
+																	setting_modal: !this.state.setting_modal,
+																	program_info: this.props.Meteor.collection.sketches.find((sketch) => {
+																		return (sketch._id === item)
+																	})
+																})
+															}
+														}
+														icon="setting"
+													>
+													</Button>
+												}
+											>
 												{
-													float: "right",
-													bottom: 0,
-													color: "red",
-													borderColor: "red"
+													(() => {
+														if (this.props.Meteor.collection.sketches.find((sketch) => {
+															return (sketch._id === item);
+														}).meta.description === "") {
+															return (
+																<div style={
+																	{
+																		fontStyle: "italic",
+																		opacity: 0.3
+																	}
+																}>
+																	No description
+																</div>
+															)
+														} else {
+															return (
+																<div>
+																	{
+																		this.props.Meteor.collection.sketches.find((sketch) => {
+																			return (sketch._id === item);
+																		}).meta.description
+																	}
+																</div>
+															)
+														}
+													})()
 												}
-											}
-											onClick={
-												()=>{
-													this.setState({
-														delete: item,
-														delete_modal: true,
-													});
-												}
-											}
-											icon="delete">
-										</Button>
-										</Card>
-									</React.Fragment>
-								)
-							})
+												<Button
+													style={
+														{
+															float: "right",
+															bottom: 0,
+															color: "red",
+															borderColor: "red"
+														}
+													}
+													onClick={
+														() => {
+															this.setState({
+																delete: item,
+																delete_modal: true,
+															});
+														}
+													}
+													icon="delete">
+												</Button>
+											</Card>
+										</React.Fragment>
+									)
+								});
+							})()
 						}
 					</div>
 				</div>
@@ -215,7 +253,7 @@ class Component extends React.Component {
 					title="Delete Program"
 					visible={this.state.delete_modal}
 					onOk={
-						()=>{
+						() => {
 							this.props.store.dispatch(CanvasAction.delete(this.state.delete));
 							this.setState({
 								delete_modal: !this.state.delete_modal
@@ -223,7 +261,7 @@ class Component extends React.Component {
 						}
 					}
 					onCancel={
-						()=>{
+						() => {
 							this.setState({
 								delete_modal: !this.state.delete_modal
 							})
@@ -237,14 +275,14 @@ class Component extends React.Component {
 					title="Extra Program Information"
 					visible={this.state.setting_modal}
 					onOk={
-						()=>{
+						() => {
 							this.setState({
 								setting_modal: !this.state.setting_modal
 							})
 						}
 					}
 					onCancel={
-						()=>{
+						() => {
 							this.setState({
 								setting_modal: !this.state.setting_modal
 							})
@@ -263,22 +301,21 @@ class Component extends React.Component {
 								<br/>
 								<b>API URL:</b>
 								<br/>
-								{window.location.protocol + "//" + window.location.host + '/api/program/'+ this.state.program_info._id}
+								{window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id}
 								<br/>
 								<br/>
 								<b>API Key(s):</b>
 								<br/>
 								{
-									(()=>{
-										if(this.state.program_info.tokens === undefined){
+									(() => {
+										if (this.state.program_info.tokens === undefined) {
 											return []
-										}
-										else{
+										} else {
 											return this.state.program_info.tokens
 										}
-									})().map((token, index)=>{
+									})().map((token, index) => {
 										console.log(token);
-										return(
+										return (
 											<React.Fragment
 												key={index}>
 												<div>
@@ -294,15 +331,14 @@ class Component extends React.Component {
 								<b>Log(s):</b>
 								<br/>
 								{
-									(()=>{
-										if(this.state.program_info.logs === undefined){
+									(() => {
+										if (this.state.program_info.logs === undefined) {
 											return []
-										}
-										else{
+										} else {
 											return this.state.program_info.logs
 										}
-									})().map((log, index)=>{
-										return(
+									})().map((log, index) => {
+										return (
 											<React.Fragment
 												key={index}>
 												<div>
