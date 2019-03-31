@@ -22,6 +22,7 @@ import { ExecuteNode } from "../../shared/lib/functional/execute-node";
 import { ExponentialNode } from "../../shared/lib/arithmetics/exponential-node";
 import { GreaterThanNode } from "../../shared/lib/logic/greater-than-node";
 import { HttpGetNode } from "../../shared/lib/web/http-get-node";
+import { HttpPostNode } from "../../shared/lib/web/http-post-node";
 import { KestrelNode } from "../../shared/lib/functional/kestrel-node";
 import { LessThanNode } from "../../shared/lib/logic/less-than-node";
 import { MultiplicationNode } from "../../shared/lib/arithmetics/multiplication-node";
@@ -113,7 +114,8 @@ describe('CanvasReducer', () => {
 					DatabaseRemoveNode,
 				},
 				Web: {
-					HttpGetNode
+					HttpGetNode,
+					HttpPostNode
 				}
 			},
 			select_id: "",
