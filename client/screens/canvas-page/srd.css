@@ -167,7 +167,8 @@
 }
 
 .srd-default-link__label {
-    pointer-events: none
+    pointer-events: none;
+    overflow: visible;
 }
 
 .srd-default-link__label > div {
