@@ -5,7 +5,7 @@ import { BucketsPage } from "./buckets-page";
 FlowRouter.route('/buckets', {
 	action: (params) => {
 		if (!Meteor.userId() && FlowRouter.current().path === '/buckets') {
-			FlowRouter.go('/login');
+			FlowRouter.go('/');
 		}
 		mount(BucketsPage, {
 			store: store,

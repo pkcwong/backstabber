@@ -97,7 +97,6 @@ class Component extends React.Component {
 									height: "4vh"
 								}
 							}
-							// size="large"
 							onClick={
 								()=>{
 									FlowRouter.go("/create");

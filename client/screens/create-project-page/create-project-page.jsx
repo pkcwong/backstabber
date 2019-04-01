@@ -41,7 +41,13 @@ class Component extends React.Component {
 							minHeight: "8%",
 						}
 					}>
-						<b>B </b> a c k<b> S </b> t a b b e r
+						<div onClick={
+							()=>{
+								FlowRouter.go('/');
+							}
+						}>
+							<b>B </b> a c k<b> S </b> t a b b e r
+						</div>
 					</div>
 					<div
 						style={
@@ -76,16 +82,35 @@ class Component extends React.Component {
 							Data Buckets
 						</Button>
 						<Input.Search
+							size = {'large'}
 							style={{
 								width: '20%',
-								float: 'right'
+								marginLeft: "1vw"
 							}}
+							placeholder="Program Search"
 							onChange={(e) => {
 								this.setState({
 									search: e.target.value
 								});
 							}}
 						/>
+						<Button
+							style={
+								{
+									float: "right"
+								}
+							}
+							icon="logout"
+							size="large"
+							onClick={
+								()=>{
+									Meteor.logout();
+									FlowRouter.go("/")
+								}
+							}
+						>
+							Logout
+						</Button>
 					</div>
 					<div style={
 						{
