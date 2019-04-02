@@ -144,7 +144,7 @@ export const CanvasReducer = (state = initialState, action) => {
 			if (action.payload.props !== 0) {
 				bsNode.setProps(action.payload.props);
 			}
-			let stormNode = new DefaultNodeModel(bsNode.class.name, state.colorLookup[Object.keys(state.nodeTypes).find((category) => {
+			let stormNode = new DefaultNodeModel(action.payload.nodeType, state.colorLookup[Object.keys(state.nodeTypes).find((category) => {
 				return Object.keys(state.nodeTypes[category]).includes(action.payload.nodeType);
 			})]);
 			stormNode.setPosition(action.payload.coordinates.x, action.payload.coordinates.y);
