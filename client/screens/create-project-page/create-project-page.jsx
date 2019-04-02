@@ -64,7 +64,7 @@ class Component extends React.Component {
 									FlowRouter.go("/canvas")
 								}
 							}>
-							Create New Program
+							New Program
 						</Button>
 						<Button
 							style={
@@ -121,8 +121,7 @@ class Component extends React.Component {
 							overflowY: 'scroll',
 							display: "flex",
 							flexWrap: "wrap",
-							flexDirection: "row"
-							// alignItems: "center",
+							flexDirection: "row",
 							// justifyContent: "center"
 						}
 					}>
@@ -131,144 +130,165 @@ class Component extends React.Component {
 								const sketches = this.props.Meteor.collection.sketches.filter((sketch) => {
 									return (sketch.owner === this.props.Meteor.userId);
 								});
-								const idx = ((sketches) => {
-									return lunr(function () {
-										this.ref('_id');
-										this.field('_id');
-										this.field('title');
-										this.field('description');
-										sketches.map((sketch) => {
-											return {
-												_id: sketch._id,
-												title: sketch.meta.title,
-												description: sketch.meta.description
-											};
-										}).forEach((sketch) => {
-											this.add(sketch);
+								if(sketches.length === 0){
+									return(
+										<React.Fragment>
+											<div style={
+												{
+													fontSize: "1.8em",
+													fontStyle: "italic",
+													opacity: 0.5,
+													marginLeft: "auto",
+													marginRight: "auto",
+													alignSelf: "center",
+												}
+											}>
+												No Programs
+											</div>
+										</React.Fragment>
+									);
+								}
+								else{
+									const idx = ((sketches) => {
+										return lunr(function () {
+											this.ref('_id');
+											this.field('_id');
+											this.field('title');
+											this.field('description');
+											sketches.map((sketch) => {
+												return {
+													_id: sketch._id,
+													title: sketch.meta.title,
+													description: sketch.meta.description
+												};
+											}).forEach((sketch) => {
+												this.add(sketch);
+											});
 										});
-									});
-								})(sketches);
-								return sketches.filter((sketch) => {
-									return idx.search(this.state.search).map((search) => {
-										return search.ref;
-									}).includes(sketch._id);
-								}).map((value, index) => {
-									return (value._id)
-								}).map((item, index) => {
-									return (
-										<React.Fragment key={item}>
-											<Card
-												style={
-													{
-														margin: "1em",
-														width: "30vw",
-														border: "none",
-													}
-												}
-												type="inner"
-												title={
-													<a onClick={
-														() => {
-															const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
-																return (sketch._id === item);
-															});
-															this.props.store.dispatch(CanvasAction.load(sketch._id));
-															FlowRouter.go("/canvas")
-														}
-													}
-													   style={
-														   {
-															   color: "white"
-														   }
-													   }>
+									})(sketches);
+									return sketches.filter((sketch) => {
+										return idx.search(this.state.search).map((search) => {
+											return search.ref;
+										}).includes(sketch._id);
+									}).map((value, index) => {
+										return (value._id)
+									}).map((item, index) => {
+										return (
+											<React.Fragment key={item}>
+												<Card
+													style={
 														{
-															this.props.Meteor.collection.sketches.find((sketch) => {
-																return (sketch._id === item);
-															}).meta.title
+															margin: "1em",
+															width: "30vw",
+															border: "none",
 														}
-													</a>
-												}
-												headStyle={
-													{
-														// backgroundColor: "#C5C6C7",
-														backgroundColor: '#607D8B',
-														color: 'white'
 													}
-												}
-												bodyStyle={
-													{
-														backgroundColor: "#1F2833",
-														color: 'white'
+													type="inner"
+													title={
+														<a onClick={
+															() => {
+																const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+																	return (sketch._id === item);
+																});
+																this.props.store.dispatch(CanvasAction.load(sketch._id));
+																FlowRouter.go("/canvas")
+															}
+														}
+														   style={
+															   {
+																   color: "white"
+															   }
+														   }>
+															{
+																this.props.Meteor.collection.sketches.find((sketch) => {
+																	return (sketch._id === item);
+																}).meta.title
+															}
+														</a>
 													}
-												}
-												extra={
+													headStyle={
+														{
+															// backgroundColor: "#C5C6C7",
+															backgroundColor: '#607D8B',
+															color: 'white'
+														}
+													}
+													bodyStyle={
+														{
+															backgroundColor: "#1F2833",
+															color: 'white'
+														}
+													}
+													extra={
+														<Button
+															onClick={
+																() => {
+																	this.setState({
+																		setting_modal: !this.state.setting_modal,
+																		program_info: this.props.Meteor.collection.sketches.find((sketch) => {
+																			return (sketch._id === item)
+																		})
+																	})
+																}
+															}
+															icon="setting"
+														>
+														</Button>
+													}
+												>
+													{
+														(() => {
+															if (this.props.Meteor.collection.sketches.find((sketch) => {
+																	return (sketch._id === item);
+																}).meta.description === "") {
+																return (
+																	<div style={
+																		{
+																			fontStyle: "italic",
+																			opacity: 0.3,
+																			wordWrap: "break-word"
+																		}
+																	}>
+																		No description
+																	</div>
+																)
+															} else {
+																return (
+																	<div>
+																		{
+																			this.props.Meteor.collection.sketches.find((sketch) => {
+																				return (sketch._id === item);
+																			}).meta.description
+																		}
+																	</div>
+																)
+															}
+														})()
+													}
 													<Button
+														style={
+															{
+																float: "right",
+																bottom: 0,
+																color: "red",
+																borderColor: "red"
+															}
+														}
 														onClick={
 															() => {
 																this.setState({
-																	setting_modal: !this.state.setting_modal,
-																	program_info: this.props.Meteor.collection.sketches.find((sketch) => {
-																		return (sketch._id === item)
-																	})
-																})
+																	delete: item,
+																	delete_modal: true,
+																});
 															}
 														}
-														icon="setting"
-													>
+														icon="delete">
 													</Button>
-												}
-											>
-												{
-													(() => {
-														if (this.props.Meteor.collection.sketches.find((sketch) => {
-															return (sketch._id === item);
-														}).meta.description === "") {
-															return (
-																<div style={
-																	{
-																		fontStyle: "italic",
-																		opacity: 0.3
-																	}
-																}>
-																	No description
-																</div>
-															)
-														} else {
-															return (
-																<div>
-																	{
-																		this.props.Meteor.collection.sketches.find((sketch) => {
-																			return (sketch._id === item);
-																		}).meta.description
-																	}
-																</div>
-															)
-														}
-													})()
-												}
-												<Button
-													style={
-														{
-															float: "right",
-															bottom: 0,
-															color: "red",
-															borderColor: "red"
-														}
-													}
-													onClick={
-														() => {
-															this.setState({
-																delete: item,
-																delete_modal: true,
-															});
-														}
-													}
-													icon="delete">
-												</Button>
-											</Card>
-										</React.Fragment>
-									)
-								});
+												</Card>
+											</React.Fragment>
+										)
+									});
+								}
 							})()
 						}
 					</div>
