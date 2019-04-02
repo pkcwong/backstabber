@@ -37,7 +37,6 @@ class Component extends React.Component {
 			program: {},
 			canvas: {},
 			props: {},
-			error: "",
 			zoom: 100,
 			offsetX: 0,
 			offsetY: 0,
@@ -1048,7 +1047,7 @@ class Component extends React.Component {
 											<option value={item}>
 												{this.props.Meteor.collection.buckets.find((bucket) => {
 													return (bucket._id === item);
-												})._id}
+												}).meta.title}
 											</option>
 										</React.Fragment>
 									)

@@ -3,11 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { connect } from 'react-redux';
 import { buckets_db } from "../../../shared/collections/buckets";
-import {Button, Modal, Input, Card} from 'antd';
+import { Button, Modal, Input, Card } from 'antd';
 import 'antd/dist/antd.css';
 import lunr from 'lunr';
 import { BucketsAction } from "../../redux/actions/buckets-action";
-import { CanvasAction } from "../../redux/actions/canvas-action";
 
 class Component extends React.Component {
 
@@ -51,14 +50,12 @@ class Component extends React.Component {
 						}>
 						<Button
 							style={
-								{
-
-								}
+								{}
 							}
 							size={"large"}
 							icon="arrow-left"
 							onClick={
-								()=>{
+								() => {
 									FlowRouter.go("/create")
 								}
 							}>
@@ -73,7 +70,7 @@ class Component extends React.Component {
 							size={"large"}
 							icon="plus"
 							onClick={
-								()=>{
+								() => {
 									this.setState({
 										buckets_modal: true
 									})
@@ -82,7 +79,7 @@ class Component extends React.Component {
 							New Data Bucket
 						</Button>
 						<Input.Search
-							size = {'large'}
+							size={'large'}
 							style={{
 								width: '20%',
 								marginLeft: "1vw"
@@ -108,10 +105,10 @@ class Component extends React.Component {
 						}
 					}>
 						{
-							(()=>{
+							(() => {
 								const buckets = this.props.Meteor.collection.buckets;
-								if(buckets.length === 0){
-									return(
+								if (buckets.length === 0) {
+									return (
 										<div style={
 											{
 												fontSize: "1.8em",
@@ -125,8 +122,7 @@ class Component extends React.Component {
 											No DataBuckets
 										</div>
 									);
-								}
-								else{
+								} else {
 									const idx = ((buckets) => {
 										return lunr(function () {
 											this.ref('_id');
@@ -144,129 +140,122 @@ class Component extends React.Component {
 											});
 										});
 									})(buckets);
-									return buckets.filter((sketch) => {
+									return this.props.Meteor.collection.buckets.filter((bucket) => {
 										return idx.search(this.state.search).map((search) => {
 											return search.ref;
-										}).includes(sketch._id);
-									}).map((value, index) => {
-										return (value._id)
-									}).map((item, index) => {
-										return(
-											this.props.Meteor.collection.buckets.map((bucket, index) => {
-												console.log(bucket);
-												return (
-													<React.Fragment
-														key={index}
-													>
-														<Card
-															title={bucket.meta.title}
-															bordered={false}
-															style={
-																{
-																	margin: "1em",
-																	width: "30vw",
-																	border: "none",
+										}).includes(bucket._id);
+									}).map((bucket, index) => {
+										return (
+											<React.Fragment
+												key={index}
+											>
+												<Card
+													title={bucket.meta.title}
+													bordered={false}
+													style={
+														{
+															margin: "1em",
+															width: "30vw",
+															border: "none",
+														}
+													}
+													headStyle={
+														{
+															backgroundColor: '#607D8B',
+															color: 'white'
+														}
+													}
+													bodyStyle={
+														{
+															backgroundColor: "#1F2833",
+															color: 'white'
+														}
+													}
+													extra={
+														<Button
+															onClick={
+																() => {
+																	this.setState({
+																		delete_id: bucket._id,
+																		delete_modal: true
+																	})
 																}
 															}
-															headStyle={
+															icon="delete"
+														>
+														</Button>
+													}>
+													{
+														<React.Fragment>
+															<div>
+																<b>Bucket ID:</b>
+																<br/>
 																{
-																	backgroundColor: '#607D8B',
-																	color: 'white'
+																	" " + bucket._id
 																}
-															}
-															bodyStyle={
+																<br/>
+																<br/>
+																<b>Token:</b>
+																<br/>
 																{
-																	backgroundColor: "#1F2833",
-																	color: 'white'
+																	" " + bucket.token
 																}
-															}
-															extra={
-																<Button
-																	onClick={
-																		() => {
-																			this.setState({
-																				delete_id: bucket._id,
-																				delete_modal: true
-																			})
+																<br/>
+																<br/>
+																<b>Description:</b>
+																<br/>
+																{
+																	(() => {
+																		if (bucket.meta.description === "") {
+																			return (
+																				<div style={
+																					{
+																						fontStyle: "italic",
+																						opacity: 0.3,
+																					}
+																				}>
+																					No description
+																				</div>
+																			)
+																		} else {
+																			return (
+																				<div style={
+																					{
+																						wordWrap: "break-word"
+																					}
+																				}>
+																					{
+																						bucket.meta.description
+																					}
+																				</div>
+																			);
 																		}
-																	}
-																	icon="delete"
-																>
-																</Button>
-															}>
+																	})()
+																}
+															</div>
+														</React.Fragment>
+													}
+													<Button
+														style={
 															{
-																<React.Fragment>
-																	<div>
-																		<b>Bucket ID:</b>
-																		<br/>
-																		{
-																			" " + bucket._id
-																		}
-																		<br/>
-																		<br/>
-																		<b>Token:</b>
-																		<br/>
-																		{
-																			" " + bucket.token
-																		}
-																		<br/>
-																		<br/>
-																		<b>Description:</b>
-																		<br/>
-																		{
-																			(()=>{
-																				if(bucket.meta.description === ""){
-																					return (
-																						<div style={
-																							{
-																								fontStyle: "italic",
-																								opacity: 0.3,
-																							}
-																						}>
-																							No description
-																						</div>
-																					)
-																				}
-																				else{
-																					return(
-																						<div style={
-																							{
-																								wordWrap: "break-word"
-																							}
-																						}>
-																							{
-																								bucket.meta.description
-																							}
-																						</div>
-																					);
-																				}
-																			})()
-																		}
-																	</div>
-																</React.Fragment>
+																float: "right",
+																bottom: 0,
+																color: "white",
+																backgroundColor: "green",
+																borderColor: "green"
 															}
-															<Button
-																style={
-																	{
-																		float: "right",
-																		bottom: 0,
-																		color: "white",
-																		backgroundColor: "green",
-																		borderColor: "green"
-																	}
-																}
-																onClick={
-																	() => {
+														}
+														onClick={
+															() => {
 
-																	}
-																}
-																icon="eye">
-																View Database
-															</Button>
-														</Card>
-													</React.Fragment>
-												);
-											}));
+															}
+														}
+														icon="eye">
+														View Database
+													</Button>
+												</Card>
+											</React.Fragment>
+										);
 									});
 								}
 							})()
@@ -295,10 +284,10 @@ class Component extends React.Component {
 						<p>Are you sure you want to delete this data bucket?</p>
 					</Modal>
 					<Modal
-						title="Creating Databucket"
+						title="Creating Data Bucket"
 						visible={this.state.buckets_modal}
-						onOk={()=>{
-							if($("#name").val()!==''){
+						onOk={() => {
+							if ($("#name").val() !== '') {
 								let meta = {
 									title: $("#name").val(),
 									description: $("#description").val()
@@ -307,13 +296,12 @@ class Component extends React.Component {
 								this.setState({
 									buckets_modal: !this.state.buckets_modal
 								})
-							}
-							else{
+							} else {
 								alert("Please give your bucket a name!")
 							}
 
 						}}
-						onCancel={()=>{
+						onCancel={() => {
 							this.setState({
 								buckets_modal: !this.state.buckets_modal
 							})
@@ -321,14 +309,14 @@ class Component extends React.Component {
 					>
 						Bucket Name:
 						<Input
-								style={
-									{
-										marginBottom: "2vh"
-									}
+							style={
+								{
+									marginBottom: "2vh"
 								}
-							id='name' size='large' placeholder="data bucket name" />
+							}
+							id='name' size='large' placeholder="data bucket name"/>
 						Bucket Description (Optional)
-						<Input id='description' size='large' placeholder="description" />
+						<Input id='description' size='large' placeholder="description"/>
 					</Modal>
 				</div>
 			</React.Fragment>
