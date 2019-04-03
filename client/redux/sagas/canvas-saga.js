@@ -64,7 +64,7 @@ export const CanvasSaga = function* () {
 				})
 			];
 		}, []));
-		yield put(CanvasAction.loadComplete(action.payload._id));
+		yield put(CanvasAction.loadComplete(action.payload._id !== undefined ? action.payload._id : null));
 	});
 	yield takeLatest(CanvasAction.CREATE, function* (action) {
 		try {
