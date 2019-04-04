@@ -247,7 +247,7 @@ class Component extends React.Component {
 														}
 														onClick={
 															() => {
-
+																FlowRouter.redirect("/bucket/"+ bucket._id)
 															}
 														}
 														icon="eye">
