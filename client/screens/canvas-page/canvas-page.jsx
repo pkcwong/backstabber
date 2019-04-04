@@ -464,20 +464,10 @@ class Component extends React.Component {
 																		id={prop}
 																		onChange={
 																			(event)=>{
-																				console.log()
 																				let value = event.target.value;
-																				console.log(value);
-
 																				if(typeof bsNode.class.props[prop] === "number" && !isNaN(Number(value))){
 																					value = Number(value);
 																				}
-																				// else if (typeof bsNode.class.props[prop] === 'object') {
-																				// 	let re=/,]/;
-																				// 	if(re.test(value)){
-																				// 		value = value.replace(re, ",0]");
-																				// 	}
-																				// 	value = JSON.parse(value);
-																				// }
 																				this.props.dispatch(CanvasAction.updateProps(prop, value));
 																			}
 																		}
