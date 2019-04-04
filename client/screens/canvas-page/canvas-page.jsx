@@ -58,6 +58,9 @@ class Component extends React.Component {
 			selected_database_token: null,
 			database_node: null,
 			database_coor: {},
+			// Showing the returnNode value
+			result: "",
+			result_modal: false
 
 		};
 		this.engine = new DiagramEngine();
@@ -570,9 +573,17 @@ class Component extends React.Component {
 										});
 									});
 								});
-								program.execute(JSON.parse($("#user_input").val())).then((result) => {
-
-								});
+								try{
+									program.execute(JSON.parse($("#user_input").val())).then((result) => {
+										this.setState({
+											result: result,
+											result_modal: true
+										})
+									});
+								}
+								catch(e){
+									alert(e.message);
+								}
 								this.setState({
 									debug_modal: false,
 								})
@@ -1122,6 +1133,31 @@ class Component extends React.Component {
 							</select>
 						</div>
 					</Modal>
+					<Modal
+						title="Final Result"
+						visible={this.state.result_modal}
+						onOk={
+							()=>{
+								this.setState({
+									result_modal: false
+								})
+							}
+						}
+						onCancel={
+							()=>{
+								this.setState({
+									result_modal: false
+								})
+							}
+						}
+					>
+						{
+							(()=>{
+								return("Your final Result: " + JSON.stringify(this.state.result));
+							})()
+
+						}
+					</Modal>
 				</div>
 			</React.Fragment>);
 	}
@@ -1134,19 +1170,6 @@ class Component extends React.Component {
 	componentDidUpdate(prevProps) {
 		this.engine.diagramModel.setZoomLevel(this.state.zoom);
 		this.engine.diagramModel.setOffset(this.state.offsetX, this.state.offsetY);
-		// if(this.props !== prevProps && this.props.CanvasReducer.select_id !== ""){
-		// 	let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) => {
-		// 		return (bsNode._id === this.props.CanvasReducer.select_id)
-		// 	});
-		// 	if(Object.keys(bsNode.props).length !== 0){
-		// 		this.setState(
-		// 			{
-		// 				props: bsNode.props,
-		// 				drawer: !this.state.props.drawer,
-		// 			}
-		// 		);
-		// 	}
-		// }
 		if(this.state.pending.length !== 0){
 			this.props.dispatch(this.state.pending.splice(0, 1)[0]);
 		}
