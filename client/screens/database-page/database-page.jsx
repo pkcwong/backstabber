@@ -2,18 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Card, Button, Modal, Input, Icon } from 'antd';
+import { Card, Button, Divider, Modal, Input, Icon, Table } from 'antd';
 import 'antd/dist/antd.css';
 import { buckets_db } from "../../../shared/collections/buckets";
+import { documents_db } from "../../../shared/collections/documents";
+import { DocumentsAction } from "../../redux/actions/documents-action";
 
 
 class Component extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state={
+		this.state = {
 			document_modal: false,
-			documents: [],
+			document: {},
+			textArea: ""
 		}
 	}
 
@@ -38,17 +41,16 @@ class Component extends React.Component {
 						}
 					}>
 						{
-							(()=>{
-								if(this.props.Meteor.collection.buckets.filter((bucket)=>{
-									return(bucket._id === FlowRouter.getParam("_id"));}).length === 0){
-									return("Sorry, Bucket Does Not Exist")
-								}
-								else{
-									return this.props.Meteor.collection.buckets.filter((bucket)=>{
-										return(bucket._id === FlowRouter.getParam("_id"));
-									}).map((bucket, index)=>{
-										console.log(bucket);
-										return(
+							(() => {
+								if (this.props.Meteor.collection.buckets.filter((bucket) => {
+									return (bucket._id === FlowRouter.getParam("_id"));
+								}).length === 0) {
+									return ("Sorry, Bucket Does Not Exist")
+								} else {
+									return this.props.Meteor.collection.buckets.filter((bucket) => {
+										return (bucket._id === FlowRouter.getParam("_id"));
+									}).map((bucket, index) => {
+										return (
 											<React.Fragment key={index}>
 												<div>
 													{
@@ -72,7 +74,7 @@ class Component extends React.Component {
 							icon="arrow-left"
 							onClick={
 								() => {
-									FlowRouter.go("/buckets")
+									FlowRouter.go("/buckets");
 								}
 							}>
 							Back
@@ -91,8 +93,28 @@ class Component extends React.Component {
 							onClick={
 								() => {
 									this.setState({
-										document_modal: true
-									})
+										document_modal: true,
+										document: (() => {
+											const doc = this.props.Meteor.collection.documents.filter((document) => {
+												return (document.bucket === FlowRouter.getParam('_id'));
+											}).map((document) => {
+												return Object.assign({}, {
+													_id: document._id
+												}, document.document);
+											}).reduce((accumulator, current) => {
+												return Object.assign({}, accumulator, Object.keys(current).reduce((acc, cur) => {
+													return Object.assign({}, acc, {
+														[cur]: null
+													})
+												}, {}));
+											}, {
+												_id: null
+											});
+											delete doc['_id'];
+											return doc;
+										})(),
+										textArea: ""
+									});
 								}
 							}>
 							Insert Document
@@ -111,33 +133,67 @@ class Component extends React.Component {
 						}
 					}>
 						{
-
+							<Table
+								rowKey='_id'
+								dataSource={
+									this.props.Meteor.collection.documents.filter((document) => {
+										return (document.bucket === FlowRouter.getParam('_id'));
+									}).map((document) => {
+										return Object.assign({}, {
+											_id: document._id
+										}, document.document);
+									})
+								}
+								columns={
+									Object.keys(this.props.Meteor.collection.documents.filter((document) => {
+										return (document.bucket === FlowRouter.getParam('_id'));
+									}).map((document) => {
+										return Object.assign({}, {
+											_id: document._id
+										}, document.document);
+									}).reduce((accumulator, current) => {
+										return Object.assign({}, accumulator, current);
+									}, {
+										_id: null
+									})).map((key) => {
+										return {
+											title: key,
+											dataIndex: key,
+											key: key
+										};
+									})
+								}
+							/>
 						}
 					</div>
 				</div>
 				<Modal
 					title="Insert New Document"
 					visible={this.state.document_modal}
-					onOk={()=>{
-						//Todo insert Document with redux with this.state.document
+					onOk={() => {
+						if (this.state.textArea === '') {
+							this.props.dispatch(DocumentsAction.insert(FlowRouter.getParam('_id'), this.props.Meteor.collection.buckets.find((bucket) => {
+								return (bucket._id === FlowRouter.getParam('_id'));
+							}).token, Object.assign({}, this.state.document)));
+						} else {
+							this.props.dispatch(DocumentsAction.insert(FlowRouter.getParam('_id'), this.props.Meteor.collection.buckets.find((bucket) => {
+								return (bucket._id === FlowRouter.getParam('_id'));
+							}).token, Object.assign({}, JSON.parse(this.state.textArea))));
+						}
 						this.setState({
-							document_modal: false,
-							documents: []
-						})
-
-					}
-					}
-					onCancel={()=>{
+							document_modal: false
+						});
+					}}
+					onCancel={() => {
 						this.setState({
-							document_modal: false,
-							documents: []
-						})
+							document_modal: false
+						});
 					}}
 				>
 					{
-						(()=>{
-							return (this.state.documents.map((document, index)=>{
-								return(
+						(() => {
+							return (Object.keys(this.state.document).map((key, index) => {
+								return (
 									<React.Fragment key={index}>
 										<div style={
 											{
@@ -146,30 +202,7 @@ class Component extends React.Component {
 												flexDirection: "row"
 											}
 										}>
-											<Input
-												id={"key"+index}
-												onChange={
-													(event)=>{
-														let value = event.target.value;
-														//Check if a string is a valid JSON string in JavaScript without using Try/Catch
-														if(/^[\],:{}\s]*$/.test(value.replace(/\\["\\\/bfnrtu]/g, '@').
-															replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-															replace(/(?:^|:|,)(?:\s*\[)+/g, ''))){
-															value = JSON.parse(value);
-														}
-														//Todo set state for this.state.documents
-														// this.setState(
-														// 	{
-														// 		documents:
-														// 	}
-														// )
-													}
-												}
-												style={
-													{
-														width: "27%"
-													}
-												}/>
+											{key}
 											<div style={
 												{
 													width: "6%",
@@ -181,58 +214,39 @@ class Component extends React.Component {
 												:
 											</div>
 											<Input
-												id={"value"+index}
+												id={"value" + index}
 												style={
 													{
 														width: "62%"
 													}
-												}/>
-											<Icon
-												onClick={
-													()=>{
-														//Todo delete the object in this.state.document
-													}
 												}
-												type="delete"
-												style={
-													{
-														paddingTop: "2%",
-														paddingLeft: "2%",
-														width: "3%",
-														color: "red"
-													}
-												}/>
+												onChange={(e) => {
+													this.setState({
+														document: Object.assign({}, this.state.document, {
+															[key]: e.target.value
+														})
+													});
+												}}
+											/>
 										</div>
 									</React.Fragment>
 								);
-							}));
+							}))
 						})()
 					}
-					<div style={
-						{
-
-						}
-					}>
-						<Button
-							onClick={
-								()=>{
-									this.setState({
-										documents: [...this.state.documents, {}]
-									})
-								}
-							}
-							style={
-								{
-									marginTop: "1vh",
-									marginBottom: "2vh"
-								}
-							}>
-							Add New Field
-						</Button>
-					</div>
-
+					<Divider>
+						or json
+					</Divider>
+					<Input.TextArea
+						rows={4}
+						onChange={(e) => {
+							this.setState({
+								textArea: e.target.value
+							});
+						}}
+						defaultValue=''
+					/>
 				</Modal>
-
 			</React.Fragment>
 		);
 	}
@@ -241,11 +255,13 @@ class Component extends React.Component {
 
 const Tracker = withTracker(() => {
 	Meteor.subscribe('buckets_db');
+	Meteor.subscribe('documents_db');
 	return {
 		Meteor: {
 			collection: {
 				users: Meteor.users.find().fetch(),
-				buckets: buckets_db.find().fetch()
+				buckets: buckets_db.find().fetch(),
+				documents: documents_db.find().fetch()
 			},
 			user: Meteor.user(),
 			userId: Meteor.userId(),
