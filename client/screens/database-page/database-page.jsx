@@ -127,6 +127,7 @@ class Component extends React.Component {
 							background: "white",
 							padding: 0,
 							overflowY: 'scroll',
+							overflowX: 'scroll',
 							display: "flex",
 							flexWrap: "wrap",
 							flexDirection: "column",
@@ -134,6 +135,15 @@ class Component extends React.Component {
 					}>
 						{
 							<Table
+								onRow={(record, rowIndex) => {
+									return {
+										onClick: (event) => {
+											console.log(record)
+										}
+									};
+								}}
+								bordered
+								pagination = {false}
 								rowKey='_id'
 								dataSource={
 									this.props.Meteor.collection.documents.filter((document) => {
@@ -159,7 +169,7 @@ class Component extends React.Component {
 										return {
 											title: key,
 											dataIndex: key,
-											key: key
+											key: key,
 										};
 									})
 								}
