@@ -6,6 +6,12 @@ https://github.com/pkcwong/backstabber
 
 Built with [meteor-react-starter](https://github.com/pkcwong/meteor-react-starter), a starter repo to building a web application with ReactJS, using the MeteorJS framework.
 
+### Deploy
+
+Demo App: https://backstabber.herokuapp.com/
+
+Docs: https://pkcwong.github.io/backstabber/
+
 ### Contributing
 
 - Christopher Wong [@pkcwong](https://github.com/pkcwong)
