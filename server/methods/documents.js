@@ -46,7 +46,11 @@ Meteor.methods({
 			}
 			const _id = documents_db.insert({
 				bucket: bucket._id,
-				document: json.document
+				document: ((document) => {
+					let doc = Object.assign({}, document);
+					delete doc._id;
+					return doc;
+				})(json.document)
 			});
 			resolve({
 				_id: _id
@@ -73,11 +77,19 @@ Meteor.methods({
 				_id: json._id
 			}, {
 				$set: {
-					document: json.document
+					document: ((document) => {
+						let doc = Object.assign({}, document);
+						delete doc._id;
+						return doc;
+					})(json.document)
 				}
 			});
 			resolve({
-				document: json.document
+				document: ((document) => {
+					let doc = Object.assign({}, document);
+					delete doc._id;
+					return doc;
+				})(json.document)
 			});
 		});
 	},
