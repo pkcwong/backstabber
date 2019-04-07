@@ -7,7 +7,7 @@ import 'antd/dist/antd.css';
 import { buckets_db } from "../../../shared/collections/buckets";
 import { documents_db } from "../../../shared/collections/documents";
 import { DocumentsAction } from "../../redux/actions/documents-action";
-
+import { DocumentEditorComponent } from "./components/document-editor-component/document-editor-component";
 
 class Component extends React.Component {
 
@@ -15,8 +15,7 @@ class Component extends React.Component {
 		super(props);
 		this.state = {
 			document_modal: false,
-			document: {},
-			textArea: ""
+			document: null
 		}
 	}
 
@@ -94,26 +93,7 @@ class Component extends React.Component {
 								() => {
 									this.setState({
 										document_modal: true,
-										document: (() => {
-											const doc = this.props.Meteor.collection.documents.filter((document) => {
-												return (document.bucket === FlowRouter.getParam('_id'));
-											}).map((document) => {
-												return Object.assign({}, {
-													_id: document._id
-												}, document.document);
-											}).reduce((accumulator, current) => {
-												return Object.assign({}, accumulator, Object.keys(current).reduce((acc, cur) => {
-													return Object.assign({}, acc, {
-														[cur]: null
-													})
-												}, {}));
-											}, {
-												_id: null
-											});
-											delete doc['_id'];
-											return doc;
-										})(),
-										textArea: ""
+										document: null
 									});
 								}
 							}>
@@ -138,12 +118,15 @@ class Component extends React.Component {
 								onRow={(record, rowIndex) => {
 									return {
 										onClick: (event) => {
-											console.log(record)
+											this.setState({
+												document_modal: true,
+												document: record
+											})
 										}
 									};
 								}}
 								bordered
-								pagination = {false}
+								pagination={false}
 								rowKey='_id'
 								dataSource={
 									this.props.Meteor.collection.documents.filter((document) => {
@@ -177,18 +160,40 @@ class Component extends React.Component {
 						}
 					</div>
 				</div>
-				<Modal
-					title="Insert New Document"
+				<DocumentEditorComponent
+					store={this.props.store}
+					document={this.state.document}
+					fallbackKeys={
+						(() => {
+							const doc = this.props.Meteor.collection.documents.filter((document) => {
+								return (document.bucket === FlowRouter.getParam('_id'));
+							}).map((document) => {
+								return Object.assign({}, {
+									_id: document._id
+								}, document.document);
+							}).reduce((accumulator, current) => {
+								return Object.assign({}, accumulator, Object.keys(current).reduce((acc, cur) => {
+									return Object.assign({}, acc, {
+										[cur]: null
+									})
+								}, {}));
+							}, {
+								_id: null
+							});
+							delete doc['_id'];
+							return Object.keys(doc);
+						})()
+					}
 					visible={this.state.document_modal}
-					onOk={() => {
-						if (this.state.textArea === '') {
+					onOk={(document) => {
+						if (this.state.document === null) {
 							this.props.dispatch(DocumentsAction.insert(FlowRouter.getParam('_id'), this.props.Meteor.collection.buckets.find((bucket) => {
 								return (bucket._id === FlowRouter.getParam('_id'));
-							}).token, Object.assign({}, this.state.document)));
+							}).token, document));
 						} else {
-							this.props.dispatch(DocumentsAction.insert(FlowRouter.getParam('_id'), this.props.Meteor.collection.buckets.find((bucket) => {
+							this.props.dispatch(DocumentsAction.update(FlowRouter.getParam('_id'), this.props.Meteor.collection.buckets.find((bucket) => {
 								return (bucket._id === FlowRouter.getParam('_id'));
-							}).token, Object.assign({}, JSON.parse(this.state.textArea))));
+							}).token, this.state.document._id, document));
 						}
 						this.setState({
 							document_modal: false
@@ -199,64 +204,7 @@ class Component extends React.Component {
 							document_modal: false
 						});
 					}}
-				>
-					{
-						(() => {
-							return (Object.keys(this.state.document).map((key, index) => {
-								return (
-									<React.Fragment key={index}>
-										<div style={
-											{
-												display: "flex",
-												flexWrap: "wrap",
-												flexDirection: "row"
-											}
-										}>
-											{key}
-											<div style={
-												{
-													width: "6%",
-													textAlign: "center",
-													fontWeight: "bold",
-													paddingTop: "1%"
-												}
-											}>
-												:
-											</div>
-											<Input
-												id={"value" + index}
-												style={
-													{
-														width: "62%"
-													}
-												}
-												onChange={(e) => {
-													this.setState({
-														document: Object.assign({}, this.state.document, {
-															[key]: e.target.value
-														})
-													});
-												}}
-											/>
-										</div>
-									</React.Fragment>
-								);
-							}))
-						})()
-					}
-					<Divider>
-						or json
-					</Divider>
-					<Input.TextArea
-						rows={4}
-						onChange={(e) => {
-							this.setState({
-								textArea: e.target.value
-							});
-						}}
-						defaultValue=''
-					/>
-				</Modal>
+				/>
 			</React.Fragment>
 		);
 	}

@@ -55,6 +55,32 @@ Meteor.methods({
 			throw new Meteor.Error(err);
 		});
 	},
+	'Documents/UPDATE': (json) => {
+		return new Promise((resolve, reject) => {
+			const bucket = buckets_db.findOne({
+				_id: json.bucket
+			});
+			if (!bucket) {
+				reject('404 Not Found');
+				return;
+			}
+			if (bucket.token !== json.token) {
+				reject('401 Unauthorized');
+				return;
+			}
+			documents_db.update({
+				bucket: bucket._id,
+				_id: json._id
+			}, {
+				$set: {
+					document: json.document
+				}
+			});
+			resolve({
+				document: json.document
+			});
+		});
+	},
 	'Documents/REMOVE': (json) => {
 		return new Promise((resolve, reject) => {
 			const bucket = buckets_db.findOne({
