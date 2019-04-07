@@ -388,7 +388,7 @@ class Component extends React.Component {
 												key={index}>
 												<div>
 													{
-														log
+														JSON.stringify(log)
 													}
 												</div>
 											</React.Fragment>
