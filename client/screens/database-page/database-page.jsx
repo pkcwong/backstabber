@@ -141,26 +141,38 @@ class Component extends React.Component {
 								}
 								columns={
 									[
-										...Object.keys(this.props.Meteor.collection.documents.filter((document) => {
-											return (document.bucket === FlowRouter.getParam('_id'));
-										}).map((document) => {
-											return Object.assign({}, {
-												_id: document._id
-											}, document.document);
-										}).reduce((accumulator, current) => {
-											return Object.assign({}, accumulator, current);
-										}, {
-											_id: null
-										})).map((key) => {
+										{
+											key: '_id',
+											title: '_id',
+											dataIndex: '_id'
+										},
+										...Object.keys((() => {
+											let squash = this.props.Meteor.collection.documents.filter((document) => {
+												return (document.bucket === FlowRouter.getParam('_id'));
+											}).map((document) => {
+												return Object.assign({}, {
+													_id: document._id
+												}, document.document);
+											}).reduce((accumulator, current) => {
+												return Object.assign({}, accumulator, current);
+											}, {
+												_id: null
+											});
+											delete squash._id;
+											return squash;
+										})()).map((key) => {
 											return {
 												title: key,
 												dataIndex: key,
 												key: key,
+												render: (text) => {
+													return JSON.stringify(text);
+												}
 											};
 										}),
 										{
-											title: 'action',
 											key: 'action',
+											title: 'action',
 											render: (text, record) => {
 												return (
 													<React.Fragment>
