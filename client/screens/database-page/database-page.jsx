@@ -118,10 +118,12 @@ class Component extends React.Component {
 								onRow={(record, rowIndex) => {
 									return {
 										onClick: (event) => {
-											this.setState({
-												document_modal: true,
-												document: record
-											})
+											if (event.target.value !== 'delete') {
+												this.setState({
+													document_modal: true,
+													document: record
+												});
+											}
 										}
 									};
 								}}
@@ -138,23 +140,46 @@ class Component extends React.Component {
 									})
 								}
 								columns={
-									Object.keys(this.props.Meteor.collection.documents.filter((document) => {
-										return (document.bucket === FlowRouter.getParam('_id'));
-									}).map((document) => {
-										return Object.assign({}, {
-											_id: document._id
-										}, document.document);
-									}).reduce((accumulator, current) => {
-										return Object.assign({}, accumulator, current);
-									}, {
-										_id: null
-									})).map((key) => {
-										return {
-											title: key,
-											dataIndex: key,
-											key: key,
-										};
-									})
+									[
+										...Object.keys(this.props.Meteor.collection.documents.filter((document) => {
+											return (document.bucket === FlowRouter.getParam('_id'));
+										}).map((document) => {
+											return Object.assign({}, {
+												_id: document._id
+											}, document.document);
+										}).reduce((accumulator, current) => {
+											return Object.assign({}, accumulator, current);
+										}, {
+											_id: null
+										})).map((key) => {
+											return {
+												title: key,
+												dataIndex: key,
+												key: key,
+											};
+										}),
+										{
+											title: 'action',
+											key: 'action',
+											render: (text, record) => {
+												return (
+													<React.Fragment>
+														<Button
+															type='danger'
+															value='delete'
+															onClick={() => {
+																this.props.dispatch(DocumentsAction.remove(FlowRouter.getParam('_id'), this.props.Meteor.collection.buckets.find((bucket) => {
+																	return (bucket._id === FlowRouter.getParam('_id'));
+																}).token, record._id));
+															}}
+														>
+															Delete
+														</Button>
+													</React.Fragment>
+												);
+											}
+										}
+									]
 								}
 							/>
 						}
