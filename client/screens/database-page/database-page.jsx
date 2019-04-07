@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Card, Button, Divider, Modal, Input, Icon, Table } from 'antd';
+import { Button, Empty, Table } from 'antd';
 import 'antd/dist/antd.css';
 import { buckets_db } from "../../../shared/collections/buckets";
 import { documents_db } from "../../../shared/collections/documents";
@@ -114,86 +114,107 @@ class Component extends React.Component {
 						}
 					}>
 						{
-							<Table
-								onRow={(record, rowIndex) => {
-									return {
-										onClick: (event) => {
-											if (event.target.value !== 'delete') {
-												this.setState({
-													document_modal: true,
-													document: record
-												});
-											}
-										}
-									};
-								}}
-								bordered
-								pagination={false}
-								rowKey='_id'
-								dataSource={
-									this.props.Meteor.collection.documents.filter((document) => {
-										return (document.bucket === FlowRouter.getParam('_id'));
-									}).map((document) => {
-										return Object.assign({}, {
-											_id: document._id
-										}, document.document);
-									})
+							(() => {
+								if (this.props.Meteor.collection.documents.filter((document) => {
+									return (document.bucket === FlowRouter.getParam('_id'));
+								}).length === 0) {
+									return (
+										<React.Fragment>
+											<div
+												style={
+													{
+														margin: 'auto'
+													}
+												}
+											>
+												<Empty/>
+											</div>
+										</React.Fragment>
+									);
 								}
-								columns={
-									[
-										{
-											key: '_id',
-											title: '_id',
-											dataIndex: '_id'
-										},
-										...Object.keys((() => {
-											let squash = this.props.Meteor.collection.documents.filter((document) => {
+								return (
+									<Table
+										onRow={(record, rowIndex) => {
+											return {
+												onClick: (event) => {
+													if (event.target.value !== 'delete') {
+														this.setState({
+															document_modal: true,
+															document: record
+														});
+													}
+												}
+											};
+										}}
+										bordered
+										pagination={false}
+										rowKey='_id'
+										dataSource={
+											this.props.Meteor.collection.documents.filter((document) => {
 												return (document.bucket === FlowRouter.getParam('_id'));
 											}).map((document) => {
 												return Object.assign({}, {
 													_id: document._id
 												}, document.document);
-											}).reduce((accumulator, current) => {
-												return Object.assign({}, accumulator, current);
-											}, {
-												_id: null
-											});
-											delete squash._id;
-											return squash;
-										})()).map((key) => {
-											return {
-												title: key,
-												dataIndex: key,
-												key: key,
-												render: (text) => {
-													return JSON.stringify(text);
-												}
-											};
-										}),
-										{
-											key: 'action',
-											title: 'action',
-											render: (text, record) => {
-												return (
-													<React.Fragment>
-														<Button
-															type='danger'
-															value='delete'
-															onClick={() => {
-																this.props.dispatch(DocumentsAction.remove(FlowRouter.getParam('_id'), this.props.Meteor.collection.buckets.find((bucket) => {
-																	return (bucket._id === FlowRouter.getParam('_id'));
-																}).token, record._id));
-															}}
-														>
-															Delete
-														</Button>
-													</React.Fragment>
-												);
-											}
+											})
 										}
-									]
-								}
-							/>
+										columns={
+											[
+												{
+													key: '_id',
+													title: '_id',
+													dataIndex: '_id'
+												},
+												...Object.keys((() => {
+													let squash = this.props.Meteor.collection.documents.filter((document) => {
+														return (document.bucket === FlowRouter.getParam('_id'));
+													}).map((document) => {
+														return Object.assign({}, {
+															_id: document._id
+														}, document.document);
+													}).reduce((accumulator, current) => {
+														return Object.assign({}, accumulator, current);
+													}, {
+														_id: null
+													});
+													delete squash._id;
+													return squash;
+												})()).map((key) => {
+													return {
+														title: key,
+														dataIndex: key,
+														key: key,
+														render: (text) => {
+															return JSON.stringify(text);
+														}
+													};
+												}),
+												{
+													key: 'action',
+													title: 'action',
+													render: (text, record) => {
+														return (
+															<React.Fragment>
+																<Button
+																	type='danger'
+																	value='delete'
+																	onClick={() => {
+																		this.props.dispatch(DocumentsAction.remove(FlowRouter.getParam('_id'), this.props.Meteor.collection.buckets.find((bucket) => {
+																			return (bucket._id === FlowRouter.getParam('_id'));
+																		}).token, record._id));
+																	}}
+																>
+																	Delete
+																</Button>
+															</React.Fragment>
+														);
+													}
+												}
+											]
+										}
+									/>
+								);
+							})()
 						}
 					</div>
 				</div>
