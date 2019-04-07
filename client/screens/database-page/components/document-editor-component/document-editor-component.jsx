@@ -9,7 +9,7 @@ class Component extends React.Component {
 		super(props);
 		this.state = {
 			document: {},
-			json: JSON.stringify({}),
+			json: JSON.stringify({}, null, 4),
 			error_fields: [],
 			error_json: false
 		};
@@ -212,7 +212,7 @@ class Component extends React.Component {
 						return JSON.stringify(this.props.fallbackKeys.reduce((accumulator, current) => {
 							accumulator[current] = null;
 							return accumulator;
-						}, {}));
+						}, {}), null, 4);
 					}
 				})()
 			});
