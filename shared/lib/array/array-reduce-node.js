@@ -32,14 +32,15 @@ export class ArrayReduceNode extends BasicNode {
 	static executor = (props = ArrayReduceNode.props, inputs) => {
 		return new Promise(async (resolve, reject) => {
 			resolve({
-				result: await Promise.resolve(inputs.array.reduce(async (accumulator, current) => {
+				result: await Promise.resolve(inputs.array.reduce(async (accumulator, current, index) => {
 					return Promise.resolve(await new Promise(async (resolve) => {
 						Meteor.call('sketches/EXECUTE', {
 							_id: inputs.program._id,
 							token: inputs.program.token,
 							entry: Object.assign({}, inputs.program.entry, {
 								accumulator: await Promise.resolve(accumulator),
-								current: current
+								current: current,
+								index: index
 							})
 						}, (err, res) => {
 							if (err) {
