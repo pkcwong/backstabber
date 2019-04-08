@@ -1158,8 +1158,11 @@ class Component extends React.Component {
 										Return Value:
 										<Input.TextArea
 											cols={4}
+											rows={8}
 											contentEditable={false}
-											value={JSON.stringify(this.state.result, null, 4)}
+											value={JSON.stringify({
+												result: this.state.result
+											}, null, 4)}
 										/>
 									</React.Fragment>
 								);
