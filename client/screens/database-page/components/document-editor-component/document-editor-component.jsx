@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Divider, Modal, Input } from 'antd';
+import { Divider, Modal, Icon, Input } from 'antd';
 import 'antd/dist/antd.css';
 
 class Component extends React.Component {
@@ -9,8 +9,8 @@ class Component extends React.Component {
 		super(props);
 		this.state = {
 			document: {},
-			json: JSON.stringify({}),
-			error_fields: false,
+			json: JSON.stringify({}, null, 4),
+			error_fields: [],
 			error_json: false
 		};
 	}
@@ -45,7 +45,7 @@ class Component extends React.Component {
 					}
 					okButtonProps={
 						{
-							disabled: (this.state.error_fields || this.state.error_json)
+							disabled: (this.state.error_fields.length !== 0 || this.state.error_json)
 						}
 					}
 				>
@@ -83,6 +83,23 @@ class Component extends React.Component {
 													width: "62%"
 												}
 											}
+											suffix={
+												<React.Fragment>
+													{
+														(() => {
+															if (this.state.error_fields.includes(key)) {
+																return (
+																	<Icon
+																		type='warning'
+																		theme='twoTone'
+																		twoToneColor='#ff0000'
+																	/>
+																)
+															}
+														})()
+													}
+												</React.Fragment>
+											}
 											onChange={(e) => {
 												this.setState({
 													document: Object.assign({}, this.state.document, {
@@ -100,12 +117,15 @@ class Component extends React.Component {
 													}, {});
 													this.updateJson(doc);
 													this.setState({
-														error_fields: false,
+														error_fields: [],
 														error_json: false
 													});
 												} catch (e) {
 													this.setState({
-														error_fields: true
+														error_fields: [
+															...this.state.error_fields,
+															key
+														]
 													});
 												}
 											}}
@@ -130,7 +150,7 @@ class Component extends React.Component {
 									const doc = JSON.parse(e.target.value);
 									this.updateFields(doc);
 									this.setState({
-										error_fields: false,
+										error_fields: [],
 										error_json: false
 									});
 								} catch (e) {
@@ -142,6 +162,24 @@ class Component extends React.Component {
 						}
 						value={this.state.json}
 					/>
+					{
+						(() => {
+							if (this.state.error_json === true) {
+								return (
+									<Icon
+										type='warning'
+										theme='twoTone'
+										twoToneColor='#ff0000'
+										style={
+											{
+												float: 'right'
+											}
+										}
+									/>
+								)
+							}
+						})()
+					}
 				</Modal>
 			</React.Fragment>
 		);
@@ -169,12 +207,12 @@ class Component extends React.Component {
 					if (this.props.document !== null) {
 						const doc = Object.assign({}, this.props.document);
 						delete doc._id;
-						return JSON.stringify(doc, null ,4);
+						return JSON.stringify(doc, null, 4);
 					} else {
 						return JSON.stringify(this.props.fallbackKeys.reduce((accumulator, current) => {
 							accumulator[current] = null;
 							return accumulator;
-						}, {}));
+						}, {}), null, 4);
 					}
 				})()
 			});
