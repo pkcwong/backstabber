@@ -1134,7 +1134,7 @@ class Component extends React.Component {
 						</div>
 					</Modal>
 					<Modal
-						title="Final Result"
+						title="Execution Complete"
 						visible={this.state.result_modal}
 						onOk={
 							()=>{
@@ -1153,7 +1153,16 @@ class Component extends React.Component {
 					>
 						{
 							(()=>{
-								return("Your final Result: " + JSON.stringify(this.state.result));
+								return(
+									<React.Fragment>
+										Return Value:
+										<Input.TextArea
+											cols={4}
+											contentEditable={false}
+											value={JSON.stringify(this.state.result, null, 4)}
+										/>
+									</React.Fragment>
+								);
 							})()
 
 						}
