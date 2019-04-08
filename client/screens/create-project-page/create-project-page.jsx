@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { sketches_db } from "../../../shared/collections/sketches";
-import { Button, Card, Input, Modal } from 'antd';
+import { Button, Card, Input, message, Modal } from 'antd';
 import lunr from 'lunr';
 import 'antd/dist/antd.css';
 import { CanvasAction } from "../../redux/actions/canvas-action";
@@ -42,7 +42,7 @@ class Component extends React.Component {
 						}
 					}>
 						<div onClick={
-							()=>{
+							() => {
 								FlowRouter.go('/');
 							}
 						}>
@@ -82,7 +82,7 @@ class Component extends React.Component {
 							Data Buckets
 						</Button>
 						<Input.Search
-							size = {'large'}
+							size={'large'}
 							style={{
 								width: '20%',
 								marginLeft: "1vw"
@@ -103,7 +103,7 @@ class Component extends React.Component {
 							icon="logout"
 							size="large"
 							onClick={
-								()=>{
+								() => {
 									Meteor.logout();
 									FlowRouter.go("/")
 								}
@@ -130,8 +130,8 @@ class Component extends React.Component {
 								const sketches = this.props.Meteor.collection.sketches.filter((sketch) => {
 									return (sketch.owner === this.props.Meteor.userId);
 								});
-								if(sketches.length === 0){
-									return(
+								if (sketches.length === 0) {
+									return (
 										<React.Fragment>
 											<div style={
 												{
@@ -147,8 +147,7 @@ class Component extends React.Component {
 											</div>
 										</React.Fragment>
 									);
-								}
-								else{
+								} else {
 									const idx = ((sketches) => {
 										return lunr(function () {
 											this.ref('_id');
@@ -239,8 +238,8 @@ class Component extends React.Component {
 													{
 														(() => {
 															if (this.props.Meteor.collection.sketches.find((sketch) => {
-																	return (sketch._id === item);
-																}).meta.description === "") {
+																return (sketch._id === item);
+															}).meta.description === "") {
 																return (
 																	<div style={
 																		{
@@ -364,9 +363,21 @@ class Component extends React.Component {
 											<React.Fragment
 												key={index}>
 												<div>
-													{
-														token
-													}
+													<Button
+														onClick={() => {
+															((string) => {
+																const e = document.createElement('textarea');
+																e.value = string;
+																document.body.appendChild(e);
+																e.select();
+																document.execCommand('copy');
+																document.body.removeChild(e);
+															})('curl -X POST --header \"token: ' + token + '\" ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id);
+															message.success('copied CURL command to clipboard');
+														}}
+													>
+														{token}
+													</Button>
 												</div>
 											</React.Fragment>
 										);
