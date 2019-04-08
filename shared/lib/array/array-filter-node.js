@@ -29,14 +29,15 @@ export class ArrayFilterNode extends BasicNode {
 	static executor = (props = ArrayFilterNode.props, inputs) => {
 		return new Promise(async (resolve, reject) => {
 			resolve({
-				result: await Promise.resolve(inputs.array.reduce(async (accumulator, current) => {
+				result: await Promise.resolve(inputs.array.reduce(async (accumulator, current, index) => {
 					const acc = await Promise.resolve(accumulator);
 					return Promise.resolve(await new Promise(async (resolve) => {
 						Meteor.call('sketches/EXECUTE', {
 							_id: inputs.program._id,
 							token: inputs.program.token,
 							entry: Object.assign({}, inputs.program.entry, {
-								current: current
+								current: current,
+								index: index
 							})
 						}, (err, res) => {
 							if (err) {
