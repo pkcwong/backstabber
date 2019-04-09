@@ -197,7 +197,15 @@ class Component extends React.Component {
 													})('data:application/octet-stream;charset=utf-8,' + encodeURIComponent(JSON.stringify({
 														program: program.serialize(),
 														canvas: canvas
-													})), 'export.bs');
+													})), (() => {
+														if(this.props.CanvasReducer._id !== null){
+															return this.props.Meteor.collection.sketches.find((sketch) => {
+																return sketch._id === this.props.CanvasReducer._id
+															}).meta.title + ".bs";
+														}else{
+															return "export.bs";
+														}
+													})());
 												}
 											}>
 												Export
