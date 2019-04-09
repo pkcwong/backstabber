@@ -133,14 +133,6 @@ class Component extends React.Component {
 											<a onClick={()=>{console.log("Delete")}}>Delete</a>
 										</Menu.Item>
 										<Menu.Item>
-											<a onClick={()=> {
-												this.props.dispatch(CanvasAction.generateApiKey(this.props.CanvasReducer._id));
-												this.setState({
-													save_modal: true
-												});
-											}}>Generate API</a>
-										</Menu.Item>
-										<Menu.Item>
 											<a onClick={
 												() => {
 													(() => {
@@ -692,15 +684,54 @@ class Component extends React.Component {
 											})()
 
 										}
-										<br/>
-										<br/>
-										<b>API URL:</b>
-										<br/>
-										{window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id}
-										<br/>
-										<br/>
-										<b>API Key(s):</b>
-										<br/>
+										{
+											(()=>{
+												const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
+													return (sketch._id === this.props.CanvasReducer._id);
+												});
+												if(sketch !== undefined){
+													return (
+														<React.Fragment>
+															<br/>
+															<br/>
+															<b>API URL:</b>
+															<br/>
+															{window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id}
+															<br/>
+															<br/>
+															<div style={
+																{
+																	marginBottom: "1vh"
+																}
+															}>
+																<b>API Key(s):</b>
+																<Button
+																	style={
+																		{
+																			marginLeft: "1vw"
+																		}
+																	}
+																	onClick={()=> {
+																		this.props.dispatch(CanvasAction.generateApiKey(this.props.CanvasReducer._id));
+																		this.setState({
+																			save_modal: true
+																		});
+																	}}>
+																	Generate API Key
+																</Button>
+															</div>
+														</React.Fragment>
+													)
+												}
+												else{
+													return(
+														<div>
+															**Note: save first to obtain API key and URL.
+														</div>
+													)
+												}
+											})()
+										}
 										{
 											(() => {
 												const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
@@ -718,6 +749,7 @@ class Component extends React.Component {
 														<p>
 															{item}
 															<Button
+																size={"small"}
 																style={
 																	{
 																		marginLeft: "2vw"
