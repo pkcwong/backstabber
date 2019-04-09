@@ -21,10 +21,15 @@ Meteor.methods({
 	'Buckets/DELETE': (json) => {
 		return new Promise((resolve, reject) => {
 			const bucket = buckets_db.findOne({
-				_id: json._id
+				_id: json._id,
 			});
 			if (!bucket) {
 				reject('404 Not Found');
+				return;
+			}
+			if (bucket.owner !== Meteor.userId()) {
+				reject('401 Unauthorized');
+				return;
 			}
 			documents_db.remove({
 				bucket: bucket._id
@@ -34,6 +39,28 @@ Meteor.methods({
 			}));
 		}).catch((err) => {
 			throw new Meteor.Error(err);
+		});
+	},
+	'Buckets/UPDATE': (json) => {
+		return new Promise((resolve, reject) => {
+			const bucket = buckets_db.findOne({
+				_id: json._id,
+			});
+			if (!bucket) {
+				reject('404 Not Found');
+				return;
+			}
+			if (bucket.owner !== Meteor.userId()) {
+				reject('401 Unauthorized');
+				return;
+			}
+			buckets_db.update({
+				_id: json._id
+			}, {
+				$set: {
+					meta: json.meta
+				}
+			});
 		});
 	}
 });
