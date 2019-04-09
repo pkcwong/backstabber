@@ -121,7 +121,7 @@ class Component extends React.Component {
 													save_modal: true
 												})
 											}}>
-												Save
+												Save & Generate API
 											</a>
 										</Menu.Item>
 										<Menu.Item>
