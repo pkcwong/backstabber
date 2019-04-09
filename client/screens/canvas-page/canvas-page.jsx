@@ -17,7 +17,7 @@ import TrayItemWidget from './components/TrayItemWidget';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { Program } from "../../../shared/lib/program";
 import { buckets_db } from "../../../shared/collections/buckets";
-import { Menu, Dropdown, Button, Input, Drawer, Modal, Radio, Icon} from 'antd';
+import { Menu, Dropdown, Button, Input, Drawer, message, Modal, Radio, Icon} from 'antd';
 import 'antd/dist/antd.css';
 
 
@@ -1164,6 +1164,53 @@ class Component extends React.Component {
 												result: this.state.result
 											}, null, 4)}
 										/>
+										{
+											(() => {
+												if (this.props.CanvasReducer._id !== null) {
+													return (
+														<Dropdown
+															overlay={
+																<React.Fragment>
+																	<Menu>
+																		{
+																			this.props.Meteor.collection.sketches.find((sketch) => {
+																				return (sketch._id === this.props.CanvasReducer._id);
+																			}).tokens.map((token) => {
+																				return (
+																					<Menu.Item
+																						key={token}
+																						onClick={() => {
+																							((string) => {
+																								const e = document.createElement('textarea');
+																								e.value = string;
+																								document.body.appendChild(e);
+																								e.select();
+																								document.execCommand('copy');
+																								document.body.removeChild(e);
+																							})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data \'' + JSON.stringify(JSON.parse($("#user_input").val())) + '\' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id);
+																							message.success('copied CURL command to clipboard');
+																						}}
+																					>
+																						<Icon
+																							type='key'
+																						/>
+																						{token}
+																					</Menu.Item>
+																				);
+																			})
+																		}
+																	</Menu>
+																</React.Fragment>
+															}
+														>
+															<Button>
+																Export cURL command
+															</Button>
+														</Dropdown>
+													);
+												}
+											})()
+										}
 									</React.Fragment>
 								);
 							})()
