@@ -574,7 +574,6 @@ class Component extends React.Component {
 									loading: true,
 									debug_modal: false,
 								});
-								console.log(this.state.loading);
 								this.props.dispatch(CanvasAction.deleteLabel());
 								const program = new Program(this.props.CanvasReducer.bsNodes);
 								this.props.CanvasReducer.bsNodes.forEach((bsNode) => {
