@@ -17,7 +17,7 @@ import TrayItemWidget from './components/TrayItemWidget';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { Program } from "../../../shared/lib/program";
 import { buckets_db } from "../../../shared/collections/buckets";
-import { Menu, Dropdown, Button, Input, Drawer, message, Modal, Radio, Icon} from 'antd';
+import { Menu, Dropdown, Button, Input, Drawer, message, Modal, Radio, Icon, Spin } from 'antd';
 import 'antd/dist/antd.css';
 
 
@@ -41,6 +41,7 @@ class Component extends React.Component {
 			offsetX: 0,
 			offsetY: 0,
 			bsNode:{},
+			loading: false,
 			// Auto dispatch ID and token for Program Node
 			program_node_modal: false,
 			selected_program_id: null,
@@ -73,6 +74,22 @@ class Component extends React.Component {
 		this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
 		return (
 			<React.Fragment>
+				<Spin
+					tip="Program executing..."
+					spinning={this.state.loading}
+					size= "large"
+					style={
+						{
+							position: "fixed",
+							height: "100vh",
+							width: "100vw",
+							paddingTop:"45vh",
+							zIndex: "3",
+							background: "white",
+							opacity: "0.8"
+						}
+					}
+				/>
 				<div style={
 					{
 						minHeight: "7vh",
@@ -553,6 +570,10 @@ class Component extends React.Component {
 						visible={this.state.debug_modal}
 						onOk={
 							()=>{
+								this.setState({
+									loading: true,
+									debug_modal: false,
+								});
 								this.props.dispatch(CanvasAction.deleteLabel());
 								const program = new Program(this.props.CanvasReducer.bsNodes);
 								this.props.CanvasReducer.bsNodes.forEach((bsNode) => {
@@ -577,16 +598,23 @@ class Component extends React.Component {
 									program.execute(JSON.parse($("#user_input").val())).then((result) => {
 										this.setState({
 											result: result,
-											result_modal: true
+											result_modal: true,
+											loading: false
 										})
-									});
+									}).catch(()=>{
+										alert("Program takes too long to run");
+										this.setState({
+											loading: false
+										})
+									})
 								}
 								catch(e){
 									alert(e.message);
+									this.setState({
+										loading: false
+									})
 								}
-								this.setState({
-									debug_modal: false,
-								})
+
 							}
 						}
 						onCancel={
