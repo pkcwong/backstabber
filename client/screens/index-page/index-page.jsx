@@ -64,7 +64,17 @@ class Component extends React.Component {
 									}
 								}
 							>
-								Login
+								{
+									(()=>{
+										if(Meteor.user() === null) {
+											return "Login";
+										}
+										else {
+											return "Go To App"
+										}
+									})()
+								}
+
 							</Button>
 
 						</div>
