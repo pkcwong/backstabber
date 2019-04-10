@@ -670,15 +670,15 @@ class Component extends React.Component {
 									}
 								});
 							});
+							let meta = {
+								title: $("#program_name").val(),
+								description: $("#program_description").val()
+							};
 							if(_id === null){
-								let meta = {
-									title: $("#program_name").val(),
-									description: $("#program_description").val()
-								};
 								this.props.dispatch(CanvasAction.create(program, canvas, meta));
 							}
 							else{
-								this.props.dispatch(CanvasAction.update(_id, program, canvas));
+								this.props.dispatch(CanvasAction.update(_id, program, canvas, meta));
 							}
 							this.setState({
 								save_modal: false
@@ -709,7 +709,7 @@ class Component extends React.Component {
 													let sketch= this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return(sketch.meta.title);
+													return(<Input id={"program_name"} placeholder={sketch.meta.title}/>);
 												}
 											})()
 
@@ -727,7 +727,7 @@ class Component extends React.Component {
 													let sketch= this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return(sketch.meta.description);
+													return(<Input id={"program_description"} placeholder={sketch.meta.description}/>);
 												}
 											})()
 
@@ -944,7 +944,7 @@ class Component extends React.Component {
 								let input_token = $("#program_token").val();
 								this.setState({
 									program_node_modal: !this.state.program_node_modal
-								})
+								});
 								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.id_coor, 0, 0, (bsNode) => {
 									bsNode.setProps({
 										string: input_id

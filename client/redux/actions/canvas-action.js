@@ -187,15 +187,15 @@ export class CanvasAction {
 	 * Stores a new sketch into database
 	 * @param program
 	 * @param canvas
-	 * @returns {{type: string, payload: {program: *, position: *, title *}}}
+	 * @returns {{type: string, payload: {program: *, position: *, meta: *}}}
 	 */
-	static create = (program, canvas, title) => {
+	static create = (program, canvas, meta) => {
 		return {
 			type: CanvasAction.CREATE,
 			payload: {
 				program: program.serialize(),
 				canvas: canvas,
-				meta: title
+				meta: meta
 			}
 		};
 	};
@@ -205,15 +205,16 @@ export class CanvasAction {
 	 * @param _id
 	 * @param program
 	 * @param canvas
-	 * @returns {{type: string, payload: {_id: *, program: *, canvas: *}}}
+	 * @returns {{type: string, payload: {_id: *, program: *, canvas: *, meta: *}}}
 	 */
-	static update = (_id, program, canvas) => {
+	static update = (_id, program, canvas, meta) => {
 		return {
 			type: CanvasAction.UPDATE_PROGRAM,
 			payload: {
 				_id: _id,
 				program: program.serialize(),
-				canvas: canvas
+				canvas: canvas,
+				meta: meta
 			}
 		};
 	};

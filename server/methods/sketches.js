@@ -31,7 +31,8 @@ Meteor.methods({
 			}, {
 				$set: {
 					program: json['program'],
-					canvas: json['canvas']
+					canvas: json['canvas'],
+					meta: json['meta']
 				}
 			}));
 		});
