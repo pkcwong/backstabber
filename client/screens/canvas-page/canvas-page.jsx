@@ -34,6 +34,7 @@ class Component extends React.Component {
 			drawer: false,
 			save_modal: false,
 			save_as_modal: false,
+			delete_modal: false,
 			debug_modal: false,
 			program: {},
 			canvas: {},
@@ -152,7 +153,13 @@ class Component extends React.Component {
 											</a>
 										</Menu.Item>
 										<Menu.Item>
-											<a onClick={()=>{console.log("Delete")}}>Delete</a>
+											<a onClick={()=>{
+												this.setState({
+													delete_modal: true
+												})
+											}}>
+												Delete
+											</a>
 										</Menu.Item>
 										<Menu.Item>
 											<a onClick={
@@ -878,6 +885,30 @@ class Component extends React.Component {
 								);
 							})()
 						}
+					</Modal>
+					{/*Delete Modal*/}
+					<Modal
+						title="Delete Program"
+						visible={this.state.delete_modal}
+						onOk={
+							() => {
+								if(this.props.CanvasReducer._id !== null){
+									this.props.store.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
+								}
+								this.setState({
+									delete_modal: !this.state.delete_modal
+								})
+							}
+						}
+						onCancel={
+							() => {
+								this.setState({
+									delete_modal: !this.state.delete_modal
+								})
+							}
+						}
+					>
+						<p>Are you sure you want to delete this program?</p>
 					</Modal>
 					{/*Program Node Modal*/}
 					<Modal
