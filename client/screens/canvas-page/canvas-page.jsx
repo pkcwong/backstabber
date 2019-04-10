@@ -33,6 +33,7 @@ class Component extends React.Component {
 			}, {}),
 			drawer: false,
 			save_modal: false,
+			save_as_modal: false,
 			debug_modal: false,
 			program: {},
 			canvas: {},
@@ -142,7 +143,11 @@ class Component extends React.Component {
 											</a>
 										</Menu.Item>
 										<Menu.Item>
-											<a>
+											<a onClick={() => {
+												this.setState({
+													save_as_modal: true
+												})
+											}}>
 												Save as
 											</a>
 										</Menu.Item>
@@ -801,6 +806,73 @@ class Component extends React.Component {
 													</React.Fragment>
 												);
 											})
+										}
+									</div>
+								);
+							})()
+						}
+					</Modal>
+					{/*Save As Modal*/}
+					<Modal
+						title="Program"
+						visible={this.state.save_as_modal}
+						onOk={()=>{
+							const _id = null;
+							const program = new Program(this.props.CanvasReducer.bsNodes);
+							let canvas = {};
+							this.props.CanvasReducer.bsNodes.map((bsNode) => {
+								const srdNode = this.props.CanvasReducer.srdNodes.find((srdNode) => {
+									return (this.props.CanvasReducer.lookup[bsNode._id] === srdNode.id)
+								});
+								canvas = Object.assign({}, canvas, {
+									[bsNode._id]: {
+										coordinates: {
+											x: srdNode.x,
+											y: srdNode.y
+										}
+									}
+								});
+							});
+							if(_id === null){
+								let meta = {
+									title: $("#program_name").val(),
+									description: $("#program_description").val()
+								};
+								this.props.dispatch(CanvasAction.create(program, canvas, meta));
+							}
+							this.setState({
+								save_as_modal: false
+							})
+						}}
+						onCancel={()=>{
+							this.setState({
+								save_as_modal: false
+							})
+						}}
+					>
+						{
+							(()=>{
+								return(
+									<div style={
+										{
+											fontSize: "1.5vh"
+										}
+									}>
+										<b>Program Name:</b>
+										<br/>
+										{
+											(()=>{
+													return(<Input id={"program_name"}/>);
+											})()
+										}
+										<br/>
+										<br/>
+										<b>Description (optional):</b>
+										<br/>
+										{
+											(()=>{
+													return(<Input id={"program_description"}/>);
+											})()
 										}
 									</div>
 								);
