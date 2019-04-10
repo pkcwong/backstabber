@@ -27,7 +27,7 @@ export class ObjectParseNode extends BasicNode {
 
 	constructor(props) {
 		super({
-			class: ObjectGetNode,
+			class: ObjectParseNode,
 			props: props
 		});
 	}
