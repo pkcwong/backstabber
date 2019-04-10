@@ -7,7 +7,7 @@ export class ObjectParseNode extends BasicNode {
 	static ports = {
 		inputs: {
 			string: (x) => {
-				return (x !== undefined);
+				return (x);
 			}
 		},
 		outputs: {
@@ -19,9 +19,15 @@ export class ObjectParseNode extends BasicNode {
 
 	static executor = (props = ObjectParseNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
-			resolve({
-				json: JSON.parse(inputs.string)
-			});
+			try{
+				let result = JSON.parse(inputs.string)
+				resolve({
+					json: result
+				});
+			}
+			catch (e){
+				reject(e)
+			}
 		});
 	};
 
