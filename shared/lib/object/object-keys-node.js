@@ -22,15 +22,9 @@ export class ObjectKeysNode extends BasicNode {
 
     static executor = (props = ObjectKeysNode.props, inputs) => {
         return new Promise((resolve, reject) => {
-            try{
-                let result = Object.keys(inputs.object)
-                resolve({
-                    keys: result
-                });
-            }
-            catch (e){
-                reject(e)
-            }
+            resolve({
+                keys: Object.keys(inputs.object)
+            });
         });
     };
 
