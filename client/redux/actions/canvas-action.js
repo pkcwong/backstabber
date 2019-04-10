@@ -205,15 +205,17 @@ export class CanvasAction {
 	 * @param _id
 	 * @param program
 	 * @param canvas
-	 * @returns {{type: string, payload: {_id: *, program: *, canvas: *}}}
+	 * @returns {{type: string, payload: {_id: *, program: *, canvas: *, title *}}}
 	 */
-	static update = (_id, program, canvas) => {
+	static update = (_id, program, canvas, title) => {
+		console.log(title)
 		return {
 			type: CanvasAction.UPDATE_PROGRAM,
 			payload: {
 				_id: _id,
 				program: program.serialize(),
-				canvas: canvas
+				canvas: canvas,
+				meta: title
 			}
 		};
 	};
