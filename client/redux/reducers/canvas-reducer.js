@@ -303,11 +303,11 @@ export const CanvasReducer = (state = initialState, action) => {
 			const bsNode = state.bsNodes.find((bsNode) => {
 				return (bsNode._id === select_id)
 			});
-			if(Object.keys(bsNode.props).length !== 0){
+			if(Object.keys(bsNode.class.props).length !== 0){
 				return Object.assign({}, state, {
 					select_id: select_id,
 					drawer_modal: !state.drawer_modal,
-					node_props: bsNode.props
+					node_props: Object.assign({}, bsNode.props)
 				});
 			}
 			else{
@@ -318,7 +318,8 @@ export const CanvasReducer = (state = initialState, action) => {
 		}
 		case CanvasAction.NODE_DESELECT: {
 			return Object.assign({}, state, {
-				select_id: ""
+				select_id: "",
+				node_props: {}
 			});
 		}
 		case CanvasAction.DRAWER_STATE_CHANGE: {
