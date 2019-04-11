@@ -31,6 +31,7 @@ import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
 import { ObjectGetNode } from "./object/object-get-node";
+import { ObjectParseNode } from "./object/object-parse-node";
 import { ObjectPutNode } from "./object/object-put-node";
 import { OrNode } from "./logic/or-node";
 import { ProgramNode } from "./functional/program-node";
@@ -171,6 +172,7 @@ export class Program {
 			NumberNode,
 			ObjectNode,
 			ObjectGetNode,
+			ObjectParseNode,
 			ObjectPutNode,
 			OrNode,
 			ProgramNode,
