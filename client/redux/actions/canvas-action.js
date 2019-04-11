@@ -12,6 +12,7 @@ export class CanvasAction {
 	static LOAD_COMPLETE = 'Canvas/LOAD-COMPLETE';
 	static CREATE = 'Canvas/CREATE';
 	static UPDATE_PROGRAM = 'Canvas/UPDATE-PROGRAM';
+	static UPDATE_PROGRAM_META = 'Canvas/UPDATE-PROGRAM-META';
 	static DELETE = 'Canvas/DELETE';
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static REVOKE_KEY = 'Canvas/REVOKE-KEY';
@@ -214,6 +215,22 @@ export class CanvasAction {
 				_id: _id,
 				program: program.serialize(),
 				canvas: canvas,
+				meta: meta
+			}
+		};
+	};
+
+	/**
+	 * Updates the meta of an existing Sketch on database
+	 * @param _id
+	 * @param meta
+	 * @returns {{type: string, payload: {_id: *, meta: *}}}
+	 */
+	static updateMeta= (_id, meta) => {
+		return {
+			type: CanvasAction.UPDATE_PROGRAM_META,
+			payload: {
+				_id: _id,
 				meta: meta
 			}
 		};
