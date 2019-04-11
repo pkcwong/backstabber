@@ -26,7 +26,7 @@ class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selected_category: Object.keys(this.props.CanvasReducer.nodeTypes).reduce((obj, current)=>{
+			selected_category: Object.keys(this.props.CanvasReducer.nodeTypes).reduce((obj, current) => {
 				return Object.assign(obj, {
 					[current]: false
 				})
@@ -42,7 +42,7 @@ class Component extends React.Component {
 			zoom: 100,
 			offsetX: 0,
 			offsetY: 0,
-			bsNode:{},
+			bsNode: {},
 			loading: false,
 			// Auto dispatch ID and token for Program Node
 			program_node_modal: false,
@@ -79,13 +79,13 @@ class Component extends React.Component {
 				<Spin
 					tip="Program executing..."
 					spinning={this.state.loading}
-					size= "large"
+					size="large"
 					style={
 						{
 							position: "fixed",
 							height: "100vh",
 							width: "100vw",
-							paddingTop:"45vh",
+							paddingTop: "45vh",
 							zIndex: "3",
 							background: "white",
 							opacity: "0.8"
@@ -103,7 +103,7 @@ class Component extends React.Component {
 				}>
 					<div style={
 						{
-							margin:"auto",
+							margin: "auto",
 							paddingTop: "1.5vh",
 							paddingBottom: "1.5vh",
 							paddingLeft: "1vw",
@@ -119,15 +119,15 @@ class Component extends React.Component {
 								}
 							}
 							onClick={
-								()=>{
+								() => {
 									FlowRouter.go("/create");
 								}
 							}>
 							<b>B </b> a c k<b> S </b> t a b b e r
 						</Button>
 						<Dropdown overlay={
-							()=>{
-								return(
+							() => {
+								return (
 									<Menu style={
 										{
 											position: "absolute",
@@ -153,7 +153,7 @@ class Component extends React.Component {
 											</a>
 										</Menu.Item>
 										<Menu.Item>
-											<a onClick={()=>{
+											<a onClick={() => {
 												this.setState({
 													delete_modal: true
 												})
@@ -210,11 +210,11 @@ class Component extends React.Component {
 														program: program.serialize(),
 														canvas: canvas
 													})), (() => {
-														if(this.props.CanvasReducer._id !== null){
+														if (this.props.CanvasReducer._id !== null) {
 															return this.props.Meteor.collection.sketches.find((sketch) => {
 																return sketch._id === this.props.CanvasReducer._id
 															}).meta.title + ".bs";
-														}else{
+														} else {
 															return "export.bs";
 														}
 													})());
@@ -241,12 +241,12 @@ class Component extends React.Component {
 							</Button>
 						</Dropdown>
 						<Dropdown overlay={
-							()=>{
-								return(
+							() => {
+								return (
 									<Menu>
 										<Menu.Item>
-											<a onClick={()=>{
-												this.setState({debug_modal:true});
+											<a onClick={() => {
+												this.setState({debug_modal: true});
 											}}>Debug</a>
 										</Menu.Item>
 										<Menu.Item>
@@ -276,7 +276,7 @@ class Component extends React.Component {
 							        }
 						        }
 						        onClick={
-							        ()=>{
+							        () => {
 								        alert("Try drag and drop nodes from the selection bar on the right hand side")
 							        }
 						        }>
@@ -319,9 +319,9 @@ class Component extends React.Component {
 												}
 											}
 											onClick={
-												()=>{
+												() => {
 													let selected_category = this.state.selected_category;
-													selected_category[category]= !this.state.selected_category[category];
+													selected_category[category] = !this.state.selected_category[category];
 													this.setState({
 														selected_category: selected_category
 													});
@@ -332,16 +332,15 @@ class Component extends React.Component {
 										</div>
 										<TrayWidget>
 											{
-												(()=>{
-													if(this.state.selected_category[category]){
-														return Object.keys(this.props.CanvasReducer.nodeTypes[category]).map((node)=>{
+												(() => {
+													if (this.state.selected_category[category]) {
+														return Object.keys(this.props.CanvasReducer.nodeTypes[category]).map((node) => {
 															return node
 														})
-													}
-													else{
+													} else {
 														return []
 													}
-												})().map((node, index)=>{
+												})().map((node, index) => {
 													return (
 														<React.Fragment
 															key={index}
@@ -351,7 +350,7 @@ class Component extends React.Component {
 																	type: node,
 																	category: category
 																}}
-																color= {this.props.CanvasReducer.colorLookup[category]}
+																color={this.props.CanvasReducer.colorLookup[category]}
 																name={node}
 															/>
 														</React.Fragment>
@@ -376,7 +375,7 @@ class Component extends React.Component {
 							className="diagram-layer"
 							onDrop={(event) => {
 								this.props.dispatch(CanvasAction.addNode(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type, this.engine.getRelativeMousePoint(event), 0, 0, (bsNode) => {
-									if(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "ProgramNode"){
+									if (JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "ProgramNode") {
 										this.setState({
 											program_node_modal: true,
 											selected_program_id: null,
@@ -395,7 +394,7 @@ class Component extends React.Component {
 												y: this.engine.getRelativeMousePoint(event).y - 4
 											}
 										})
-									}else if(JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "DatabaseNode"){
+									} else if (JSON.parse(event.dataTransfer.getData('storm-diagram-node')).type === "DatabaseNode") {
 										this.setState({
 											database_modal: true,
 											selected_database_id: null,
@@ -435,7 +434,7 @@ class Component extends React.Component {
 						title="Set Parameters"
 						placement={'bottom'}
 						closable={false}
-						onClose={()=>{
+						onClose={() => {
 							this.props.dispatch(CanvasAction.drawerStateChange());
 						}}
 						visible={this.props.CanvasReducer.drawer_modal}
@@ -447,99 +446,95 @@ class Component extends React.Component {
 							}
 						}>
 							{
-								(()=>{
+								(() => {
 									let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) => {
 										return (bsNode._id === this.props.CanvasReducer.select_id)
 									});
 									return ((bsNode) => {
-										if(bsNode){
-											return Object.keys(bsNode.props);
-										}
-										else{
+										if (bsNode) {
+											return Object.keys(bsNode.class.props);
+										} else {
 											return []
 										}
 									})(bsNode).map((prop) => {
 										return (
-											<React.Fragment
+											<div
 												key={bsNode._id}
-											>
-												<div style={
+												style={
 													{
 														width: "20vw",
 													}
-												}>
-													{prop.charAt(0).toUpperCase() + prop.slice(1) + ": "}
-													{
-														(()=>{
-															if(typeof bsNode.class.props[prop] === "boolean"){
-																return(
-																	<Radio.Group
-																		style={
-																			{
-																				marginLeft: "0.5vw"
-																			}
+												}
+											>
+												{prop.charAt(0).toUpperCase() + prop.slice(1) + ": "}
+												{
+													(() => {
+														if (typeof bsNode.class.props[prop] === "boolean") {
+															return (
+																<Radio.Group
+																	style={
+																		{
+																			marginLeft: "0.5vw"
 																		}
-																		onChange={
-																			(event)=>{
-																				this.props.dispatch(CanvasAction.updateProps(prop, event.target.value));
-																			}
+																	}
+																	onChange={
+																		(event) => {
+																			this.props.dispatch(CanvasAction.updateProps(prop, event.target.value));
 																		}
-																		value={this.props.CanvasReducer.node_props[prop]}>
-																		<Radio value={true}>true</Radio>
-																		<Radio value={false}>false</Radio>
-																	</Radio.Group>
-																)
-															}
-															else{
-																return(
-																	<input
-																		id={prop}
-																		onChange={
-																			(event)=>{
-																				let value = event.target.value;
-																				if(typeof bsNode.class.props[prop] === "number" && !isNaN(Number(value))){
-																					value = Number(value);
-																				}
-																				this.props.dispatch(CanvasAction.updateProps(prop, value));
+																	}
+																	value={this.props.CanvasReducer.node_props[prop]}>
+																	<Radio value={true}>true</Radio>
+																	<Radio value={false}>false</Radio>
+																</Radio.Group>
+															)
+														} else {
+															return (
+																<input
+																	id={prop}
+																	onChange={
+																		(event) => {
+																			let value = event.target.value;
+																			if (typeof bsNode.class.props[prop] === "number" && !isNaN(Number(value))) {
+																				value = Number(value);
 																			}
+																			this.props.dispatch(CanvasAction.updateProps(prop, value));
 																		}
-																		value={(typeof this.props.CanvasReducer.node_props[prop] === 'string') ? this.props.CanvasReducer.node_props[prop] : JSON.stringify(this.props.CanvasReducer.node_props[prop])}
-																	/>
-																);
-															}
-														})()
-													}
-													{
-														(()=>{
-															if(this.props.CanvasReducer.node_props[prop] === bsNode.props[prop]){
-																return(
-																	<Icon
-																		style={
-																			{
-																				color: "green",
-																				marginLeft: "0.2vw"
-																			}
+																	}
+																	value={(typeof this.props.CanvasReducer.node_props[prop] === 'string') ? this.props.CanvasReducer.node_props[prop] : JSON.stringify(this.props.CanvasReducer.node_props[prop])}
+																/>
+															);
+														}
+													})()
+												}
+												{
+													(() => {
+														if (this.props.CanvasReducer.node_props[prop] === bsNode.props[prop]) {
+															return (
+																<Icon
+																	style={
+																		{
+																			color: "green",
+																			marginLeft: "0.2vw"
 																		}
-																		type="check-circle"/>
-																);
-															}
-															else{
-																return(
-																	<Icon
-																		style={
-																			{
-																				color: "red",
-																				marginLeft: "0.2vw"
-																			}
+																	}
+																	type="check-circle"/>
+															);
+														} else {
+															return (
+																<Icon
+																	style={
+																		{
+																			color: "red",
+																			marginLeft: "0.2vw"
 																		}
-																		type="edit" />
+																	}
+																	type="edit"/>
 
-																);
-															}
-														})()
-													}
-												</div>
-											</React.Fragment>
+															);
+														}
+													})()
+												}
+											</div>
 										);
 									});
 								})()
@@ -552,20 +547,19 @@ class Component extends React.Component {
 									}
 								}
 								onClick={
-									()=>{
-										if(Object.keys(this.props.CanvasReducer.node_props)[0]==='array' &&
+									() => {
+										if (Object.keys(this.props.CanvasReducer.node_props)[0] === 'array' &&
 											Object.keys(this.props.CanvasReducer.node_props).length === 1 &&
-												typeof this.props.CanvasReducer.node_props["array"] !== "object"
-										){
+											typeof this.props.CanvasReducer.node_props["array"] !== "object"
+										) {
 											this.props.CanvasReducer.node_props["array"] = JSON.parse(this.props.CanvasReducer.node_props["array"]);
 										}
 										let bsNode = this.props.CanvasReducer.bsNodes.find((bsNode) => {
 											return (bsNode._id === this.props.CanvasReducer.select_id)
 										});
-										try{
+										try {
 											bsNode.setProps(this.props.CanvasReducer.node_props)
-										}
-										catch(e){
+										} catch (e) {
 											alert("Parameter Error");
 										}
 										this.props.dispatch(CanvasAction.drawerStateChange());
@@ -581,7 +575,7 @@ class Component extends React.Component {
 						title="Debug Input"
 						visible={this.state.debug_modal}
 						onOk={
-							()=>{
+							() => {
 								this.setState({
 									loading: true,
 									debug_modal: false,
@@ -606,21 +600,20 @@ class Component extends React.Component {
 										});
 									});
 								});
-								try{
+								try {
 									program.execute(JSON.parse($("#user_input").val())).then((result) => {
 										this.setState({
 											result: result,
 											result_modal: true,
 											loading: false
 										})
-									}).catch(()=>{
+									}).catch(() => {
 										alert("Program takes too long to run");
 										this.setState({
 											loading: false
 										})
 									})
-								}
-								catch(e){
+								} catch (e) {
 									alert(e.message);
 									this.setState({
 										loading: false
@@ -630,7 +623,7 @@ class Component extends React.Component {
 							}
 						}
 						onCancel={
-							()=>{
+							() => {
 								this.setState({
 									debug_modal: false,
 								})
@@ -653,7 +646,7 @@ class Component extends React.Component {
 					<Modal
 						title="Program"
 						visible={this.state.save_modal}
-						onOk={()=>{
+						onOk={() => {
 							const _id = this.props.CanvasReducer._id;
 							const program = new Program(this.props.CanvasReducer.bsNodes);
 							let canvas = {};
@@ -674,25 +667,24 @@ class Component extends React.Component {
 								title: $("#program_name").val(),
 								description: $("#program_description").val()
 							};
-							if(_id === null){
+							if (_id === null) {
 								this.props.dispatch(CanvasAction.create(program, canvas, meta));
-							}
-							else{
+							} else {
 								this.props.dispatch(CanvasAction.update(_id, program, canvas, meta));
 							}
 							this.setState({
 								save_modal: false
 							})
 						}}
-						onCancel={()=>{
+						onCancel={() => {
 							this.setState({
 								save_modal: false
 							})
 						}}
 					>
 						{
-							(()=>{
-								return(
+							(() => {
+								return (
 									<div style={
 										{
 											fontSize: "1.5vh"
@@ -701,15 +693,15 @@ class Component extends React.Component {
 										<b>Program Name:</b>
 										<br/>
 										{
-											(()=>{
-												if(this.props.CanvasReducer._id === null){
-													return(<Input id={"program_name"}/>);
-												}
-												else{
-													let sketch= this.props.Meteor.collection.sketches.find((sketch) => {
+											(() => {
+												if (this.props.CanvasReducer._id === null) {
+													return (<Input id={"program_name"}/>);
+												} else {
+													let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return(<Input id={"program_name"} placeholder={sketch.meta.title}/>);
+													return (
+														<Input id={"program_name"} placeholder={sketch.meta.title}/>);
 												}
 											})()
 
@@ -719,25 +711,25 @@ class Component extends React.Component {
 										<b>Description (optional):</b>
 										<br/>
 										{
-											(()=>{
-												if(this.props.CanvasReducer._id === null){
-													return(<Input id={"program_description"}/>);
-												}
-												else{
-													let sketch= this.props.Meteor.collection.sketches.find((sketch) => {
+											(() => {
+												if (this.props.CanvasReducer._id === null) {
+													return (<Input id={"program_description"}/>);
+												} else {
+													let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return(<Input id={"program_description"} placeholder={sketch.meta.description}/>);
+													return (<Input id={"program_description"}
+													               placeholder={sketch.meta.description}/>);
 												}
 											})()
 
 										}
 										{
-											(()=>{
+											(() => {
 												const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 													return (sketch._id === this.props.CanvasReducer._id);
 												});
-												if(sketch !== undefined){
+												if (sketch !== undefined) {
 													return (
 														<React.Fragment>
 															<br/>
@@ -759,7 +751,7 @@ class Component extends React.Component {
 																			marginLeft: "1vw"
 																		}
 																	}
-																	onClick={()=> {
+																	onClick={() => {
 																		this.props.dispatch(CanvasAction.generateApiKey(this.props.CanvasReducer._id));
 																		this.setState({
 																			save_modal: true
@@ -770,9 +762,8 @@ class Component extends React.Component {
 															</div>
 														</React.Fragment>
 													)
-												}
-												else{
-													return(
+												} else {
+													return (
 														<div>
 															**Note: save first to obtain API key and URL.
 														</div>
@@ -823,7 +814,7 @@ class Component extends React.Component {
 					<Modal
 						title="Program"
 						visible={this.state.save_as_modal}
-						onOk={()=>{
+						onOk={() => {
 							const _id = null;
 							const program = new Program(this.props.CanvasReducer.bsNodes);
 							let canvas = {};
@@ -840,7 +831,7 @@ class Component extends React.Component {
 									}
 								});
 							});
-							if(_id === null){
+							if (_id === null) {
 								let meta = {
 									title: $("#program_name").val(),
 									description: $("#program_description").val()
@@ -851,15 +842,15 @@ class Component extends React.Component {
 								save_as_modal: false
 							})
 						}}
-						onCancel={()=>{
+						onCancel={() => {
 							this.setState({
 								save_as_modal: false
 							})
 						}}
 					>
 						{
-							(()=>{
-								return(
+							(() => {
+								return (
 									<div style={
 										{
 											fontSize: "1.5vh"
@@ -868,8 +859,8 @@ class Component extends React.Component {
 										<b>Program Name:</b>
 										<br/>
 										{
-											(()=>{
-													return(<Input id={"program_name"}/>);
+											(() => {
+												return (<Input id={"program_name"}/>);
 											})()
 										}
 										<br/>
@@ -877,8 +868,8 @@ class Component extends React.Component {
 										<b>Description (optional):</b>
 										<br/>
 										{
-											(()=>{
-													return(<Input id={"program_description"}/>);
+											(() => {
+												return (<Input id={"program_description"}/>);
 											})()
 										}
 									</div>
@@ -892,7 +883,7 @@ class Component extends React.Component {
 						visible={this.state.delete_modal}
 						onOk={
 							() => {
-								if(this.props.CanvasReducer._id !== null){
+								if (this.props.CanvasReducer._id !== null) {
 									this.props.store.dispatch(CanvasAction.delete(this.props.CanvasReducer._id));
 								}
 								this.setState({
@@ -914,8 +905,8 @@ class Component extends React.Component {
 					<Modal
 						title="Program Node Initialization Helper"
 						visible={this.state.program_node_modal}
-						onOk={()=>{
-							if(this.state.selected_program_id !== null && this.state.selected_program_token !== null){
+						onOk={() => {
+							if (this.state.selected_program_id !== null && this.state.selected_program_token !== null) {
 								this.setState({
 									program_node_modal: !this.state.program_node_modal
 								})
@@ -939,7 +930,7 @@ class Component extends React.Component {
 										pending: temp
 									})
 								}));
-							}else if($("#program_id").val() !== undefined && $("#program_token").val() !== ""){
+							} else if ($("#program_id").val() !== undefined && $("#program_token").val() !== "") {
 								let input_id = $("#program_id").val();
 								let input_token = $("#program_token").val();
 								this.setState({
@@ -965,14 +956,14 @@ class Component extends React.Component {
 										pending: temp
 									})
 								}));
-							}else{
+							} else {
 								this.setState({
 									error: "Please input program ID and token",
 									error_modal: true
 								})
 							}
 						}}
-						onCancel={()=>{
+						onCancel={() => {
 							this.setState({
 								program_node_modal: !this.state.program_node_modal
 							})
@@ -1017,7 +1008,7 @@ class Component extends React.Component {
 								});
 							}}>
 								{(() => {
-									if (this.state.selected_program_id === null){
+									if (this.state.selected_program_id === null) {
 										return (
 											<option value="default">
 												Program IDs
@@ -1025,7 +1016,7 @@ class Component extends React.Component {
 										)
 									}
 								})()}
-								{Object.values(this.props.Meteor.collection.sketches.filter(sketch => sketch.owner === this.props.Meteor.userId && sketch._id !== this.props.CanvasReducer._id)).map((sketch, index) =>{
+								{Object.values(this.props.Meteor.collection.sketches.filter(sketch => sketch.owner === this.props.Meteor.userId && sketch._id !== this.props.CanvasReducer._id)).map((sketch, index) => {
 									return (sketch._id);
 								}).map((item, index) => {
 									return (
@@ -1072,13 +1063,14 @@ class Component extends React.Component {
 										width: "47%"
 									}
 								}
-								id="program_select_token" title={"Program token"} defaultValue="default" onChange={(e) => {
-								this.setState({
-									selected_program_token: e.target.value
-								});
-							}}>
+								id="program_select_token" title={"Program token"} defaultValue="default"
+								onChange={(e) => {
+									this.setState({
+										selected_program_token: e.target.value
+									});
+								}}>
 								{(() => {
-									if (this.state.selected_program_token === null){
+									if (this.state.selected_program_token === null) {
 										return (
 											<option value="default">
 												Token(s)
@@ -1111,8 +1103,8 @@ class Component extends React.Component {
 					<Modal
 						title="Database Node Initialization Helper"
 						visible={this.state.database_modal}
-						onOk={()=>{
-							if(this.state.selected_database_id !== null && this.state.selected_database_token !== null){
+						onOk={() => {
+							if (this.state.selected_database_id !== null && this.state.selected_database_token !== null) {
 								this.setState({
 									database_modal: false
 								})
@@ -1136,7 +1128,7 @@ class Component extends React.Component {
 										pending: temp
 									})
 								}));
-							}else if($("#database_id").val() !== undefined && $("#database_token").val() !== ""){
+							} else if ($("#database_id").val() !== undefined && $("#database_token").val() !== "") {
 								let input_id = $("#database_id").val();
 								let input_token = $("#database_token").val();
 								this.setState({
@@ -1162,7 +1154,7 @@ class Component extends React.Component {
 										pending: temp
 									})
 								}));
-							}else{
+							} else {
 								this.setState({
 									error: "Please input database ID and token",
 									error_modal: true
@@ -1170,7 +1162,7 @@ class Component extends React.Component {
 							}
 						}}
 						onCancel={
-							()=>{
+							() => {
 								this.setState({
 									database_modal: !this.state.database_modal
 								})
@@ -1215,7 +1207,7 @@ class Component extends React.Component {
 								});
 							}}>
 								{(() => {
-									if (this.state.selected_database_id === null){
+									if (this.state.selected_database_id === null) {
 										return (
 											<option value="default">
 												Database ID
@@ -1223,7 +1215,7 @@ class Component extends React.Component {
 										)
 									}
 								})()}
-								{Object.values(this.props.Meteor.collection.buckets.filter(bucket => bucket.owner === this.props.Meteor.userId && bucket._id !== this.props.CanvasReducer._id)).map((bucket, index) =>{
+								{Object.values(this.props.Meteor.collection.buckets.filter(bucket => bucket.owner === this.props.Meteor.userId && bucket._id !== this.props.CanvasReducer._id)).map((bucket, index) => {
 									return (bucket._id);
 								}).map((item, index) => {
 									//TODO rename title when database has name
@@ -1271,13 +1263,14 @@ class Component extends React.Component {
 										width: "47%"
 									}
 								}
-								id="database_select_token" title={"Database token"} defaultValue="default" onChange={(e) => {
-								this.setState({
-									selected_database_token: e.target.value
-								});
-							}}>
+								id="database_select_token" title={"Database token"} defaultValue="default"
+								onChange={(e) => {
+									this.setState({
+										selected_database_token: e.target.value
+									});
+								}}>
 								{(() => {
-									if (this.state.selected_database_token === null){
+									if (this.state.selected_database_token === null) {
 										return (
 											<option value="default">
 												Please select your database token
@@ -1308,14 +1301,14 @@ class Component extends React.Component {
 						title="Execution Complete"
 						visible={this.state.result_modal}
 						onOk={
-							()=>{
+							() => {
 								this.setState({
 									result_modal: false
 								})
 							}
 						}
 						onCancel={
-							()=>{
+							() => {
 								this.setState({
 									result_modal: false
 								})
@@ -1323,8 +1316,8 @@ class Component extends React.Component {
 						}
 					>
 						{
-							(()=>{
-								return(
+							(() => {
+								return (
 									<React.Fragment>
 										Return Value:
 										<Input.TextArea
@@ -1400,7 +1393,7 @@ class Component extends React.Component {
 	componentDidUpdate(prevProps) {
 		this.engine.diagramModel.setZoomLevel(this.state.zoom);
 		this.engine.diagramModel.setOffset(this.state.offsetX, this.state.offsetY);
-		if(this.state.pending.length !== 0){
+		if (this.state.pending.length !== 0) {
 			this.props.dispatch(this.state.pending.splice(0, 1)[0]);
 		}
 	}
@@ -1422,7 +1415,7 @@ class Component extends React.Component {
 		model.setGridSize(0);
 		model.clearListeners();
 		model.addListener({
-			linksUpdated: ({ link }) => {
+			linksUpdated: ({link}) => {
 				link.addListener({
 					targetPortChanged: () => {
 						const ports = [
