@@ -34,6 +34,7 @@ import { NullNode } from "../../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../../shared/lib/primitive/number-node";
 import { ObjectNode } from "../../../shared/lib/object/object-node";
 import { ObjectGetNode } from "../../../shared/lib/object/object-get-node";
+import { ObjectKeysNode } from "../../../shared/lib/object/object-keys-node";
 import { ObjectParseNode } from "../../../shared/lib/object/object-parse-node";
 import { ObjectPutNode } from "../../../shared/lib/object/object-put-node";
 import { OrNode } from "../../../shared/lib/logic/or-node";
@@ -96,9 +97,9 @@ const initialState = {
 		Object: {
 			ObjectNode,
 			ObjectGetNode,
+			ObjectKeysNode,
 			ObjectParseNode,
 			ObjectPutNode
-			// ObjectKeysNode
 		},
 		Array: {
 			ArrayNode,

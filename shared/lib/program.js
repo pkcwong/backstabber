@@ -32,6 +32,7 @@ import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
 import { ObjectGetNode } from "./object/object-get-node";
+import { ObjectKeysNode } from "./object/object-keys-node";
 import { ObjectParseNode } from "./object/object-parse-node";
 import { ObjectPutNode } from "./object/object-put-node";
 import { OrNode } from "./logic/or-node";
@@ -146,6 +147,7 @@ export class Program {
 			ArrayNode,
 			ArrayFilterNode,
 			ArrayGetNode,
+			ArrayIncludesNode,
 			ArrayLengthNode,
 			ArrayMapNode,
 			ArrayPushNode,
@@ -174,6 +176,7 @@ export class Program {
 			NumberNode,
 			ObjectNode,
 			ObjectGetNode,
+			ObjectKeysNode,
 			ObjectParseNode,
 			ObjectPutNode,
 			OrNode,
