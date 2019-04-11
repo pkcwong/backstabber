@@ -4,6 +4,7 @@ import { ArrayNode } from "./array/array-node";
 import { ArrayFilterNode } from "./array/array-filter-node";
 import { ArrayGetNode } from "./array/array-get-node";
 import { ArrayLengthNode } from "./array/array-length-node";
+import { ArrayIncludesNode } from "./array/array-includes-node";
 import { ArrayMapNode } from "./array/array-map-node";
 import { ArrayPushNode } from "./array/array-push-node";
 import { ArrayReduceNode } from "./array/array-reduce-node";

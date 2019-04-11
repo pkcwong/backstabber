@@ -5,6 +5,7 @@ import { AndNode } from "../../shared/lib/logic/and-node";
 import { ArrayNode } from "../../shared/lib/array/array-node";
 import { ArrayFilterNode } from "../../shared/lib/array/array-filter-node";
 import { ArrayGetNode } from "../../shared/lib/array/array-get-node";
+import { ArrayIncludesNode } from "../../shared/lib/array/array-includes-node";
 import { ArrayLengthNode } from "../../shared/lib/array/array-length-node";
 import { ArrayMapNode } from "../../shared/lib/array/array-map-node";
 import { ArrayPushNode } from "../../shared/lib/array/array-push-node";
@@ -101,6 +102,7 @@ describe('CanvasReducer', () => {
 					ArrayNode,
 					ArrayFilterNode,
 					ArrayGetNode,
+					ArrayIncludesNode,
 					ArrayLengthNode,
 					ArrayMapNode,
 					ArrayPushNode,
