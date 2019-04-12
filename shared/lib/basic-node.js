@@ -93,7 +93,7 @@ export class BasicNode {
 	 */
 	revokeSendOnReady(output, input) {
 		this.observers = this.observers.filter((item) => {
-			return (item._id !== input._id && item.outbound !== output.port && item.inbound !== input.port);
+			return !(item._id === input._id && item.outbound === output.port && item.inbound === input.port);
 		});
 	}
 
