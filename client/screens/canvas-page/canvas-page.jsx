@@ -663,13 +663,20 @@ class Component extends React.Component {
 									}
 								});
 							});
-							let meta = {
-								title: $("#program_name").val(),
-								description: $("#program_description").val()
-							};
-							if (_id === null) {
+							if(_id === null){
+								let meta = {
+									title: $("#program_name").val(),
+									description: $("#program_description").val()
+								};
 								this.props.dispatch(CanvasAction.create(program, canvas, meta));
-							} else {
+							}else{
+								let sketch= this.props.Meteor.collection.sketches.find((sketch) => {
+									return sketch._id === this.props.CanvasReducer._id
+								});
+								let meta = {
+									title: sketch.meta.title,
+									description: sketch.meta.description
+								};
 								this.props.dispatch(CanvasAction.update(_id, program, canvas, meta));
 							}
 							this.setState({
@@ -700,8 +707,7 @@ class Component extends React.Component {
 													let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return (
-														<Input id={"program_name"} placeholder={sketch.meta.title}/>);
+													return(sketch.meta.title);
 												}
 											})()
 
@@ -718,8 +724,7 @@ class Component extends React.Component {
 													let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return (<Input id={"program_description"}
-													               placeholder={sketch.meta.description}/>);
+													return(sketch.meta.description);
 												}
 											})()
 

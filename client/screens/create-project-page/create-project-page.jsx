@@ -17,6 +17,8 @@ class Component extends React.Component {
 			setting_modal: false,
 			delete: "",
 			program_info: {},
+			edit_title: null,
+			edit_description: null,
 			search: ''
 		};
 	}
@@ -226,7 +228,13 @@ class Component extends React.Component {
 																		setting_modal: !this.state.setting_modal,
 																		program_info: this.props.Meteor.collection.sketches.find((sketch) => {
 																			return (sketch._id === item)
-																		})
+																		}),
+																		edit_title: this.props.Meteor.collection.sketches.find((sketch) => {
+																			return (sketch._id === item)
+																		}).meta.title,
+																		edit_description: this.props.Meteor.collection.sketches.find((sketch) => {
+																			return (sketch._id === item)
+																		}).meta.description
 																	})
 																}
 															}
@@ -320,6 +328,14 @@ class Component extends React.Component {
 					visible={this.state.setting_modal}
 					onOk={
 						() => {
+							let sketch= this.props.Meteor.collection.sketches.find((sketch) => {
+								return sketch._id === this.state.program_info._id
+							});
+							let meta = {
+								title: $("#"+this.state.program_info._id+"edit_title").val(),
+								description: $("#"+this.state.program_info._id+"edit_description").val()
+							};
+							this.props.store.dispatch(CanvasAction.updateMeta(sketch._id, meta));
 							this.setState({
 								setting_modal: !this.state.setting_modal
 							})
@@ -336,6 +352,37 @@ class Component extends React.Component {
 					<div>
 						{
 							<React.Fragment>
+								<b>Program Title:</b>
+								<br/>
+								{
+									(() => {
+										if(this.state.program_info._id !== undefined){
+											return <Input id={this.state.program_info._id+"edit_title"} value={this.state.edit_title} onChange={
+												(event) => {
+													this.setState({
+														edit_title: event.target.value
+													})
+												}
+											}/>
+										}
+									})()
+
+								}
+								<b>Program Description:</b>
+								<br/>
+								{
+									(() => {
+										if(this.state.program_info._id !== undefined){
+											return <Input id={this.state.program_info._id+"edit_description"} value={this.state.edit_description} onChange={
+												(event) => {
+													this.setState({
+														edit_description: event.target.value
+													})
+												}
+											}/>
+										}
+									})()
+								}
 								<b>Program ID:</b>
 								<br/>
 								{
@@ -358,7 +405,6 @@ class Component extends React.Component {
 											return this.state.program_info.tokens
 										}
 									})().map((token, index) => {
-										console.log(token);
 										return (
 											<React.Fragment
 												key={index}>

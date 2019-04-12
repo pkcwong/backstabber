@@ -95,7 +95,6 @@ export const CanvasSaga = function* () {
 	yield takeEvery(CanvasAction.UPDATE_PROGRAM, function* (action) {
 		try {
 			yield call((payload) => {
-				console.log(payload)
 				return new Promise((resolve, reject) => {
 					Meteor.call('Sketches/UPDATE-PROGRAM', {
 						_id: payload._id,
@@ -114,6 +113,30 @@ export const CanvasSaga = function* () {
 				_id: action.payload._id,
 				program: action.payload.program,
 				canvas: action.payload.canvas,
+				meta: action.payload.meta
+			});
+			yield put(CanvasAction.load(action.payload._id));
+		} catch (err) {
+			console.error(err);
+		}
+	});
+	yield takeEvery(CanvasAction.UPDATE_PROGRAM_META, function* (action) {
+		try {
+			yield call((payload) => {
+				return new Promise((resolve, reject) => {
+					Meteor.call('Sketches/UPDATE-PROGRAM-META', {
+						_id: payload._id,
+						meta: payload.meta
+					}, (err, res) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						resolve(res);
+					});
+				});
+			}, {
+				_id: action.payload._id,
 				meta: action.payload.meta
 			});
 			yield put(CanvasAction.load(action.payload._id));
