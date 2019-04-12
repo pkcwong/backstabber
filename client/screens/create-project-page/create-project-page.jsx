@@ -440,8 +440,8 @@ class Component extends React.Component {
 																		'function _' + this.state.program_info._id + '(entry, callback) {\n' +
 																		'\t(function(_id, token, entry) {\n' +
 																		'\t\tvar HTTP = new XMLHttpRequest();\n' +
-																		'\t\tHTTP.open("POST", ' +
-																		window.location.protocol + '//' + window.location.host + '/api/program/' +
+																		'\t\tHTTP.open("POST", "' +
+																		window.location.protocol + '//' + window.location.host + '/api/program/"' +
 																		' + _id);\n' +
 																		'\t\tHTTP.setRequestHeader("token", token);\n' +
 																		'\t\tHTTP.send(JSON.stringify(entry));\n' +
