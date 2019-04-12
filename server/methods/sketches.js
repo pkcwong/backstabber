@@ -37,6 +37,18 @@ Meteor.methods({
 			}));
 		});
 	},
+	'Sketches/UPDATE-PROGRAM-META': (json) => {
+		return new Promise((resolve, reject) => {
+			resolve(sketches_db.update({
+				_id: json['_id'],
+				owner: Meteor.userId()
+			}, {
+				$set: {
+					meta: json['meta']
+				}
+			}));
+		});
+	},
 	'Sketches/DELETE': (json) => {
 		return new Promise((resolve, reject) => {
 			resolve(sketches_db.remove({
