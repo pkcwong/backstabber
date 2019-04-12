@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { sketches_db } from "../../../shared/collections/sketches";
-import { Button, Card, Input, message, Modal } from 'antd';
+import { Button, Card, Dropdown, Input, Menu, message, Modal } from 'antd';
 import lunr from 'lunr';
 import 'antd/dist/antd.css';
 import { CanvasAction } from "../../redux/actions/canvas-action";
@@ -392,7 +392,7 @@ class Component extends React.Component {
 								<br/>
 								<b>API URL:</b>
 								<br/>
-								{window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id}
+								{window.location.protocol + '//' + window.location.host + '/api/program/' + this.state.program_info._id}
 								<br/>
 								<br/>
 								<b>API Key(s):</b>
@@ -407,24 +407,68 @@ class Component extends React.Component {
 									})().map((token, index) => {
 										return (
 											<React.Fragment
-												key={index}>
-												<div>
-													<Button
-														onClick={() => {
-															((string) => {
-																const e = document.createElement('textarea');
-																e.value = string;
-																document.body.appendChild(e);
-																e.select();
-																document.execCommand('copy');
-																document.body.removeChild(e);
-															})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data ' + JSON.stringify({}) + ' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id);
-															message.success('copied CURL command to clipboard');
-														}}
-													>
+												key={index}
+											>
+												<Dropdown
+													overlay={(
+														<Menu>
+															<Menu.Item
+																onClick={() => {
+																	((string) => {
+																		const e = document.createElement('textarea');
+																		e.value = string;
+																		document.body.appendChild(e);
+																		e.select();
+																		document.execCommand('copy');
+																		document.body.removeChild(e);
+																	})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data ' + JSON.stringify({}) + ' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id);
+																	message.success('copied cURL command to clipboard');
+																}}
+															>
+																export cURL
+															</Menu.Item>
+															<Menu.Item
+																onClick={() => {
+																	((string) => {
+																		const e = document.createElement('textarea');
+																		e.value = string;
+																		document.body.appendChild(e);
+																		e.select();
+																		document.execCommand('copy');
+																		document.body.removeChild(e);
+																	})('<script>\n' +
+																		'function _' + this.state.program_info._id + '(entry, callback) {\n' +
+																		'\t(function(_id, token, entry) {\n' +
+																		'\t\tvar HTTP = new XMLHttpRequest();\n' +
+																		'\t\tHTTP.open("POST", ' +
+																		window.location.protocol + '//' + window.location.host + '/api/program/' +
+																		' + _id);\n' +
+																		'\t\tHTTP.setRequestHeader("token", token);\n' +
+																		'\t\tHTTP.send(JSON.stringify(entry));\n' +
+																		'\t\tHTTP.onreadystatechange = function() {\n' +
+																		'\t\t\tif (this.readyState === 4 && this.status === 200) {\n' +
+																		'\t\t\t\tcallback(JSON.parse(HTTP.responseText));\n' +
+																		'\t\t\t}\n' +
+																		'\t\t}\n' +
+																		'\t})("' +
+																		this.state.program_info._id +
+																		'", "' +
+																		token +
+																		'", entry);\n' +
+																		'};\n' +
+																		'</script>');
+																	message.success('copied HTML5 script to clipboard');
+																}}
+															>
+																export HTML5
+															</Menu.Item>
+														</Menu>
+													)}
+												>
+													<Button>
 														{token}
 													</Button>
-												</div>
+												</Dropdown>
 											</React.Fragment>
 										);
 									})
