@@ -18,6 +18,7 @@ import { sketches_db } from "../../../shared/collections/sketches";
 import { Program } from "../../../shared/lib/program";
 import { buckets_db } from "../../../shared/collections/buckets";
 import { Menu, Dropdown, Button, Input, Drawer, message, Modal, Radio, Icon, Spin } from 'antd';
+import { JsonEditorComponent } from "./components/json-editor-component/json-editor-component";
 import 'antd/dist/antd.css';
 
 
@@ -63,8 +64,8 @@ class Component extends React.Component {
 			database_coor: {},
 			// Showing the returnNode value
 			result: "",
-			result_modal: false
-
+			result_modal: false,
+			debug_input: {}
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -571,14 +572,17 @@ class Component extends React.Component {
 						</div>
 					</Drawer>
 					{/*Debug Modal*/}
-					<Modal
+					<JsonEditorComponent
 						title="Debug Input"
+						document={this.state.debug_input}
+						fallbackKeys={[]}
 						visible={this.state.debug_modal}
 						onOk={
-							() => {
+							(json) => {
 								this.setState({
 									loading: true,
 									debug_modal: false,
+									debug_input: json
 								});
 								this.props.dispatch(CanvasAction.deleteLabel());
 								const program = new Program(this.props.CanvasReducer.bsNodes);
@@ -601,7 +605,7 @@ class Component extends React.Component {
 									});
 								});
 								try {
-									program.execute(JSON.parse($("#user_input").val())).then((result) => {
+									program.execute(json).then((result) => {
 										this.setState({
 											result: result,
 											result_modal: true,
@@ -619,29 +623,16 @@ class Component extends React.Component {
 										loading: false
 									})
 								}
-
 							}
 						}
 						onCancel={
 							() => {
 								this.setState({
 									debug_modal: false,
-								})
+								});
 							}
 						}
-					>
-					<textarea
-						style={
-							{
-								width: '100%',
-								resize: 'vertical'
-							}
-						}
-						id="user_input"
-						rows="10"
-						defaultValue="{}"
 					/>
-					</Modal>
 					{/*Save & Generate API Modal*/}
 					<Modal
 						title="Program"
@@ -663,14 +654,14 @@ class Component extends React.Component {
 									}
 								});
 							});
-							if(_id === null){
+							if (_id === null) {
 								let meta = {
 									title: $("#program_name").val(),
 									description: $("#program_description").val()
 								};
 								this.props.dispatch(CanvasAction.create(program, canvas, meta));
-							}else{
-								let sketch= this.props.Meteor.collection.sketches.find((sketch) => {
+							} else {
+								let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 									return sketch._id === this.props.CanvasReducer._id
 								});
 								let meta = {
@@ -707,7 +698,7 @@ class Component extends React.Component {
 													let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return(sketch.meta.title);
+													return (sketch.meta.title);
 												}
 											})()
 
@@ -724,7 +715,7 @@ class Component extends React.Component {
 													let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return(sketch.meta.description);
+													return (sketch.meta.description);
 												}
 											})()
 
