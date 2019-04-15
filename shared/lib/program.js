@@ -62,9 +62,7 @@ export class Program {
 				this.nodes.forEach((node) => {
 					node.reset();
 				});
-				this.nodes.filter((bsNode) => {
-					return !(bsNode instanceof ReturnNode);
-				}).forEach((bsNode) => {
+				this.nodes.forEach((bsNode) => {
 					bsNode.bindProgram({
 						execute: (bsNode) => {
 							this.status[bsNode._id] = 'executed';
@@ -116,9 +114,7 @@ export class Program {
 	 */
 	halt() {
 		Object.keys(this.status).filter((_id) => {
-			return (this.nodes.find((bsNode) => {
-				return (bsNode._id === _id);
-			}) instanceof EntryNode);
+			return (this.status[_id] === 'idle');
 		}).forEach((_id) => {
 			this.status[_id] = 'rejected';
 		});
