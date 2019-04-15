@@ -331,28 +331,51 @@ class Component extends React.Component {
 								}
 							})()
 						}
-						<Button
-							style={
-								{
-									border: 'Node',
-									margin: '3px'
+						{
+							(() => {
+								if (!this.state.loading) {
+									return (
+										<Button
+											style={
+												{
+													border: 'Node',
+													margin: '3px'
+												}
+											}
+											type='primary'
+											onClick={() => {
+												this.setState({
+													debug_modal: true
+												});
+											}}
+										>
+											<Icon type="play-circle" />
+											Debug
+										</Button>
+									);
+								} else {
+									return (
+										<Button
+											style={
+												{
+													border: 'Node',
+													margin: '3px'
+												}
+											}
+											type='danger'
+											onClick={() => {
+												if (this.state.program !== null) {
+													this.state.program.halt();
+												}
+											}}
+										>
+											<Icon type="close-square" />
+											Halt
+										</Button>
+									)
 								}
-							}
-							type='primary'
-							loading={this.state.loading}
-							onClick={() => {
-								this.setState({
-									debug_modal: true
-								});
-							}}
-						>
-							<Icon type="play-circle" />
-							{
-								(() => {
-									return 'Debug';
-								})()
-							}
-						</Button>
+							})()
+						}
 					</div>
 					<div
 						style={
