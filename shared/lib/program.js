@@ -49,6 +49,7 @@ export class Program {
 				[bsNode._id]: 'idle'
 			});
 		}, {});
+		this.reject = null;
 	}
 
 	/**
@@ -70,9 +71,9 @@ export class Program {
 						resolve: (bsNode) => {
 							this.status[bsNode._id] = 'resolved';
 						},
-						reject: (bsNode) => {
+						reject: (bsNode, message = 'Exception') => {
 							this.status[bsNode._id] = 'rejected';
-							reject('Exception');
+							reject(message);
 						},
 						monitor: () => {
 							return !Object.keys(this.status).map((_id) => {
@@ -102,9 +103,14 @@ export class Program {
 			new Promise((resolve, reject) => {
 				const _id = setTimeout(() => {
 					clearTimeout(_id);
-					this.halt();
 					reject('Timeout');
+					this.halt();
 				}, 10000);
+			}),
+			new Promise((resolve, reject) => {
+				this.reject = () => {
+					reject('Halted');
+				}
 			})
 		]);
 	}
@@ -118,6 +124,9 @@ export class Program {
 		}).forEach((_id) => {
 			this.status[_id] = 'rejected';
 		});
+		if (this.reject !== null) {
+			this.reject();
+		}
 	}
 
 	/**

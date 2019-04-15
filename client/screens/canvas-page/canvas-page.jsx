@@ -239,6 +239,9 @@ class Component extends React.Component {
 										<Menu.Item>
 											<a onClick={() => {
 												this.props.dispatch(CanvasAction.deleteLabel());
+												if (this.state.program !== null) {
+													this.state.program.halt();
+												}
 											}}
 											>Stop</a>
 										</Menu.Item>
@@ -316,6 +319,8 @@ class Component extends React.Component {
 															return (this.state.program.status[key] !== 'resolved');
 														}).length === 0) {
 															return 'success';
+														} else {
+															return 'active';
 														}
 													}
 													return 'normal';
@@ -701,17 +706,17 @@ class Component extends React.Component {
 											result_modal: true,
 											loading: false
 										})
-									}).catch(() => {
-										alert("Program takes too long to run");
+									}).catch((e) => {
+										alert(e);
 										this.setState({
 											loading: false
-										})
+										});
 									})
 								} catch (e) {
 									alert(e.message);
 									this.setState({
 										loading: false
-									})
+									});
 								}
 							}
 						}
