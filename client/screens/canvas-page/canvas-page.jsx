@@ -17,7 +17,8 @@ import TrayItemWidget from './components/TrayItemWidget';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { Program } from "../../../shared/lib/program";
 import { buckets_db } from "../../../shared/collections/buckets";
-import { Menu, Dropdown, Button, Input, Drawer, message, Modal, Radio, Icon, Spin } from 'antd';
+import { Menu, Dropdown, Button, Input, Drawer, message, Modal, Progress, Radio, Icon, Spin } from 'antd';
+import { JsonEditorComponent } from "./components/json-editor-component/json-editor-component";
 import 'antd/dist/antd.css';
 
 
@@ -36,7 +37,7 @@ class Component extends React.Component {
 			save_as_modal: false,
 			delete_modal: false,
 			debug_modal: false,
-			program: {},
+			program: null,
 			canvas: {},
 			props: {},
 			zoom: 100,
@@ -63,8 +64,8 @@ class Component extends React.Component {
 			database_coor: {},
 			// Showing the returnNode value
 			result: "",
-			result_modal: false
-
+			result_modal: false,
+			debug_input: {},
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -76,22 +77,6 @@ class Component extends React.Component {
 		this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
 		return (
 			<React.Fragment>
-				<Spin
-					tip="Program executing..."
-					spinning={this.state.loading}
-					size="large"
-					style={
-						{
-							position: "fixed",
-							height: "100vh",
-							width: "100vw",
-							paddingTop: "45vh",
-							zIndex: "3",
-							background: "white",
-							opacity: "0.8"
-						}
-					}
-				/>
 				<div style={
 					{
 						minHeight: "7vh",
@@ -99,6 +84,7 @@ class Component extends React.Component {
 						background: "#22313F",
 						// background: "#3B5B93",
 						padding: 0,
+						display: 'flex'
 					}
 				}>
 					<div style={
@@ -109,7 +95,8 @@ class Component extends React.Component {
 							paddingLeft: "1vw",
 							color: "#ECECEC",
 							fontStyle: "italic",
-							fontSize: "2vh"
+							fontSize: "2vh",
+							flex: 1
 						}
 					}>
 						<Button
@@ -252,6 +239,9 @@ class Component extends React.Component {
 										<Menu.Item>
 											<a onClick={() => {
 												this.props.dispatch(CanvasAction.deleteLabel());
+												if (this.state.program !== null) {
+													this.state.program.halt();
+												}
 											}}
 											>Stop</a>
 										</Menu.Item>
@@ -284,6 +274,116 @@ class Component extends React.Component {
 							Help
 						</Button>
 					</div>
+					<div
+						style={
+							{
+								margin: 'auto',
+								paddingTop: "1.5vh",
+								paddingBottom: "1.5vh",
+								paddingLeft: "1vw",
+								color: "#ECECEC",
+								fontStyle: "italic",
+								fontSize: "2vh",
+								flex: 1,
+								justifyContent: 'flex-end',
+								display: 'flex'
+							}
+						}
+					>
+						{
+							(() => {
+								if (this.state.program !== null) {
+									return (
+										<Progress
+											percent={
+												(() => {
+													if (this.state.program !== null) {
+														if (Object.keys(this.state.program.status).length !== 0) {
+															return (Object.keys(this.state.program.status).filter((key) => {
+																return (this.state.program.status[key] === 'resolved');
+															}).length / Object.keys(this.state.program.status).length * 100);
+														}
+													}
+													return 0;
+												})()
+											}
+											showInfo={false}
+											status={
+												(() => {
+													if (this.state.program !== null) {
+														if (Object.keys(this.state.program.status).filter((key) => {
+															return (this.state.program.status[key] === 'rejected');
+														}).length !== 0) {
+															return 'exception';
+														} else if (Object.keys(this.state.program.status).filter((key) => {
+															return (this.state.program.status[key] !== 'resolved');
+														}).length === 0) {
+															return 'success';
+														} else {
+															return 'active';
+														}
+													}
+													return 'normal';
+												})()
+											}
+										/>
+									);
+								}
+							})()
+						}
+						{
+							(() => {
+								if (!this.state.loading) {
+									return (
+										<Button
+											style={
+												{
+													border: 'Node',
+													margin: '3px'
+												}
+											}
+											type='primary'
+											onClick={() => {
+												this.setState({
+													debug_modal: true
+												});
+											}}
+										>
+											<Icon type="play-circle" />
+											Debug
+										</Button>
+									);
+								} else {
+									return (
+										<Button
+											style={
+												{
+													border: 'Node',
+													margin: '3px'
+												}
+											}
+											type='danger'
+											onClick={() => {
+												if (this.state.program !== null) {
+													this.state.program.halt();
+												}
+											}}
+										>
+											<Icon type="close-square" />
+											Halt
+										</Button>
+									)
+								}
+							})()
+						}
+					</div>
+					<div
+						style={
+							{
+								width: '1vw'
+							}
+						}
+					/>
 				</div>
 				<div style={
 					{
@@ -294,6 +394,22 @@ class Component extends React.Component {
 						padding: "0",
 					}
 				}>
+					<Spin
+						tip="Program executing..."
+						spinning={this.state.loading}
+						size="large"
+						style={
+							{
+								position: "fixed",
+								height: "93vh",
+								width: "100vw",
+								paddingTop: "45vh",
+								zIndex: "3",
+								background: "white",
+								opacity: "0.8"
+							}
+						}
+					/>
 					<div style={
 						{
 							width: "12vw",
@@ -571,17 +687,23 @@ class Component extends React.Component {
 						</div>
 					</Drawer>
 					{/*Debug Modal*/}
-					<Modal
+					<JsonEditorComponent
 						title="Debug Input"
+						document={this.state.debug_input}
+						fallbackKeys={[]}
 						visible={this.state.debug_modal}
 						onOk={
-							() => {
+							(json) => {
 								this.setState({
 									loading: true,
 									debug_modal: false,
+									debug_input: json
 								});
 								this.props.dispatch(CanvasAction.deleteLabel());
 								const program = new Program(this.props.CanvasReducer.bsNodes);
+								this.setState({
+									program: program
+								});
 								this.props.CanvasReducer.bsNodes.forEach((bsNode) => {
 									bsNode.callbacks = [];
 									bsNode.registerCallback((err, res) => {
@@ -601,47 +723,34 @@ class Component extends React.Component {
 									});
 								});
 								try {
-									program.execute(JSON.parse($("#user_input").val())).then((result) => {
+									program.execute(json).then((result) => {
 										this.setState({
 											result: result,
 											result_modal: true,
 											loading: false
 										})
-									}).catch(() => {
-										alert("Program takes too long to run");
+									}).catch((e) => {
+										alert(e);
 										this.setState({
 											loading: false
-										})
+										});
 									})
 								} catch (e) {
 									alert(e.message);
 									this.setState({
 										loading: false
-									})
+									});
 								}
-
 							}
 						}
 						onCancel={
 							() => {
 								this.setState({
 									debug_modal: false,
-								})
+								});
 							}
 						}
-					>
-					<textarea
-						style={
-							{
-								width: '100%',
-								resize: 'vertical'
-							}
-						}
-						id="user_input"
-						rows="10"
-						defaultValue="{}"
 					/>
-					</Modal>
 					{/*Save & Generate API Modal*/}
 					<Modal
 						title="Program"
@@ -663,14 +772,14 @@ class Component extends React.Component {
 									}
 								});
 							});
-							if(_id === null){
+							if (_id === null) {
 								let meta = {
 									title: $("#program_name").val(),
 									description: $("#program_description").val()
 								};
 								this.props.dispatch(CanvasAction.create(program, canvas, meta));
-							}else{
-								let sketch= this.props.Meteor.collection.sketches.find((sketch) => {
+							} else {
+								let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 									return sketch._id === this.props.CanvasReducer._id
 								});
 								let meta = {
@@ -707,7 +816,7 @@ class Component extends React.Component {
 													let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return(sketch.meta.title);
+													return (sketch.meta.title);
 												}
 											})()
 
@@ -724,7 +833,7 @@ class Component extends React.Component {
 													let sketch = this.props.Meteor.collection.sketches.find((sketch) => {
 														return sketch._id === this.props.CanvasReducer._id
 													});
-													return(sketch.meta.description);
+													return (sketch.meta.description);
 												}
 											})()
 
