@@ -6,12 +6,18 @@ export class DatabaseUpdateNode extends BasicNode {
 
     static ports = {
         inputs: {
-            database: (x) => {
-                if (x._id === undefined || x.token === undefined) {
-                    throw 'invalid database configuration';
-                }
-                return x;
-            },
+			database: (x) => {
+				if (x._id === undefined || x.token === undefined) {
+					throw 'invalid database configuration';
+				}
+				return x;
+			},
+			target_id: (x) => {
+				if (typeof x !== 'string') {
+					throw 'invalid document _id';
+				}
+				return x;
+			},
             document: (x) => {
                 if (typeof x !== 'object') {
                     throw 'invalid document json';
@@ -20,9 +26,9 @@ export class DatabaseUpdateNode extends BasicNode {
             }
         },
         outputs: {
-            _id: (x) => {
-                return (x !== undefined);
-            }
+			document: (x) => {
+				return (x !== undefined);
+			}
         }
     };
 
@@ -31,6 +37,7 @@ export class DatabaseUpdateNode extends BasicNode {
             Meteor.call('Documents/UPDATE', {
                 bucket: inputs.database._id,
                 token: inputs.database.token,
+				_id: inputs.target_id,
                 document: inputs.document
             }, (err, res) => {
                 if (err) {
@@ -38,7 +45,7 @@ export class DatabaseUpdateNode extends BasicNode {
                     return;
                 }
                 resolve({
-                    _id: res._id
+                    document: res.document
                 });
             });
         });
