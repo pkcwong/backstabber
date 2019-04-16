@@ -319,9 +319,7 @@ class Component extends React.Component {
 															return (this.state.program.status[key] === 'rejected');
 														}).length !== 0) {
 															return 'exception';
-														} else if (Object.keys(this.state.program.status).filter((key) => {
-															return (this.state.program.status[key] !== 'resolved');
-														}).length === 0) {
+														} else if (this.state.program.result !== undefined) {
 															return 'success';
 														} else {
 															return 'active';
@@ -353,7 +351,7 @@ class Component extends React.Component {
 												});
 											}}
 										>
-											<Icon type="play-circle" />
+											<Icon type="play-circle"/>
 											Debug
 										</Button>
 									);
@@ -373,7 +371,7 @@ class Component extends React.Component {
 												}
 											}}
 										>
-											<Icon type="close-square" />
+											<Icon type="close-square"/>
 											Halt
 										</Button>
 									)
@@ -1041,6 +1039,40 @@ class Component extends React.Component {
 							(() => {
 								if (this.props.CanvasReducer._id !== null) {
 									return (
+										<Button
+											type='primary'
+											onClick={
+												() => {
+													this.setState({
+														tests_programs: this.props.Meteor.collection.sketches.find((sketch) => {
+															return (sketch._id === this.props.CanvasReducer._id);
+														}).tests.reduce((accumulator, test) => {
+															const program = Program.deserialize(new Program(this.props.CanvasReducer.bsNodes).serialize());
+															program.registerCallback(() => {
+																this.forceUpdate();
+															});
+															program.execute(test.entry).then((result) => {
+																this.forceUpdate();
+															}).catch((err) => {
+																this.forceUpdate();
+															});
+															accumulator[test._id] = program;
+															return accumulator;
+														}, {})
+													});
+												}
+											}
+										>
+											Run all tests
+										</Button>
+									);
+								}
+							})()
+						}
+						{
+							(() => {
+								if (this.props.CanvasReducer._id !== null) {
+									return (
 										<List
 											itemLayout='horizontal'
 											dataSource={
@@ -1068,14 +1100,16 @@ class Component extends React.Component {
 																		style={
 																			{
 																				display: 'flex',
-																				flexDirection: 'row'
+																				flexDirection: 'row',
+																				textAlign: 'center'
 																			}
 																		}
 																	>
 																		<div
 																			style={
 																				{
-																					flex: 1
+																					flex: 1,
+																					margin: 'auto'
 																				}
 																			}
 																		>
@@ -1084,7 +1118,8 @@ class Component extends React.Component {
 																		<div
 																			style={
 																				{
-																					flex: 1
+																					flex: 1,
+																					margin: 'auto'
 																				}
 																			}
 																		>
@@ -1093,7 +1128,8 @@ class Component extends React.Component {
 																		<div
 																			style={
 																				{
-																					flex: 1
+																					flex: 1,
+																					margin: 'auto'
 																				}
 																			}
 																		>
@@ -1102,7 +1138,8 @@ class Component extends React.Component {
 																		<div
 																			style={
 																				{
-																					flex: 1
+																					flex: 1,
+																					margin: 'auto'
 																				}
 																			}
 																		>
@@ -1111,7 +1148,8 @@ class Component extends React.Component {
 																		<div
 																			style={
 																				{
-																					flex: 1
+																					flex: 1,
+																					margin: 'auto'
 																				}
 																			}
 																		>
@@ -1146,9 +1184,7 @@ class Component extends React.Component {
 																							return (this.state.tests_programs[item._id].status[key] === 'rejected');
 																						}).length !== 0) {
 																							return 'exception';
-																						} else if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
-																							return (this.state.tests_programs[item._id].status[key] !== 'resolved');
-																						}).length === 0) {
+																						} else if (this.state.tests_programs[item._id].result !== undefined) {
 																							if (_.isEqual(this.state.tests_programs[item._id].result, item.return)) {
 																								return 'success';
 																							} else {
@@ -1198,6 +1234,19 @@ class Component extends React.Component {
 																				})()
 																			}
 																		</Button>
+																		<Button
+																			icon='share-alt'
+																			type='primary'
+																			onClick={
+																				() => {
+																					this.setState({
+																						debug_modal: true,
+																						debug_input: item.entry,
+																						tests_modal: false
+																					});
+																				}
+																			}
+																		/>
 																		<Button
 																			style={
 																				{
@@ -1658,6 +1707,7 @@ class Component extends React.Component {
 															onClick={
 																() => {
 																	this.props.dispatch(CanvasAction.writeTest(this.props.CanvasReducer._id, this.state.debug_input, this.state.result));
+																	message.success('Saved as Unit Test');
 																}
 															}
 														>
