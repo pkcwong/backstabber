@@ -33,6 +33,7 @@ export class ReturnNode extends BasicNode {
 	}
 
 	execute() {
+		this.program.resolve(this);
 		this.callback();
 	}
 

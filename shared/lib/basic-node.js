@@ -45,23 +45,23 @@ export class BasicNode {
 					Object.keys(this.instance.outputs).forEach((key) => {
 						this.instance.outputs[key] = result[key];
 					});
-					this.observers.forEach((item) => {
-						item.func();
-					});
+					this.program.resolve(this);
 					this.callbacks.forEach((callback) => {
 						callback(null, this);
 					});
-					this.program.resolve(this);
+					this.observers.forEach((item) => {
+						item.func();
+					});
 					resolve(result);
 				}).catch((err) => {
 					this.callbacks.forEach((callback) => {
 						callback(err, this);
 					});
-					this.program.reject(this);
+					this.program.reject(this, err);
 					reject(err);
 				});
 			} else {
-				this.program.reject(this);
+				this.program.reject(this, 'Halted');
 				reject('Halted');
 			}
 		});

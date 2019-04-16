@@ -49,6 +49,7 @@ export class Program {
 				[bsNode._id]: 'idle'
 			});
 		}, {});
+		this.reject = null;
 	}
 
 	/**
@@ -62,9 +63,7 @@ export class Program {
 				this.nodes.forEach((node) => {
 					node.reset();
 				});
-				this.nodes.filter((bsNode) => {
-					return !(bsNode instanceof ReturnNode);
-				}).forEach((bsNode) => {
+				this.nodes.forEach((bsNode) => {
 					bsNode.bindProgram({
 						execute: (bsNode) => {
 							this.status[bsNode._id] = 'executed';
@@ -72,9 +71,9 @@ export class Program {
 						resolve: (bsNode) => {
 							this.status[bsNode._id] = 'resolved';
 						},
-						reject: (bsNode) => {
+						reject: (bsNode, message = 'Exception') => {
 							this.status[bsNode._id] = 'rejected';
-							reject('Exception');
+							reject(message);
 						},
 						monitor: () => {
 							return !Object.keys(this.status).map((_id) => {
@@ -104,9 +103,14 @@ export class Program {
 			new Promise((resolve, reject) => {
 				const _id = setTimeout(() => {
 					clearTimeout(_id);
-					this.halt();
 					reject('Timeout');
+					this.halt();
 				}, 10000);
+			}),
+			new Promise((resolve, reject) => {
+				this.reject = () => {
+					reject('Halted');
+				}
 			})
 		]);
 	}
@@ -116,12 +120,13 @@ export class Program {
 	 */
 	halt() {
 		Object.keys(this.status).filter((_id) => {
-			return (this.nodes.find((bsNode) => {
-				return (bsNode._id === _id);
-			}) instanceof EntryNode);
+			return (this.status[_id] === 'idle');
 		}).forEach((_id) => {
 			this.status[_id] = 'rejected';
 		});
+		if (this.reject !== null) {
+			this.reject();
+		}
 	}
 
 	/**
