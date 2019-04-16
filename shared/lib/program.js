@@ -50,6 +50,15 @@ export class Program {
 			});
 		}, {});
 		this.reject = null;
+		this.callbacks = [];
+		this.result = undefined;
+	}
+
+	registerCallback(callback) {
+		this.callbacks = [
+			...this.callbacks,
+			callback
+		]
 	}
 
 	/**
@@ -58,6 +67,7 @@ export class Program {
 	 * @returns {Promise<any>}
 	 */
 	execute(args = {}) {
+		this.result = undefined;
 		return Promise.race([
 			new Promise((resolve, reject) => {
 				this.nodes.forEach((node) => {
@@ -67,12 +77,27 @@ export class Program {
 					bsNode.bindProgram({
 						execute: (bsNode) => {
 							this.status[bsNode._id] = 'executed';
+							this.callbacks.forEach((callback) => {
+								callback({
+									[bsNode._id]: this.status[bsNode._id]
+								});
+							});
 						},
 						resolve: (bsNode) => {
 							this.status[bsNode._id] = 'resolved';
+							this.callbacks.forEach((callback) => {
+								callback({
+									[bsNode._id]: this.status[bsNode._id]
+								});
+							});
 						},
 						reject: (bsNode, message = 'Exception') => {
 							this.status[bsNode._id] = 'rejected';
+							this.callbacks.forEach((callback) => {
+								callback({
+									[bsNode._id]: this.status[bsNode._id]
+								});
+							});
 							reject(message);
 						},
 						monitor: () => {
@@ -91,6 +116,7 @@ export class Program {
 					return (node instanceof ReturnNode);
 				}).forEach((node) => {
 					node.registerReturnCallback((result) => {
+						this.result = result;
 						resolve(result);
 					});
 				});

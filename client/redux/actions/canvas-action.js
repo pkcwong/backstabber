@@ -17,11 +17,13 @@ export class CanvasAction {
 	static GENERATE_KEY = 'Canvas/GENERATE-KEY';
 	static REVOKE_KEY = 'Canvas/REVOKE-KEY';
 	static NODE_SELECT = 'canvas/NODE_SELECT';
-	static NODE_DESELECT= 'canvas/NODE_DESELECT';
+	static NODE_DESELECT = 'canvas/NODE_DESELECT';
 	static ADD_LABEL = 'canvas/ADD_LABEL';
 	static DELETE_LABEL = 'canvas/DELETE_LABEL';
 	static DRAWER_STATE_CHANGE = 'canvas/DRAWER_STATE_CHANGE';
 	static UPDATE_PROPS = 'canvas/UPDATE_PROPS';
+	static WRITE_TEST = 'Canvas/WRITE-TEST';
+	static DELETE_TEST = 'Canvas/DELETE-TEST';
 
 	static init = (dispatcher) => {
 		return {
@@ -54,7 +56,8 @@ export class CanvasAction {
 				_id: bsNodeID,
 				props: props
 			},
-			callback: callback ? callback : () => {}
+			callback: callback ? callback : () => {
+			}
 		};
 	};
 
@@ -92,7 +95,7 @@ export class CanvasAction {
 		};
 	};
 
-	static nodeSelected = (_id)=>{
+	static nodeSelected = (_id) => {
 		return {
 			type: CanvasAction.NODE_SELECT,
 			payload: {
@@ -101,7 +104,7 @@ export class CanvasAction {
 		}
 	};
 
-	static clearNodeSelect = ()=>{
+	static clearNodeSelect = () => {
 		return {
 			type: CanvasAction.NODE_DESELECT,
 		}
@@ -147,7 +150,7 @@ export class CanvasAction {
 	static deleteLabel = () => {
 		return {
 			type: CanvasAction.DELETE_LABEL,
-			payload:{}
+			payload: {}
 		}
 	};
 	/**
@@ -226,7 +229,7 @@ export class CanvasAction {
 	 * @param meta
 	 * @returns {{type: string, payload: {_id: *, meta: *}}}
 	 */
-	static updateMeta= (_id, meta) => {
+	static updateMeta = (_id, meta) => {
 		return {
 			type: CanvasAction.UPDATE_PROGRAM_META,
 			payload: {
@@ -280,20 +283,41 @@ export class CanvasAction {
 		};
 	};
 
-	static drawerStateChange = ()=>{
+	static drawerStateChange = () => {
 		return {
 			type: CanvasAction.DRAWER_STATE_CHANGE
 		};
 	};
 
-	static updateProps = (prop, target)=>{
-		return{
+	static updateProps = (prop, target) => {
+		return {
 			type: CanvasAction.UPDATE_PROPS,
 			payload: {
 				prop: prop,
 				target: target
 			}
-		}
-	}
+		};
+	};
+
+	static writeTest = (_id, expect, toEqual) => {
+		return {
+			type: CanvasAction.WRITE_TEST,
+			payload: {
+				_id: _id,
+				entry: expect,
+				return: toEqual
+			}
+		};
+	};
+
+	static deleteTest = (_id, test) => {
+		return {
+			type: CanvasAction.DELETE_TEST,
+			payload: {
+				_id: _id,
+				test: test
+			}
+		};
+	};
 
 }
