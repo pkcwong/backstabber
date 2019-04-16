@@ -113,6 +113,12 @@ export class Program {
 				}).forEach((node) => {
 					node.props = args;
 				});
+				if (this.nodes.filter((node) => {
+					return (node instanceof ReturnNode);
+				}).length === 0) {
+					this.halt();
+					reject('ReturnNode Not Found');
+				}
 				this.nodes.filter((node) => {
 					return (node instanceof ReturnNode);
 				}).forEach((node) => {
@@ -130,8 +136,8 @@ export class Program {
 			new Promise((resolve, reject) => {
 				const _id = setTimeout(() => {
 					clearTimeout(_id);
-					reject('Timeout');
 					this.halt();
+					reject('Timeout');
 				}, 10000);
 			}),
 			new Promise((resolve, reject) => {
