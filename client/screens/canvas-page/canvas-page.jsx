@@ -17,7 +17,7 @@ import TrayItemWidget from './components/TrayItemWidget';
 import { sketches_db } from "../../../shared/collections/sketches";
 import { Program } from "../../../shared/lib/program";
 import { buckets_db } from "../../../shared/collections/buckets";
-import { Menu, Dropdown, Button, Input, Drawer, message, Modal, Progress, Radio, Icon, Spin } from 'antd';
+import { Menu, Dropdown, Button, Input, Drawer, List, message, Modal, Progress, Radio, Icon, Spin } from 'antd';
 import { JsonEditorComponent } from "./components/json-editor-component/json-editor-component";
 import 'antd/dist/antd.css';
 
@@ -66,6 +66,8 @@ class Component extends React.Component {
 			result: "",
 			result_modal: false,
 			debug_input: {},
+			tests_modal: false,
+			tests_programs: {}
 		};
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
@@ -233,8 +235,10 @@ class Component extends React.Component {
 									<Menu>
 										<Menu.Item>
 											<a onClick={() => {
-												this.setState({debug_modal: true});
-											}}>Debug</a>
+												this.setState({tests_modal: true});
+											}}>
+												Unit Tests
+											</a>
 										</Menu.Item>
 										<Menu.Item>
 											<a onClick={() => {
@@ -1015,6 +1019,212 @@ class Component extends React.Component {
 					>
 						<p>Are you sure you want to delete this program?</p>
 					</Modal>
+					<Modal
+						title='Unit Tests'
+						visible={this.state.tests_modal}
+						onOk={
+							() => {
+								this.setState({
+									tests_modal: false
+								});
+							}
+						}
+						onCancel={
+							() => {
+								this.setState({
+									tests_modal: false
+								});
+							}
+						}
+					>
+						{
+							(() => {
+								if (this.props.CanvasReducer._id !== null) {
+									return (
+										<List
+											itemLayout='horizontal'
+											dataSource={
+												this.props.Meteor.collection.sketches.find((sketch) => {
+													return (sketch._id === this.props.CanvasReducer._id);
+												}).tests
+											}
+											renderItem={
+												(item) => {
+													return (
+														<React.Fragment
+															key={item._id}
+														>
+															<List.Item>
+																<div
+																	style={
+																		{
+																			display: 'flex',
+																			flexDirection: 'column',
+																			width: '100%'
+																		}
+																	}
+																>
+																	<div
+																		style={
+																			{
+																				display: 'flex',
+																				flexDirection: 'row'
+																			}
+																		}
+																	>
+																		<div
+																			style={
+																				{
+																					flex: 1
+																				}
+																			}
+																		>
+																			{JSON.stringify(item.entry)}
+																		</div>
+																		<div
+																			style={
+																				{
+																					flex: 1
+																				}
+																			}
+																		>
+																			<Icon type="arrow-right"/>
+																		</div>
+																		<div
+																			style={
+																				{
+																					flex: 1
+																				}
+																			}
+																		>
+																			{this.state.tests_programs[item._id] ? JSON.stringify(this.state.tests_programs[item._id].result) : ''}
+																		</div>
+																		<div
+																			style={
+																				{
+																					flex: 1
+																				}
+																			}
+																		>
+																			<Icon type="swap"/>
+																		</div>
+																		<div
+																			style={
+																				{
+																					flex: 1
+																				}
+																			}
+																		>
+																			{JSON.stringify(item.return)}
+																		</div>
+																	</div>
+																	<div
+																		style={
+																			{
+																				width: '100%',
+																				flex: 1
+																			}
+																		}
+																	>
+																		<Progress
+																			percent={
+																				(() => {
+																					if (this.state.tests_programs[item._id]) {
+																						if (Object.keys(this.state.tests_programs[item._id].status).length !== 0) {
+																							return (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
+																								return (this.state.tests_programs[item._id].status[key] === 'resolved');
+																							}).length / Object.keys(this.state.tests_programs[item._id].status).length * 100);
+																						}
+																					}
+																					return 0;
+																				})()
+																			}
+																			status={
+																				(() => {
+																					if (this.state.tests_programs[item._id]) {
+																						if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
+																							return (this.state.tests_programs[item._id].status[key] === 'rejected');
+																						}).length !== 0) {
+																							return 'exception';
+																						} else if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
+																							return (this.state.tests_programs[item._id].status[key] !== 'resolved');
+																						}).length === 0) {
+																							if (_.isEqual(this.state.tests_programs[item._id].result, item.return)) {
+																								return 'success';
+																							} else {
+																								return 'exception';
+																							}
+																						} else {
+																							return 'active';
+																						}
+																					}
+																					return 'normal';
+																				})()
+																			}
+																		/>
+																		<Button
+																			onClick={
+																				() => {
+																					const program = Program.deserialize(new Program(this.props.CanvasReducer.bsNodes).serialize());
+																					this.setState({
+																						tests_programs: Object.assign({}, this.state.tests_programs, {
+																							[item._id]: program
+																						})
+																					});
+																					program.registerCallback(() => {
+																						this.forceUpdate();
+																					});
+																					program.execute(item.entry).then((result) => {
+																						this.forceUpdate();
+																					}).catch((err) => {
+																						this.forceUpdate();
+																					});
+																				}
+																			}
+																		>
+																			{
+																				(() => {
+																					if (this.state.tests_programs[item._id] === undefined) {
+																						return 'Test';
+																					} else if (_.isEqual(this.state.tests_programs[item._id].result, item.return)) {
+																						return 'Test Passed';
+																					} else if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
+																						return (this.state.tests_programs[item._id].status[key] === 'rejected');
+																					}).length === 0) {
+																						return 'Test Running';
+																					} else {
+																						return 'Test Failed';
+																					}
+																				})()
+																			}
+																		</Button>
+																		<Button
+																			style={
+																				{
+																					float: 'right'
+																				}
+																			}
+																			icon='delete'
+																			type='danger'
+																			onClick={
+																				() => {
+																					this.props.dispatch(CanvasAction.deleteTest(this.props.CanvasReducer._id, item._id));
+																				}
+																			}
+																		/>
+																	</div>
+																</div>
+															</List.Item>
+														</React.Fragment>
+													)
+												}
+											}
+										/>
+									);
+								}
+							})()
+						}
+					</Modal>
 					{/*Program Node Modal*/}
 					<Modal
 						title="Program Node Initialization Helper"
@@ -1434,6 +1644,29 @@ class Component extends React.Component {
 								return (
 									<React.Fragment>
 										Return Value:
+										{
+											(() => {
+												if (this.props.CanvasReducer._id !== null) {
+													return (
+														<Button
+															style={
+																{
+																	float: 'right'
+																}
+															}
+															type='primary'
+															onClick={
+																() => {
+																	this.props.dispatch(CanvasAction.writeTest(this.props.CanvasReducer._id, this.state.debug_input, this.state.result));
+																}
+															}
+														>
+															Save as Unit Test
+														</Button>
+													);
+												}
+											})()
+										}
 										<Input.TextArea
 											cols={4}
 											rows={8}

@@ -117,5 +117,60 @@ Meteor.methods({
 		}).catch((err) => {
 			throw new Meteor.Error(err);
 		});
+	},
+	'Sketches/WRITE-TEST': (json) => {
+		return new Promise((resolve, reject) => {
+			const sketch = sketches_db.findOne({
+				_id: json._id
+			});
+			if (sketch === undefined) {
+				reject("404 Not Found");
+				return;
+			}
+			if (sketch.owner !== Meteor.userId()) {
+				reject("401 Unauthorized");
+				return;
+			}
+			const test = {
+				_id: Random.id(),
+				entry: json.entry,
+				return: json.return
+			};
+			sketches_db.update({
+				_id: json._id
+			}, {
+				$push: {
+					tests: test
+				}
+			});
+			resolve(test);
+		});
+	},
+	'Sketches/DELETE-TEST': (json) => {
+		return new Promise((resolve, reject) => {
+			const sketch = sketches_db.findOne({
+				_id: json._id
+			});
+			if (sketch === undefined) {
+				reject("404 Not Found");
+				return;
+			}
+			if (sketch.owner !== Meteor.userId()) {
+				reject("401 Unauthorized");
+				return;
+			}
+			sketches_db.update({
+				_id: json._id
+			}, {
+				$set: {
+					tests: sketch.tests.filter((test) => {
+						return (test._id !== json.test);
+					})
+				}
+			});
+			resolve(sketch.tests.find((test) => {
+				return (test._id === json.test);
+			}));
+		});
 	}
 });

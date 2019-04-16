@@ -55,23 +55,23 @@ class Component extends React.Component {
 											}
 										}
 									>
-										{key}
 										<div
 											style={
 												{
-													width: "6%",
+													width: "10%%",
 													textAlign: "center",
 													fontWeight: "bold",
-													paddingTop: "1%"
+													paddingTop: "1%",
+													marginRight: "2%"
 												}
 											}
 										>
-											:
+											{key} :
 										</div>
 										<Input
 											style={
 												{
-													width: "62%"
+													width: "88%"
 												}
 											}
 											suffix={

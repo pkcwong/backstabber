@@ -209,4 +209,52 @@ export const CanvasSaga = function* () {
 			console.error(err);
 		}
 	});
+	yield takeEvery(CanvasAction.WRITE_TEST, function* (action) {
+		try {
+			yield call((payload) => {
+				return new Promise((resolve, reject) => {
+					Meteor.call('Sketches/WRITE-TEST', {
+						_id: payload._id,
+						entry: payload.entry,
+						return: payload.return
+					}, (err, res) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						resolve(res);
+					});
+				});
+			}, {
+				_id: action.payload._id,
+				entry: action.payload.entry,
+				return: action.payload.return
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	});
+	yield takeEvery(CanvasAction.DELETE_TEST, function* (action) {
+		try {
+			yield call((payload) => {
+				return new Promise((resolve, reject) => {
+					Meteor.call('Sketches/DELETE-TEST', {
+						_id: payload._id,
+						test: payload.test
+					}, (err, res) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+						resolve(res);
+					});
+				});
+			}, {
+				_id: action.payload._id,
+				test: action.payload.test
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	});
 };
