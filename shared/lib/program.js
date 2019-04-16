@@ -14,6 +14,7 @@ import { DatabaseNode } from "./database/database-node";
 import { DatabaseFetchNode } from "./database/database-fetch-node";
 import { DatabaseInsertNode } from "./database/database-insert-node";
 import { DatabaseRemoveNode } from "./database/database-remove-node";
+import { DatabaseUpdateNode } from "./database/database-update-node";
 import { DivisionNode } from "./arithmetics/division-node";
 import { EntryNode } from "./api/entry-node";
 import { EqualityNode } from "./logic/equality-node";
@@ -188,6 +189,7 @@ export class Program {
 			DatabaseFetchNode,
 			DatabaseInsertNode,
 			DatabaseRemoveNode,
+			DatabaseUpdateNode,
 			DivisionNode,
 			EntryNode,
 			EqualityNode,
