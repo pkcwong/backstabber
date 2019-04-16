@@ -113,6 +113,7 @@ export class BasicNode {
 			try {
 				this.instance.inputs[port] = this.class.ports.inputs[port](data);
 			} catch (err) {
+				this.program.reject(this, err);
 				console.error(err);
 				throw {
 					message: "invalid parameter: " + err,
