@@ -42,6 +42,7 @@ import { ProgramNode } from "../../../shared/lib/functional/program-node";
 import { ReturnNode } from "../../../shared/lib/api/return-node";
 import { StringNode } from "../../../shared/lib/primitive/string-node";
 import { SubtractionNode } from "../../../shared/lib/arithmetics/subtraction-node";
+import { TimestampNode } from "../../../shared/lib/functional/timestamp-node";
 
 const initialState = {
 	dispatcher: null,
@@ -92,7 +93,8 @@ const initialState = {
 		Functional: {
 			ProgramNode,
 			ExecuteNode,
-			KestrelNode
+			KestrelNode,
+			TimestampNode
 		},
 		Object: {
 			ObjectNode,

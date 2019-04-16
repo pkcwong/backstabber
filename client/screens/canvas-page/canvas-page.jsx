@@ -79,6 +79,14 @@ class Component extends React.Component {
 		this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
 		return (
 			<React.Fragment>
+				{(() =>{
+					if (this.props.CanvasReducer._id !== null) {
+						document.title = this.props.Meteor.collection.sketches.find((sketch) => {
+							return sketch._id === this.props.CanvasReducer._id
+						}).meta.title;
+					}
+				})()}
+
 				<div style={
 					{
 						minHeight: "7vh",
