@@ -40,7 +40,8 @@ import { ProgramNode } from "./functional/program-node";
 import { ReturnNode } from "./api/return-node";
 import { StringNode } from "./primitive/string-node";
 import { SubtractionNode } from "./arithmetics/subtraction-node";
-import { TimestampNode } from "./functional/timestamp-node";
+import { TimestampNode } from "./utility/timestamp-node";
+import { TypeOfNode } from "./utility/type-of-node";
 
 export class Program {
 
@@ -222,7 +223,8 @@ export class Program {
 			ReturnNode,
 			StringNode,
 			SubtractionNode,
-			TimestampNode
+			TimestampNode,
+			TypeOfNode
 		};
 		let map = json.reduce((accumulator, current) => {
 			let node = new constructor[current.class](current.props);
