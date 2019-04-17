@@ -62,6 +62,7 @@ describe('CanvasReducer', () => {
 				Object: "#cd6133",
 				Array: "#706fd3",
 				Database: "#aaa69d",
+				Utility: "#666666",
 				Web: "#00bfff"
 			},
 			nodeTypes: {
@@ -97,10 +98,6 @@ describe('CanvasReducer', () => {
 					ExecuteNode,
 					KestrelNode
 				},
-				Utiltiy: {
-					TimestampNode,
-					TypeOfNode
-				},
 				Object: {
 					ObjectNode,
 					ObjectGetNode,
@@ -128,6 +125,10 @@ describe('CanvasReducer', () => {
 				Web: {
 					HttpGetNode,
 					HttpPostNode
+				},
+				Utility: {
+					TimestampNode,
+					TypeOfNode
 				}
 			},
 			select_id: "",

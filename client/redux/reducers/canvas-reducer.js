@@ -61,6 +61,7 @@ const initialState = {
 		Object: "#cd6133",
 		Array: "#706fd3",
 		Database: "#aaa69d",
+		Utility: "#666666",
 		Web: "#00bfff"
 	},
 	nodeTypes: {
@@ -96,10 +97,6 @@ const initialState = {
 			ExecuteNode,
 			KestrelNode
 		},
-		Utiltiy: {
-			TimestampNode,
-			TypeOfNode
-		},
 		Object: {
 			ObjectNode,
 			ObjectGetNode,
@@ -127,6 +124,10 @@ const initialState = {
 		Web: {
 			HttpGetNode,
 			HttpPostNode
+		},
+		Utility: {
+			TimestampNode,
+			TypeOfNode
 		}
 	},
 	select_id: "",
