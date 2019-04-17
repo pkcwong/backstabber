@@ -42,7 +42,8 @@ import { ProgramNode } from "../../shared/lib/functional/program-node";
 import { ReturnNode } from "../../shared/lib/api/return-node";
 import { StringNode } from "../../shared/lib/primitive/string-node";
 import { SubtractionNode } from "../../shared/lib/arithmetics/subtraction-node";
-import { TimestampNode } from "../../shared/lib/functional/timestamp-node";
+import { TimestampNode } from "../../shared/lib/utility/timestamp-node";
+import { TypeOfNode } from "../../shared/lib/utility/type-of-node";
 
 describe('CanvasReducer', () => {
 	it('Should reset states', () => {
@@ -94,8 +95,11 @@ describe('CanvasReducer', () => {
 				Functional: {
 					ProgramNode,
 					ExecuteNode,
-					KestrelNode,
-					TimestampNode
+					KestrelNode
+				},
+				Utility: {
+					TimestampNode,
+					TypeOfNode
 				},
 				Object: {
 					ObjectNode,
