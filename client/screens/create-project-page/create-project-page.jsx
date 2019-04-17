@@ -421,7 +421,7 @@ class Component extends React.Component {
 																		e.select();
 																		document.execCommand('copy');
 																		document.body.removeChild(e);
-																	})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data ' + JSON.stringify({}) + ' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id);
+																	})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data \'' + JSON.stringify({}) + '\' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id);
 																	message.success('copied cURL command to clipboard');
 																}}
 															>
@@ -443,6 +443,7 @@ class Component extends React.Component {
 																		'\t\tHTTP.open("POST", "' +
 																		window.location.protocol + '//' + window.location.host + '/api/program/"' +
 																		' + _id);\n' +
+																		'\t\tHTTP.setRequestHeader("Content-Type", "application/json");\n' +
 																		'\t\tHTTP.setRequestHeader("token", token);\n' +
 																		'\t\tHTTP.send(JSON.stringify(entry));\n' +
 																		'\t\tHTTP.onreadystatechange = function() {\n' +

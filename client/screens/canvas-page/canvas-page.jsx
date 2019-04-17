@@ -1845,7 +1845,7 @@ class Component extends React.Component {
 																								e.select();
 																								document.execCommand('copy');
 																								document.body.removeChild(e);
-																							})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data ' + JSON.stringify(JSON.stringify(JSON.parse($("#user_input").val()))) + ' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id);
+																							})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data \'' + JSON.stringify(JSON.stringify(JSON.parse($("#user_input").val()))) + '\' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id);
 																							message.success('copied CURL command to clipboard');
 																						}}
 																					>
