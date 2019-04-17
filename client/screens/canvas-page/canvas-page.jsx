@@ -79,6 +79,14 @@ class Component extends React.Component {
 		this.engine.setDiagramModel(this.createModel(this.props.CanvasReducer.srdNodes, this.props.CanvasReducer.srdLinks));
 		return (
 			<React.Fragment>
+				{(() =>{
+					if (this.props.CanvasReducer._id !== null) {
+						document.title = this.props.Meteor.collection.sketches.find((sketch) => {
+							return sketch._id === this.props.CanvasReducer._id
+						}).meta.title;
+					}
+				})()}
+
 				<div style={
 					{
 						minHeight: "7vh",
@@ -319,9 +327,7 @@ class Component extends React.Component {
 															return (this.state.program.status[key] === 'rejected');
 														}).length !== 0) {
 															return 'exception';
-														} else if (Object.keys(this.state.program.status).filter((key) => {
-															return (this.state.program.status[key] !== 'resolved');
-														}).length === 0) {
+														} else if (this.state.program.result !== undefined) {
 															return 'success';
 														} else {
 															return 'active';
@@ -353,7 +359,7 @@ class Component extends React.Component {
 												});
 											}}
 										>
-											<Icon type="play-circle" />
+											<Icon type="play-circle"/>
 											Debug
 										</Button>
 									);
@@ -373,7 +379,7 @@ class Component extends React.Component {
 												}
 											}}
 										>
-											<Icon type="close-square" />
+											<Icon type="close-square"/>
 											Halt
 										</Button>
 									)
@@ -1037,193 +1043,333 @@ class Component extends React.Component {
 							}
 						}
 					>
-						{
-							(() => {
-								if (this.props.CanvasReducer._id !== null) {
-									return (
-										<List
-											itemLayout='horizontal'
-											dataSource={
-												this.props.Meteor.collection.sketches.find((sketch) => {
-													return (sketch._id === this.props.CanvasReducer._id);
-												}).tests
+						<div>
+							<div
+								style={
+									{
+										textAlign: 'center'
+									}
+								}
+							>
+								<Progress
+									type='dashboard'
+									strokeColor='red'
+									percent={
+										(() => {
+											if (Object.keys(this.state.tests_programs).length === 0) {
+												return 0;
 											}
-											renderItem={
-												(item) => {
-													return (
-														<React.Fragment
-															key={item._id}
-														>
-															<List.Item>
-																<div
-																	style={
-																		{
-																			display: 'flex',
-																			flexDirection: 'column',
-																			width: '100%'
-																		}
-																	}
-																>
+											return Math.floor((Object.keys(this.state.tests_programs).filter((test) => {
+												if (this.state.tests_programs[test].result !== undefined) {
+													return true;
+												}
+												return (Object.keys(this.state.tests_programs[test].status).filter((key) => {
+													return (this.state.tests_programs[test].status[key] === 'rejected');
+												}).length !== 0);
+											}).length / Object.keys(this.state.tests_programs).length * 100));
+										})()
+									}
+									successPercent={
+										(() => {
+											if (Object.keys(this.state.tests_programs).length === 0) {
+												return 0;
+											}
+											return Math.floor(Object.keys(this.state.tests_programs).filter((test) => {
+												return _.isEqual(this.state.tests_programs[test].result, this.props.Meteor.collection.sketches.find((sketch) => {
+													return (sketch._id === this.props.CanvasReducer._id);
+												}).tests.find((t) => {
+													return (t._id === test);
+												}).return);
+											}).length / Object.keys(this.state.tests_programs).length * 100);
+										})()
+									}
+									format={
+										() => {
+											return (Object.keys(this.state.tests_programs).filter((test) => {
+												return _.isEqual(this.state.tests_programs[test].result, this.props.Meteor.collection.sketches.find((sketch) => {
+													return (sketch._id === this.props.CanvasReducer._id);
+												}).tests.find((t) => {
+													return (t._id === test);
+												}).return);
+											}).length + ' / ' + Object.keys(this.state.tests_programs).length + ' passed');
+										}
+									}
+									status={
+										(() => {
+											if (Object.keys(this.state.tests_programs).length === 0) {
+												return 'normal';
+											}
+											if (Object.keys(this.state.tests_programs).filter((test) => {
+												return _.isEqual(this.state.tests_programs[test].result, this.props.Meteor.collection.sketches.find((sketch) => {
+													return (sketch._id === this.props.CanvasReducer._id);
+												}).tests.find((t) => {
+													return (t._id === test);
+												}).return);
+											}).length === Object.keys(this.state.tests_programs).length) {
+												return 'success';
+											}
+											if (Object.keys(this.state.tests_programs).filter((test) => {
+												if (this.state.tests_programs[test].result !== undefined) {
+													return true;
+												}
+												return (Object.keys(this.state.tests_programs[test].status).filter((key) => {
+													return (this.state.tests_programs[test].status[key] === 'rejected');
+												}).length !== 0);
+											}).length === Object.keys(this.state.tests_programs).length) {
+												return 'exception';
+											}
+											return 'active';
+										})()
+									}
+								/>
+							</div>
+							<div
+								style={
+									{
+										textAlign: 'center'
+									}
+								}
+							>
+								{
+									(() => {
+										if (this.props.CanvasReducer._id !== null) {
+											return (
+												<Button
+													type='primary'
+													onClick={
+														() => {
+															this.setState({
+																tests_programs: this.props.Meteor.collection.sketches.find((sketch) => {
+																	return (sketch._id === this.props.CanvasReducer._id);
+																}).tests.reduce((accumulator, test) => {
+																	const program = Program.deserialize(new Program(this.props.CanvasReducer.bsNodes).serialize());
+																	program.registerCallback(() => {
+																		this.forceUpdate();
+																	});
+																	program.execute(test.entry).then((result) => {
+																		this.forceUpdate();
+																	}).catch((err) => {
+																		this.forceUpdate();
+																	});
+																	accumulator[test._id] = program;
+																	return accumulator;
+																}, {})
+															});
+														}
+													}
+												>
+													Run all tests
+												</Button>
+											);
+										}
+									})()
+								}
+							</div>
+							{
+								(() => {
+									if (this.props.CanvasReducer._id !== null) {
+										return (
+											<List
+												itemLayout='horizontal'
+												dataSource={
+													this.props.Meteor.collection.sketches.find((sketch) => {
+														return (sketch._id === this.props.CanvasReducer._id);
+													}).tests
+												}
+												renderItem={
+													(item) => {
+														return (
+															<React.Fragment
+																key={item._id}
+															>
+																<List.Item>
 																	<div
 																		style={
 																			{
 																				display: 'flex',
-																				flexDirection: 'row'
+																				flexDirection: 'column',
+																				width: '100%'
 																			}
 																		}
 																	>
 																		<div
 																			style={
 																				{
-																					flex: 1
+																					display: 'flex',
+																					flexDirection: 'row',
+																					textAlign: 'center'
 																				}
 																			}
 																		>
-																			{JSON.stringify(item.entry)}
-																		</div>
-																		<div
-																			style={
-																				{
-																					flex: 1
-																				}
-																			}
-																		>
-																			<Icon type="arrow-right"/>
-																		</div>
-																		<div
-																			style={
-																				{
-																					flex: 1
-																				}
-																			}
-																		>
-																			{this.state.tests_programs[item._id] ? JSON.stringify(this.state.tests_programs[item._id].result) : ''}
-																		</div>
-																		<div
-																			style={
-																				{
-																					flex: 1
-																				}
-																			}
-																		>
-																			<Icon type="swap"/>
-																		</div>
-																		<div
-																			style={
-																				{
-																					flex: 1
-																				}
-																			}
-																		>
-																			{JSON.stringify(item.return)}
-																		</div>
-																	</div>
-																	<div
-																		style={
-																			{
-																				width: '100%',
-																				flex: 1
-																			}
-																		}
-																	>
-																		<Progress
-																			percent={
-																				(() => {
-																					if (this.state.tests_programs[item._id]) {
-																						if (Object.keys(this.state.tests_programs[item._id].status).length !== 0) {
-																							return (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
-																								return (this.state.tests_programs[item._id].status[key] === 'resolved');
-																							}).length / Object.keys(this.state.tests_programs[item._id].status).length * 100);
-																						}
+																			<div
+																				style={
+																					{
+																						flex: 1,
+																						margin: 'auto'
 																					}
-																					return 0;
-																				})()
+																				}
+																			>
+																				{JSON.stringify(item.entry)}
+																			</div>
+																			<div
+																				style={
+																					{
+																						flex: 1,
+																						margin: 'auto'
+																					}
+																				}
+																			>
+																				<Icon type="arrow-right"/>
+																			</div>
+																			<div
+																				style={
+																					{
+																						flex: 1,
+																						margin: 'auto'
+																					}
+																				}
+																			>
+																				{this.state.tests_programs[item._id] ? JSON.stringify(this.state.tests_programs[item._id].result) : ''}
+																			</div>
+																			<div
+																				style={
+																					{
+																						flex: 1,
+																						margin: 'auto'
+																					}
+																				}
+																			>
+																				<Icon type="swap"/>
+																			</div>
+																			<div
+																				style={
+																					{
+																						flex: 1,
+																						margin: 'auto'
+																					}
+																				}
+																			>
+																				{JSON.stringify(item.return)}
+																			</div>
+																		</div>
+																		<div
+																			style={
+																				{
+																					width: '100%',
+																					flex: 1
+																				}
 																			}
-																			status={
-																				(() => {
-																					if (this.state.tests_programs[item._id]) {
-																						if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
-																							return (this.state.tests_programs[item._id].status[key] === 'rejected');
-																						}).length !== 0) {
-																							return 'exception';
-																						} else if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
-																							return (this.state.tests_programs[item._id].status[key] !== 'resolved');
-																						}).length === 0) {
-																							if (_.isEqual(this.state.tests_programs[item._id].result, item.return)) {
-																								return 'success';
-																							} else {
-																								return 'exception';
+																		>
+																			<Progress
+																				percent={
+																					(() => {
+																						if (this.state.tests_programs[item._id]) {
+																							if (Object.keys(this.state.tests_programs[item._id].status).length !== 0) {
+																								return (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
+																									return (this.state.tests_programs[item._id].status[key] === 'resolved');
+																								}).length / Object.keys(this.state.tests_programs[item._id].status).length * 100);
 																							}
-																						} else {
-																							return 'active';
 																						}
-																					}
-																					return 'normal';
-																				})()
-																			}
-																		/>
-																		<Button
-																			onClick={
-																				() => {
-																					const program = Program.deserialize(new Program(this.props.CanvasReducer.bsNodes).serialize());
-																					this.setState({
-																						tests_programs: Object.assign({}, this.state.tests_programs, {
-																							[item._id]: program
-																						})
-																					});
-																					program.registerCallback(() => {
-																						this.forceUpdate();
-																					});
-																					program.execute(item.entry).then((result) => {
-																						this.forceUpdate();
-																					}).catch((err) => {
-																						this.forceUpdate();
-																					});
+																						return 0;
+																					})()
 																				}
-																			}
-																		>
-																			{
-																				(() => {
-																					if (this.state.tests_programs[item._id] === undefined) {
-																						return 'Test';
-																					} else if (_.isEqual(this.state.tests_programs[item._id].result, item.return)) {
-																						return 'Test Passed';
-																					} else if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
-																						return (this.state.tests_programs[item._id].status[key] === 'rejected');
-																					}).length === 0) {
-																						return 'Test Running';
-																					} else {
-																						return 'Test Failed';
+																				status={
+																					(() => {
+																						if (this.state.tests_programs[item._id]) {
+																							if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
+																								return (this.state.tests_programs[item._id].status[key] === 'rejected');
+																							}).length !== 0) {
+																								return 'exception';
+																							} else if (this.state.tests_programs[item._id].result !== undefined) {
+																								if (_.isEqual(this.state.tests_programs[item._id].result, item.return)) {
+																									return 'success';
+																								} else {
+																									return 'exception';
+																								}
+																							} else {
+																								return 'active';
+																							}
+																						}
+																						return 'normal';
+																					})()
+																				}
+																			/>
+																			<Button
+																				onClick={
+																					() => {
+																						const program = Program.deserialize(new Program(this.props.CanvasReducer.bsNodes).serialize());
+																						this.setState({
+																							tests_programs: Object.assign({}, this.state.tests_programs, {
+																								[item._id]: program
+																							})
+																						});
+																						program.registerCallback(() => {
+																							this.forceUpdate();
+																						});
+																						program.execute(item.entry).then((result) => {
+																							this.forceUpdate();
+																						}).catch((err) => {
+																							this.forceUpdate();
+																						});
 																					}
-																				})()
-																			}
-																		</Button>
-																		<Button
-																			style={
+																				}
+																			>
 																				{
-																					float: 'right'
+																					(() => {
+																						if (this.state.tests_programs[item._id] === undefined) {
+																							return 'Test';
+																						} else if (_.isEqual(this.state.tests_programs[item._id].result, item.return)) {
+																							return 'Test Passed';
+																						} else if (Object.keys(this.state.tests_programs[item._id].status).filter((key) => {
+																							return (this.state.tests_programs[item._id].status[key] === 'rejected');
+																						}).length === 0) {
+																							return 'Test Running';
+																						} else {
+																							return 'Test Failed';
+																						}
+																					})()
 																				}
-																			}
-																			icon='delete'
-																			type='danger'
-																			onClick={
-																				() => {
-																					this.props.dispatch(CanvasAction.deleteTest(this.props.CanvasReducer._id, item._id));
+																			</Button>
+																			<Button
+																				icon='share-alt'
+																				type='primary'
+																				onClick={
+																					() => {
+																						this.setState({
+																							debug_modal: true,
+																							debug_input: item.entry,
+																							tests_modal: false
+																						});
+																					}
 																				}
-																			}
-																		/>
+																			/>
+																			<Button
+																				style={
+																					{
+																						float: 'right'
+																					}
+																				}
+																				icon='delete'
+																				type='danger'
+																				onClick={
+																					() => {
+																						this.props.dispatch(CanvasAction.deleteTest(this.props.CanvasReducer._id, item._id));
+																					}
+																				}
+																			/>
+																		</div>
 																	</div>
-																</div>
-															</List.Item>
-														</React.Fragment>
-													)
+																</List.Item>
+															</React.Fragment>
+														)
+													}
 												}
-											}
-										/>
-									);
-								}
-							})()
-						}
+											/>
+										);
+									}
+								})()
+							}
+						</div>
 					</Modal>
 					{/*Program Node Modal*/}
 					<Modal
@@ -1658,6 +1804,7 @@ class Component extends React.Component {
 															onClick={
 																() => {
 																	this.props.dispatch(CanvasAction.writeTest(this.props.CanvasReducer._id, this.state.debug_input, this.state.result));
+																	message.success('Saved as Unit Test');
 																}
 															}
 														>
@@ -1698,7 +1845,7 @@ class Component extends React.Component {
 																								e.select();
 																								document.execCommand('copy');
 																								document.body.removeChild(e);
-																							})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data ' + JSON.stringify(JSON.stringify(JSON.parse($("#user_input").val()))) + ' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id);
+																							})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data \'' + JSON.stringify(this.state.debug_input) + '\' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.props.CanvasReducer._id);
 																							message.success('copied CURL command to clipboard');
 																						}}
 																					>

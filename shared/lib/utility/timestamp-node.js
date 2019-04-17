@@ -16,7 +16,7 @@ export class TimestampNode extends BasicNode {
 	static executor = (props = TimestampNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
 			resolve({
-				timestamp: time = new Date().toUTCString()
+				timestamp: new Date().getTime()
 			});
 		});
 	};
