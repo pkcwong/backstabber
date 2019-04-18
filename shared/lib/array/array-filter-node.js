@@ -1,4 +1,6 @@
 import { BasicNode } from "../basic-node";
+import { Program } from "../program";
+import { sketches_db } from "../../collections/sketches";
 
 export class ArrayFilterNode extends BasicNode {
 
@@ -32,27 +34,48 @@ export class ArrayFilterNode extends BasicNode {
 				result: await Promise.resolve(inputs.array.reduce(async (accumulator, current, index) => {
 					const acc = await Promise.resolve(accumulator);
 					return Promise.resolve(await new Promise(async (resolve) => {
-						Meteor.call('sketches/EXECUTE', {
-							_id: inputs.program._id,
-							token: inputs.program.token,
-							entry: Object.assign({}, inputs.program.entry, {
+						const sketch = sketches_db.findOne({
+							_id: inputs.program._id
+						});
+						if (sketch !== undefined) {
+							Program.deserialize(sketch.program).execute(Object.assign({}, inputs.program.entry, {
 								current: current,
 								index: index
-							})
-						}, (err, res) => {
-							if (err) {
+							})).then((res) => {
+								if (res.current === true) {
+									resolve([
+										...acc,
+										current
+									]);
+								} else {
+									resolve(acc);
+								}
+							}).catch((err) => {
 								reject(err);
-								return;
-							}
-							if (res.current === true) {
-								resolve([
-									...acc,
-									current
-								]);
-							} else {
-								resolve(acc);
-							}
-						});
+							});
+						} else {
+							Meteor.call('sketches/EXECUTE', {
+								_id: inputs.program._id,
+								token: inputs.program.token,
+								entry: Object.assign({}, inputs.program.entry, {
+									current: current,
+									index: index
+								})
+							}, (err, res) => {
+								if (err) {
+									reject(err);
+									return;
+								}
+								if (res.current === true) {
+									resolve([
+										...acc,
+										current
+									]);
+								} else {
+									resolve(acc);
+								}
+							});
+						}
 					}));
 				}, Promise.resolve([])))
 			});
