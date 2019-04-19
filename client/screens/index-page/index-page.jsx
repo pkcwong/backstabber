@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Typography, Card, Icon, Button, Modal, Input, Checkbox} from 'antd';
+import { Typography, Card, Carousel, Icon, Button, Modal, Input, Checkbox} from 'antd';
 import 'antd/dist/antd.css';
+import { styles } from "./styles";
 
 const { Paragraph } = Typography;
 const { Text } = Typography;
@@ -107,36 +108,135 @@ class Component extends React.Component {
 						more simple without sacrificing any limitation of what conventional coding languages can do.
 						We hope that by doing these, would make it easier for users to learn and choose our language.
 					</Paragraph>
-					<img
+					<div
 						style={
 							{
-								width: "40vw",
-								paddingBottom: "2vh"
+								height: '72vh'
 							}
 						}
-						src={"https://media.giphy.com/media/1gWm3Iu2vRKOlc0lLB/giphy.gif"}/>
-					<br/>
-					<Text code style={
-						{
-							fontWeight: "bold",
-							fontSize: "1.8em",
-						}
-					}>Current Supporting Features:</Text>
-					<br/>
-					<Paragraph
-						style={
-							{
-								paddingLeft: "1em",
-								fontSize: "1.3em"
+					>
+						<div
+							style={
+								{
+									width: '50%',
+									float: 'left'
+								}
 							}
-						}>
-						<b>1.</b> Drag and Drop <br/>
-						<b>2.</b> Program Deployment using APIs<br/>
-						<b>3.</b> Real Time Debugging <br/>
-						<b>3.</b> Program Sharing <br/>
-						<b>3.</b> Program Management System <br/>
-						<b>3.</b> Database Management System <br/>
-					</Paragraph>
+						>
+							<Carousel
+								autoplay={true}
+								autoplaySpeed={7000}
+							>
+								<div>
+									<div
+										style={styles.container}
+									>
+										<div
+											style={styles.header}
+										>
+											<img
+												style={styles.image}
+												src='/res/img/drag_drop.gif'
+											/>
+										</div>
+										<div
+											style={styles.footer}
+										>
+											Drag, Drop and Connect to write a Program
+										</div>
+									</div>
+								</div>
+								<div>
+									<div
+										style={styles.container}
+									>
+										<div
+											style={styles.header}
+										>
+											<img
+												style={styles.image}
+												src='/res/img/props.gif'
+											/>
+										</div>
+										<div
+											style={styles.footer}
+										>
+											Customize an output value
+										</div>
+									</div>
+								</div>
+								<div>
+									<div
+										style={styles.container}
+									>
+										<div
+											style={styles.header}
+										>
+											<img
+												style={styles.image}
+												src='/res/img/debugging.gif'
+											/>
+										</div>
+										<div
+											style={styles.footer}
+										>
+											Realtime Execution and Debugging
+										</div>
+									</div>
+								</div>
+								<div>
+									<div
+										style={styles.container}
+									>
+										<div
+											style={styles.header}
+										>
+											<img
+												style={styles.image}
+												src='/res/img/unit_test.gif'
+											/>
+										</div>
+										<div
+											style={styles.footer}
+										>
+											Easily writing Test Cases
+										</div>
+									</div>
+								</div>
+							</Carousel>
+						</div>
+						<div
+							style={
+								{
+									width: '50%',
+									float: 'right'
+								}
+							}
+						>
+							<Text code style={
+								{
+									fontWeight: "bold",
+									fontSize: "1.8em",
+								}
+							}>Current Supporting Features:</Text>
+							<br/>
+							<Paragraph
+								style={
+									{
+										paddingLeft: "1em",
+										fontSize: "1.3em"
+									}
+								}>
+								<b>1.</b> Drag and Drop <br/>
+								<b>2.</b> Program Deployment using APIs<br/>
+								<b>3.</b> Real Time Debugging <br/>
+								<b>3.</b> Program Sharing <br/>
+								<b>3.</b> Program Management System <br/>
+								<b>3.</b> Database Management System <br/>
+							</Paragraph>
+						</div>
+					</div>
+					<br/>
 					<br/>
 					<Text code style={
 						{
