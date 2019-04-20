@@ -3,6 +3,7 @@ import { CanvasAction } from "../actions/canvas-action";
 import { AdditionNode } from "../../../shared/lib/arithmetics/addition-node";
 import { AndNode } from "../../../shared/lib/logic/and-node";
 import { ArrayNode } from "../../../shared/lib/array/array-node";
+import { ArrayConcatNode } from "../../../shared/lib/array/array-concat-node";
 import { ArrayFilterNode } from "../../../shared/lib/array/array-filter-node";
 import { ArrayGetNode } from "../../../shared/lib/array/array-get-node";
 import { ArrayIncludesNode } from "../../../shared/lib/array/array-includes-node";
@@ -108,6 +109,7 @@ const initialState = {
 		},
 		Array: {
 			ArrayNode,
+			ArrayConcatNode,
 			ArrayFilterNode,
 			ArrayGetNode,
 			ArrayIncludesNode,
