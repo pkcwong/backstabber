@@ -1,4 +1,5 @@
 import { ObjectEqualNode } from "../../shared/lib/object/object-equal-node";
+import _ from "lodash";
 
 describe('ObjectEqualNode', function () {
 	it('should return true', async function () {
