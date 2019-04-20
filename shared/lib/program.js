@@ -1,6 +1,7 @@
 import { AdditionNode } from "./arithmetics/addition-node";
 import { AndNode } from "./logic/and-node";
 import { ArrayNode } from "./array/array-node";
+import { ArrayConcatNode } from "./array/array-concat-node";
 import { ArrayFilterNode } from "./array/array-filter-node";
 import { ArrayGetNode } from "./array/array-get-node";
 import { ArrayLengthNode } from "./array/array-length-node";
@@ -184,6 +185,7 @@ export class Program {
 			AdditionNode,
 			AndNode,
 			ArrayNode,
+			ArrayConcatNode,
 			ArrayFilterNode,
 			ArrayGetNode,
 			ArrayIncludesNode,
