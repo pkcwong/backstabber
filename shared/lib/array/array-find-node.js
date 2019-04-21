@@ -15,7 +15,16 @@ export class ArrayFindNode extends BasicNode {
 				}
 			},
 			value: (x) => {
+				if(typeof x === "number" || typeof x === "string"){
 					return x;
+				}else if(typeof x === "object"){
+					try{
+						return JSON.parse(JSON.stringify(x));
+					}
+					catch(e){
+						throw e;
+					}
+				}
 			}
 		},
 		outputs: {
@@ -34,14 +43,25 @@ export class ArrayFindNode extends BasicNode {
 
 	static executor = (props = ArrayFindNode.props, inputs) => {
 		return new Promise((resolve, reject) => {
-			resolve({
-				found: inputs.array.find((x) =>{
-					return x === inputs.value;
-				}),
-				index: inputs.array.findIndex((x) =>{
-					return x === inputs.value;
-				})
-			});
+			if(typeof inputs.value === "object"){
+				resolve({
+					found: inputs.array.find((x) =>{
+						return _.isMatch(x, inputs.value);
+					}),
+					index: inputs.array.findIndex((x) =>{
+						return _.isMatch(x, inputs.value);
+					})
+				});
+			}else{
+				resolve({
+					found: inputs.array.find((x) =>{
+						return x === inputs.value;
+					}),
+					index: inputs.array.findIndex((x) =>{
+						return x === inputs.value;
+					})
+				});
+			}
 		});
 	};
 

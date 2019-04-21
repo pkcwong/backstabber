@@ -20,4 +20,13 @@ describe('ArrayFindNode', function () {
 			index: 0
 		});
 	});
+	it('should return array object', async function () {
+		expect(await ArrayFindNode.executor({}, {
+			array: [{"a":"b"}, 2],
+			value: {"a":"b"}
+		})).toEqual({
+			found: {"a":"b"},
+			index: 0
+		});
+	});
 });
