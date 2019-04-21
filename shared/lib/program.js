@@ -1,6 +1,7 @@
 import { AdditionNode } from "./arithmetics/addition-node";
 import { AndNode } from "./logic/and-node";
 import { ArrayNode } from "./array/array-node";
+import { ArrayConcatNode } from "./array/array-concat-node";
 import { ArrayFilterNode } from "./array/array-filter-node";
 import { ArrayGetNode } from "./array/array-get-node";
 import { ArrayLengthNode } from "./array/array-length-node";
@@ -31,6 +32,7 @@ import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
+import { ObjectEqualNode } from "./object/object-equal-node";
 import { ObjectGetNode } from "./object/object-get-node";
 import { ObjectHasPropertyNode } from "./object/object-has-property-node";
 import { ObjectKeysNode } from "./object/object-keys-node";
@@ -185,6 +187,7 @@ export class Program {
 			AdditionNode,
 			AndNode,
 			ArrayNode,
+			ArrayConcatNode,
 			ArrayFilterNode,
 			ArrayGetNode,
 			ArrayIncludesNode,
