@@ -7,7 +7,12 @@ export class ObjectHasPropertyNode extends BasicNode {
 	static ports = {
 		inputs: {
 			object: (x) => {
-				return JSON.parse(JSON.stringify(x));
+				try {
+					return JSON.parse(JSON.stringify(x));
+				}
+				catch(e){
+					throw e
+				}
 			},
 			property: (x) => {
 				return x;

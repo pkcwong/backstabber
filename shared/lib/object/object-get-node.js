@@ -7,7 +7,12 @@ export class ObjectGetNode extends BasicNode {
 	static ports = {
 		inputs: {
 			json: (x) => {
-				return JSON.parse(JSON.stringify(x));
+				try {
+					return JSON.parse(JSON.stringify(x));
+				}
+				catch(e){
+					throw e
+				}
 			},
 			key: (x) => {
 				return x;
