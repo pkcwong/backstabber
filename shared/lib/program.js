@@ -34,6 +34,7 @@ import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
 import { ObjectEqualNode } from "./object/object-equal-node";
 import { ObjectGetNode } from "./object/object-get-node";
+import { ObjectHasPropertyNode } from "./object/object-has-property-node";
 import { ObjectKeysNode } from "./object/object-keys-node";
 import { ObjectParseNode } from "./object/object-parse-node";
 import { ObjectPutNode } from "./object/object-put-node";
@@ -218,6 +219,7 @@ export class Program {
 			NumberNode,
 			ObjectNode,
 			ObjectGetNode,
+			ObjectHasPropertyNode,
 			ObjectKeysNode,
 			ObjectParseNode,
 			ObjectPutNode,
