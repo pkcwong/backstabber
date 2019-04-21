@@ -5,6 +5,7 @@ import { AndNode } from "../../../shared/lib/logic/and-node";
 import { ArrayNode } from "../../../shared/lib/array/array-node";
 import { ArrayConcatNode } from "../../../shared/lib/array/array-concat-node";
 import { ArrayFilterNode } from "../../../shared/lib/array/array-filter-node";
+import { ArrayFindNode } from "../../../shared/lib/array/array-find-node";
 import { ArrayGetNode } from "../../../shared/lib/array/array-get-node";
 import { ArrayIncludesNode } from "../../../shared/lib/array/array-includes-node";
 import { ArrayLengthNode } from "../../../shared/lib/array/array-length-node";
@@ -113,6 +114,7 @@ const initialState = {
 			ArrayNode,
 			ArrayConcatNode,
 			ArrayFilterNode,
+			ArrayFindNode,
 			ArrayGetNode,
 			ArrayIncludesNode,
 			ArrayLengthNode,
@@ -180,8 +182,7 @@ export const CanvasReducer = (state = initialState, action) => {
 				selectionChanged: (e) => {
 					if (e.isSelected) {
 						state.dispatcher(CanvasAction.nodeSelected(stormNode.id));
-					}
-					else {
+					} else {
 						state.dispatcher(CanvasAction.clearNodeSelect());
 					}
 				}
@@ -317,14 +318,13 @@ export const CanvasReducer = (state = initialState, action) => {
 			const bsNode = state.bsNodes.find((bsNode) => {
 				return (bsNode._id === select_id)
 			});
-			if(Object.keys(bsNode.class.props).length !== 0){
+			if (Object.keys(bsNode.class.props).length !== 0) {
 				return Object.assign({}, state, {
 					select_id: select_id,
 					drawer_modal: !state.drawer_modal,
 					node_props: Object.assign({}, bsNode.props)
 				});
-			}
-			else{
+			} else {
 				return Object.assign({}, state, {
 					select_id: select_id
 				});

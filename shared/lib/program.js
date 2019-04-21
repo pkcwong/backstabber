@@ -3,6 +3,7 @@ import { AndNode } from "./logic/and-node";
 import { ArrayNode } from "./array/array-node";
 import { ArrayConcatNode } from "./array/array-concat-node";
 import { ArrayFilterNode } from "./array/array-filter-node";
+import { ArrayFindNode } from "./array/array-find-node";
 import { ArrayGetNode } from "./array/array-get-node";
 import { ArrayLengthNode } from "./array/array-length-node";
 import { ArrayIncludesNode } from "./array/array-includes-node";
@@ -189,6 +190,7 @@ export class Program {
 			ArrayNode,
 			ArrayConcatNode,
 			ArrayFilterNode,
+			ArrayFindNode,
 			ArrayGetNode,
 			ArrayIncludesNode,
 			ArrayLengthNode,
@@ -218,6 +220,7 @@ export class Program {
 			NullNode,
 			NumberNode,
 			ObjectNode,
+			ObjectEqualNode,
 			ObjectGetNode,
 			ObjectHasPropertyNode,
 			ObjectKeysNode,
