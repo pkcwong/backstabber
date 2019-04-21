@@ -34,6 +34,7 @@ import { NegateNode } from "../../../shared/lib/logic/negate-node";
 import { NullNode } from "../../../shared/lib/primitive/null-node";
 import { NumberNode } from "../../../shared/lib/primitive/number-node";
 import { ObjectNode } from "../../../shared/lib/object/object-node";
+import { ObjectEqualNode } from "../../../shared/lib/object/object-equal-node";
 import { ObjectGetNode } from "../../../shared/lib/object/object-get-node";
 import { ObjectKeysNode } from "../../../shared/lib/object/object-keys-node";
 import { ObjectParseNode } from "../../../shared/lib/object/object-parse-node";
@@ -100,6 +101,7 @@ const initialState = {
 		},
 		Object: {
 			ObjectNode,
+			ObjectEqualNode,
 			ObjectGetNode,
 			ObjectKeysNode,
 			ObjectParseNode,

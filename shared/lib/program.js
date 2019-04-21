@@ -32,6 +32,7 @@ import { NegateNode } from "./logic/negate-node";
 import { NullNode } from "./primitive/null-node";
 import { NumberNode } from "./primitive/number-node";
 import { ObjectNode } from "./object/object-node";
+import { ObjectEqualNode } from "./object/object-equal-node";
 import { ObjectGetNode } from "./object/object-get-node";
 import { ObjectKeysNode } from "./object/object-keys-node";
 import { ObjectParseNode } from "./object/object-parse-node";
