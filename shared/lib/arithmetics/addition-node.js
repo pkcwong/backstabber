@@ -15,7 +15,7 @@ export class AdditionNode extends BasicNode {
 		},
 		outputs: {
 			sum: (x) => {
-				return (typeof x === 'number');
+				return (typeof x === 'number' || typeof x === 'string');
 			}
 		}
 	};
