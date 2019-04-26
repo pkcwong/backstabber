@@ -37,6 +37,10 @@ class Component extends React.Component {
 			save_as_modal: false,
 			delete_modal: false,
 			debug_modal: false,
+			create_test_input_modal: false,
+			create_test_result_modal: false,
+			test_input: {},
+			test_result: {},
 			program: null,
 			canvas: {},
 			props: {},
@@ -246,6 +250,13 @@ class Component extends React.Component {
 												this.setState({tests_modal: true});
 											}}>
 												Unit Tests
+											</a>
+										</Menu.Item>
+										<Menu.Item>
+											<a onClick={() => {
+												this.setState({create_test_input_modal: true});
+											}}>
+												Create Unit Test
 											</a>
 										</Menu.Item>
 										<Menu.Item>
@@ -696,6 +707,56 @@ class Component extends React.Component {
 							</Button>
 						</div>
 					</Drawer>
+					{/*Create Unit Test Input Modal*/}
+					<JsonEditorComponent
+						title="Create Unit Test Input Modal"
+						document={this.state.test_input}
+						fallbackKeys={[]}
+						visible={this.state.create_test_input_modal}
+						onOk={
+							(json) => {
+								this.setState({
+									create_test_input_modal: false,
+									create_test_result_modal: true,
+									test_input: json
+								});
+							}
+						}
+						onCancel={
+							() => {
+								this.setState({
+									create_test_input_modal: false,
+									test_input: {}
+								});
+							}
+						}
+					/>
+					{/*Create Unit Test Result Modal*/}
+					<JsonEditorComponent
+						title="Create Unit Test Result Modal"
+						document={this.state.test_result}
+						fallbackKeys={[]}
+						visible={this.state.create_test_result_modal}
+						onOk={
+							(json) => {
+								this.setState({
+									create_test_result_modal: false,
+									test_result: json
+								});
+								this.props.dispatch(CanvasAction.writeTest(this.props.CanvasReducer._id, this.state.test_input, json));
+								message.success('Saved as Unit Test');
+							}
+						}
+						onCancel={
+							() => {
+								this.setState({
+									create_test_result_modal: false,
+									test_input: {},
+									test_result: {}
+								});
+							}
+						}
+					/>
 					{/*Debug Modal*/}
 					<JsonEditorComponent
 						title="Debug Input"
