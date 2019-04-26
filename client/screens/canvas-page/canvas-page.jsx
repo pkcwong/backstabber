@@ -52,7 +52,7 @@ class Component extends React.Component {
 			// Auto dispatch ID and token for Program Node
 			program_node_modal: false,
 			selected_program_id: null,
-			selected_program_token: null,
+			program_search_id: null,
 			program_node: null,
 			program_coor: {},
 			id_coor: {},
@@ -516,7 +516,6 @@ class Component extends React.Component {
 										this.setState({
 											program_node_modal: true,
 											selected_program_id: null,
-											selected_program_token: null,
 											program_node: bsNode,
 											program_coor: {
 												x: this.engine.getRelativeMousePoint(event).x,
@@ -1437,7 +1436,7 @@ class Component extends React.Component {
 						title="Program Node Initialization Helper"
 						visible={this.state.program_node_modal}
 						onOk={() => {
-							if (this.state.selected_program_id !== null && this.state.selected_program_token !== null) {
+							if (this.state.selected_program_id !== null) {
 								this.setState({
 									program_node_modal: !this.state.program_node_modal
 								})
@@ -1451,12 +1450,10 @@ class Component extends React.Component {
 										pending: temp
 									})
 								}));
-								this.props.dispatch(CanvasAction.addNode("StringNode", this.state.token_coor, 0, 0, (bsNode) => {
-									bsNode.setProps({
-										string: this.state.selected_program_token
-									});
+								this.props.dispatch(CanvasAction.addNode("NullNode", this.state.token_coor, 0, 0, (bsNode) => {
+
 									let temp = this.state.pending;
-									temp.push(CanvasAction.addLink(bsNode._id, "string", this.state.program_node._id, "token"))
+									temp.push(CanvasAction.addLink(bsNode._id, "null", this.state.program_node._id, "token"))
 									this.setState({
 										pending: temp
 									})
@@ -1509,13 +1506,56 @@ class Component extends React.Component {
 								flexDirection: "row"
 							}
 						}>
-							<Input
-								id="program_id"
-								style={
-									{
-										width: "47%"
+							{
+								(() => {
+									if (true) {
+										return (
+											<Dropdown
+												overlay={
+													<React.Fragment>
+														<Menu>
+															{
+																this.props.Meteor.collection.sketches.map((sketch) => {
+																	return (
+																		<Menu.Item
+																			key={sketch._id}
+																			onClick={
+																				() => {
+																					this.setState({
+																						program_search_id: sketch._id
+																					});
+																				}
+																			}>
+																			{sketch._id}
+																		</Menu.Item>
+																	)
+																})
+															}
+														</Menu>
+													</React.Fragment>
+												}
+											>
+												<Input
+													id="program_id"
+													onChange={
+														(e) => {
+															this.setState({
+																program_search_id: e.target.value
+															})
+														}
+													}
+													value ={this.state.program_search_id}
+													style={
+														{
+															width: "47%"
+														}
+													}
+												/>
+											</Dropdown>
+										);
 									}
-								}/>
+								})()
+							}
 							<div style={
 								{
 									width: "6%",
@@ -1534,8 +1574,7 @@ class Component extends React.Component {
 								}
 								id="program_select_id" title={"Program ID"} defaultValue="default" onChange={(e) => {
 								this.setState({
-									selected_program_id: e.target.value,
-									selected_program_token: null
+									selected_program_id: e.target.value
 								});
 							}}>
 								{(() => {
@@ -1577,57 +1616,8 @@ class Component extends React.Component {
 									{
 										width: "47%"
 									}
-								}/>
-							<div style={
-								{
-									width: "6%",
-									textAlign: "center",
-									fontWeight: "bold",
-									paddingTop: "1%"
 								}
-							}>
-								or
-							</div>
-							<select
-								style={
-									{
-										width: "47%"
-									}
-								}
-								id="program_select_token" title={"Program token"} defaultValue="default"
-								onChange={(e) => {
-									this.setState({
-										selected_program_token: e.target.value
-									});
-								}}>
-								{(() => {
-									if (this.state.selected_program_token === null) {
-										return (
-											<option value="default">
-												Token(s)
-											</option>
-										)
-									}
-								})()}
-								{
-									(() => {
-										const sketch = this.props.Meteor.collection.sketches.find((sketch) => {
-											return (sketch._id === this.state.selected_program_id);
-										});
-										if (sketch) {
-											return sketch.tokens.map((token) => {
-												return (
-													<React.Fragment key={token}>
-														<option value={token}>
-															{token}
-														</option>
-													</React.Fragment>
-												);
-											})
-										}
-									})()
-								}
-							</select>
+							/>
 						</div>
 					</Modal>
 					{/*Modal for Database Node*/}
