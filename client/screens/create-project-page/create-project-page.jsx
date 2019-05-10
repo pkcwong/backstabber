@@ -473,60 +473,10 @@ class Component extends React.Component {
 																		document.execCommand('copy');
 																		document.body.removeChild(e);
 																	})(
-																		'import java.io.BufferedInputStream;\n' +
-																		'import java.io.BufferedReader;\n' +
-																		'import java.io.IOException;\n' +
-																		'import java.io.InputStream;\n' +
-																		'import java.io.InputStreamReader;\n' +
-																		'import java.io.OutputStream;\n' +
-																		'import java.net.HttpURLConnection;\n' +
-																		'import java.net.URL;\n' +
-																		'import java.nio.charset.Charset;\n' +
-																		'import java.nio.charset.StandardCharsets;\n' +
-																		'import org.json.simple.JSONObject;\n' +
-																		'import org.json.simple.parser.JSONParser;\n' +
-																		'import org.json.simple.parser.ParseException;\n\n' +
+																		'public static JSONObject _' + this.state.edit_title.replace(/[^a-zA-Z0-9-_]/g,'') + '(JSONObject json) {\n' +
 
-																		'public class _' + this.state.edit_title.replace(/\s+/g, '') + ' {\n\n' +
+																		'\treturn Backstabber.spawnConnection(\"' + this.state.program_info._id+ '\", \"' + token + '\").execute(json);\n' +
 
-																			'\tpublic JSONObject __' + this.state.edit_title.replace(/\s+/g, '') + '(JSONObject json) throws IOException, ParseException {\n' +
-																				'\t\tString query = "http://backstabber.herokuapp.com/api/program/' + this.state.program_info._id +'";\n' +
-																				'\t\tString sjson = json.toString();\n\n' +
-
-																				'\t\tURL url = new URL(query);\n' +
-																				'\t\tHttpURLConnection conn = (HttpURLConnection) url.openConnection();\n' +
-																				'\t\tconn.setConnectTimeout(5000);\n' +
-																				'\t\tconn.setRequestProperty("Content-Type", "application/json");\n' +
-																				'\t\tconn.setRequestProperty("token", "pzhMYBRp5rPWNs5gY");\n' +
-																				'\t\tconn.setDoOutput(true);\n' +
-																				'\t\tconn.setDoInput(true);\n' +
-																				'\t\tconn.setRequestMethod("POST");\n\n' +
-
-																				'\t\tOutputStream os = conn.getOutputStream();\n' +
-																				'\t\tos.write(sjson.getBytes("UTF-8"));\n' +
-																				'\t\tos.close();\n\n' +
-
-																				// read the response
-																				'\t\tInputStream in = new BufferedInputStream(conn.getInputStream());\n' +
-																				'\t\tCharset charset = StandardCharsets.UTF_8;\n' +
-																				'\t\tStringBuilder stringBuilder = new StringBuilder();\n' +
-																				'\t\tString line = null;\n\n' +
-
-																				'\t\ttry (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, charset))) {\n' +
-																					'\t\t\twhile ((line = bufferedReader.readLine()) != null) {\n' +
-																						'\t\t\t\tstringBuilder.append(line);\n' +
-																					'\t\t\t}\n' +
-																				'\t\t}\n' +
-																				'\t\tString result = stringBuilder.toString();\n\n' +
-
-																				'\t\tJSONParser parser = new JSONParser(); \n' +
-																				'\t\tJSONObject jsonResult = (JSONObject) parser.parse(result);\n' +
-
-																				'\t\tin.close();\n' +
-																				'\t\tconn.disconnect();\n' +
-
-																				'\t\treturn jsonResult;\n' +
-																			'\t}\n' +
 																		'}'
 																	);
 																	message.success('copied Java Class to clipboard');
