@@ -463,6 +463,27 @@ class Component extends React.Component {
 															>
 																export HTML5
 															</Menu.Item>
+															<Menu.Item
+																onClick={() => {
+																	((string) => {
+																		const e = document.createElement('textarea');
+																		e.value = string;
+																		document.body.appendChild(e);
+																		e.select();
+																		document.execCommand('copy');
+																		document.body.removeChild(e);
+																	})(
+																		'public static JSONObject _' + this.state.edit_title.replace(/[^a-zA-Z0-9-_]/g,'') + '(JSONObject json) {\n' +
+
+																		'\treturn Backstabber.spawnConnection(\"' + this.state.program_info._id+ '\", \"' + token + '\").execute(json);\n' +
+
+																		'}'
+																	);
+																	message.success('copied Java Class to clipboard');
+																}}
+															>
+																export Java Class
+														</Menu.Item>
 														</Menu>
 													)}
 												>
