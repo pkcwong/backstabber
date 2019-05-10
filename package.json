@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
-    "test": "jest --runInBand --maxWorkers=1 --verbose"
+    "test": "jest --runInBand --verbose"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
