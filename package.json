@@ -52,6 +52,7 @@
     }
   },
   "jest": {
-    "rootDir": "client/"
+    "rootDir": "client/",
+    "runInBand": true
   }
 }
