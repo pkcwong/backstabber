@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Collapse } from "antd";
+import { Button, Collapse, Typography } from "antd";
 import 'antd/dist/antd.css';
 import { TutorialAction } from "../../redux/actions/tutorial-action";
 import { TutorialHelloWorld } from "./tutorial-hello-world";
@@ -39,35 +39,50 @@ class Component extends React.Component {
 						</div>
 					</div>
 				</div>
-				<Collapse
-					accordion={true}
+				<div
+					style={{
+						margin: '2%'
+					}}
 				>
-					{
-						[
-							TutorialHelloWorld
-						].map((tutorial, index) => {
-							return (
-								<Collapse.Panel
-									key={index}
-									header={tutorial.title}
-								>
-									<p>
-										{tutorial.description}
-									</p>
-									<Button
-										type='primary'
-										onClick={() => {
-											this.props.dispatch(TutorialAction.setTest(tutorial.title, tutorial.tests, tutorial.expect));
-											FlowRouter.go('/sandbox');
-										}}
+					<Typography.Title
+						level={2}
+					>
+						Basics
+					</Typography.Title>
+					<Collapse
+						accordion={true}
+					>
+						{
+							[
+								TutorialHelloWorld
+							].map((tutorial, index) => {
+								return (
+									<Collapse.Panel
+										key={index}
+										header={tutorial.title}
 									>
-										Start Lesson
-									</Button>
-								</Collapse.Panel>
-							);
-						})
-					}
-				</Collapse>
+										<p
+											style={{
+												whiteSpace: 'pre-wrap'
+											}}
+										>
+											{tutorial.description}
+										</p>
+										<Button
+											type='primary'
+											onClick={() => {
+												this.props.dispatch(TutorialAction.setTest(tutorial.title, tutorial.tests, tutorial.expect, tutorial.solution));
+												FlowRouter.go('/sandbox');
+											}}
+										>
+											Start Lesson
+										</Button>
+									</Collapse.Panel>
+								);
+							})
+						}
+					</Collapse>
+				</div>
 			</React.Fragment>
 		);
 	}

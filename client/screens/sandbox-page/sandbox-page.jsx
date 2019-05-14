@@ -5,7 +5,22 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { CanvasComponent } from "../../components/canvas-component/canvas-component";
 import { sketches_db } from "../../../shared/collections/sketches";
 import { buckets_db } from "../../../shared/collections/buckets";
-import { Avatar, Menu, Dropdown, Button, Input, Drawer, List, message, Modal, Progress, Radio, Icon, Spin } from 'antd';
+import {
+	Avatar,
+	Menu,
+	Dropdown,
+	Button,
+	Input,
+	Drawer,
+	List,
+	message,
+	Modal,
+	Progress,
+	Radio,
+	Icon,
+	Spin,
+	Tooltip
+} from 'antd';
 import { CanvasAction } from "../../redux/actions/canvas-action";
 import { Program } from "../../../shared/lib/program";
 import { JsonEditorComponent } from "../../components/json-editor-component/json-editor-component";
@@ -686,12 +701,17 @@ class Component extends React.Component {
 														);
 													} else {
 														return (
-															<Avatar
-																style={{
-																	backgroundColor: 'orange'
-																}}
-																icon='info-circle'
-															/>
+															<Tooltip
+																placement="bottomLeft"
+																title={test.hint}
+															>
+																<Avatar
+																	style={{
+																		backgroundColor: 'orange'
+																	}}
+																	icon='info-circle'
+																/>
+															</Tooltip>
 														)
 													}
 												})()
@@ -704,6 +724,16 @@ class Component extends React.Component {
 							}}
 						/>
 						<Button
+							type='danger'
+							disabled={(this.props.TutorialReducer.solution === null)}
+							onClick={() => {
+								this.props.dispatch(CanvasAction.render(this.props.TutorialReducer.solution));
+							}}
+						>
+							View Solution
+						</Button>
+						<Button
+							type='primary'
 							style={{
 								float: 'right'
 							}}

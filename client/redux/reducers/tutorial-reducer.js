@@ -3,7 +3,8 @@ import { TutorialAction } from "../actions/tutorial-action";
 const initialState = {
 	title: '',
 	tests: [],
-	expect: []
+	expect: [],
+	solution: null
 };
 
 export const TutorialReducer = (state = initialState, action) => {
@@ -12,7 +13,8 @@ export const TutorialReducer = (state = initialState, action) => {
 			return Object.assign({}, state, {
 				title: action.payload.title,
 				tests: action.payload.tests,
-				expect: action.payload.expect
+				expect: action.payload.expect,
+				solution: action.payload.solution
 			});
 		}
 		default: {
