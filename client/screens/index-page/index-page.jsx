@@ -230,9 +230,15 @@ class Component extends React.Component {
 								<b>1.</b> Drag and Drop <br/>
 								<b>2.</b> Program Deployment using APIs<br/>
 								<b>3.</b> Real Time Debugging <br/>
-								<b>3.</b> Program Sharing <br/>
-								<b>3.</b> Program Management System <br/>
-								<b>3.</b> Database Management System <br/>
+								<b>4.</b> Program Sharing <br/>
+								<b>5.</b> Program Management System <br/>
+								<b>6.</b> Database Management System <br/>
+								<b>7. </b>
+								<a onClick={() => {
+									FlowRouter.go('/tutorial');
+								}}>
+									Interactive Tutorial
+								</a><br/>
 							</Paragraph>
 						</div>
 					</div>

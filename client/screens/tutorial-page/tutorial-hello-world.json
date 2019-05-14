@@ -1,0 +1,1 @@
+{"program":[{"_id":"rbke46gfhnb","class":"StringNode","props":{"string":"Hello World!"},"observers":[{"_id":"oj8c8xupfe9","outbound":"string","inbound":"result"}]},{"_id":"oj8c8xupfe9","class":"ReturnNode","props":{},"observers":[]}],"canvas":{"rbke46gfhnb":{"coordinates":{"x":193.640625,"y":276.34375}},"oj8c8xupfe9":{"coordinates":{"x":518.640625,"y":375.34375}}}}
