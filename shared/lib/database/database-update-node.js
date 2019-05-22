@@ -26,7 +26,7 @@ export class DatabaseUpdateNode extends BasicNode {
             }
         },
         outputs: {
-			document: (x) => {
+			result: (x) => {
 				return (x !== undefined);
 			}
         }
@@ -45,7 +45,7 @@ export class DatabaseUpdateNode extends BasicNode {
                     return;
                 }
                 resolve({
-                    document: res.document
+                    result: res.document
                 });
             });
         });
