@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Button, Collapse, Typography } from "antd";
 import 'antd/dist/antd.css';
 import { TutorialAction } from "../../redux/actions/tutorial-action";
-import { TutorialHelloWorld } from "./tutorial-hello-world";
+import { TutorialHelloWorld } from "./tutorial-hello-world.jsx";
+import { CanvasAction } from "../../redux/actions/canvas-action";
 
 class Component extends React.Component {
 
@@ -61,16 +62,11 @@ class Component extends React.Component {
 										key={index}
 										header={tutorial.title}
 									>
-										<p
-											style={{
-												whiteSpace: 'pre-wrap'
-											}}
-										>
-											{tutorial.description}
-										</p>
+										{tutorial.description}
 										<Button
 											type='primary'
 											onClick={() => {
+												this.props.dispatch(CanvasAction.reset());
 												this.props.dispatch(TutorialAction.setTest(tutorial.title, tutorial.tests, tutorial.expect, tutorial.solution));
 												FlowRouter.go('/sandbox');
 											}}
