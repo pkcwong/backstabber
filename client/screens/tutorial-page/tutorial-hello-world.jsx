@@ -1,9 +1,15 @@
+import React from 'react';
 import { StringNode } from "../../../shared/lib/primitive/string-node";
 import { ReturnNode } from "../../../shared/lib/api/return-node";
 
 export const TutorialHelloWorld = {
 	title: 'Hello World!',
-	description: 'In this tutorial we will be writing the iconic Hello World program. This will be used to illustrate the basic syntax of the Backstabber programming language.\nA Hello World program is a simple program that simply outputs \"Hello World!\" when executed.',
+	description: (
+		<p>
+			In this tutorial we will be writing the iconic Hello World program. This will be used to illustrate the basic syntax of the Backstabber programming language.<br/>
+			A Hello World program is a simple program that simply outputs "Hello World!" when executed.
+		</p>
+	),
 	tests: [
 		{
 			task: 'Create a StringNode.',

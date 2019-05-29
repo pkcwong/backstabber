@@ -530,7 +530,7 @@ class Component extends React.Component {
 							}
 							onClick={
 								() => {
-									FlowRouter.go("/create");
+									FlowRouter.go("/tutorial");
 								}
 							}>
 							<b>B </b> a c k<b> S </b> t a b b e r
