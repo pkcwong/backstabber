@@ -1,6 +1,6 @@
 import React from 'react';
-import { StringNode } from "../../../shared/lib/primitive/string-node";
-import { ReturnNode } from "../../../shared/lib/api/return-node";
+import { StringNode } from "../../../../shared/lib/primitive/string-node";
+import { ReturnNode } from "../../../../shared/lib/api/return-node";
 
 export const TutorialHelloWorld = {
 	title: 'Hello World!',
