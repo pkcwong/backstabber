@@ -421,7 +421,7 @@ class Component extends React.Component {
 																		e.select();
 																		document.execCommand('copy');
 																		document.body.removeChild(e);
-																	})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data \'' + JSON.stringify({}) + '\' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id);
+																	})('curl -X POST -H \"Content-Type: application/json\" --header \"token: ' + token + '\" --data ' + JSON.stringify(JSON.stringify({})) + ' ' + window.location.protocol + "//" + window.location.host + '/api/program/' + this.state.program_info._id);
 																	message.success('copied cURL command to clipboard');
 																}}
 															>
