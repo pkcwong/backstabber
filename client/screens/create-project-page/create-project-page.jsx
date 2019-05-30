@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { sketches_db } from "../../../shared/collections/sketches";
-import { Button, Card, Dropdown, Input, Menu, message, Modal } from 'antd';
+import { Button, Card, Dropdown, Input, Menu, message, Modal, Table } from 'antd';
 import lunr from 'lunr';
 import 'antd/dist/antd.css';
 import { CanvasAction } from "../../redux/actions/canvas-action";
@@ -324,7 +324,7 @@ class Component extends React.Component {
 				</Modal>
 				{/*Setting Modal*/}
 				<Modal
-					title="Extra Program Information"
+					title="Program Configuration"
 					visible={this.state.setting_modal}
 					onOk={
 						() => {
@@ -498,26 +498,51 @@ class Component extends React.Component {
 								<br/>
 								<b>Log(s):</b>
 								<br/>
-								{
-									(() => {
-										if (this.state.program_info.logs === undefined) {
-											return []
-										} else {
-											return this.state.program_info.logs
+								<Table
+									pagination={
+										{
+											pageSize: 3
 										}
-									})().map((log, index) => {
-										return (
-											<React.Fragment
-												key={index}>
-												<div>
-													{
-														JSON.stringify(log)
-													}
-												</div>
-											</React.Fragment>
-										);
-									})
-								}
+									}
+									columns={
+										[
+											{
+												title: 'Timestamp',
+												dataIndex: 'timestamp',
+												key: 'timestamp',
+												render: (timestamp) => {
+													return new Date(timestamp).toString();
+												}
+											},
+											{
+												title: 'Token',
+												dataIndex: 'token',
+												key: 'token'
+											},
+											{
+												title: 'Result',
+												dataIndex: 'result',
+												key: 'result',
+												render: (result) => {
+													return JSON.stringify(result);
+												}
+											}
+										]
+									}
+									dataSource={
+										(() => {
+											if (this.state.program_info.logs === undefined) {
+												return [];
+											} else {
+												return this.state.program_info.logs.map((log, index) => {
+													return Object.assign({}, log, {
+														key: index
+													});
+												});
+											}
+										})()
+									}
+								/>
 							</React.Fragment>
 						}
 					</div>
