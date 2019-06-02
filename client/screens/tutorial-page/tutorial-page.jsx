@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Collapse, Typography } from "antd";
 import 'antd/dist/antd.css';
 import { TutorialAction } from "../../redux/actions/tutorial-action";
+import { TutorialString } from "./tutorial-string/tutorial-string.jsx";
 import { TutorialHelloWorld } from "./tutorial-hello-world/tutorial-hello-world.jsx";
 import { CanvasAction } from "../../redux/actions/canvas-action";
 
@@ -55,6 +56,7 @@ class Component extends React.Component {
 					>
 						{
 							[
+								TutorialString,
 								TutorialHelloWorld
 							].map((tutorial, index) => {
 								return (

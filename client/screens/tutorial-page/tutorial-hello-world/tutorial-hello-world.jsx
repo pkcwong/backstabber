@@ -5,10 +5,18 @@ import { ReturnNode } from "../../../../shared/lib/api/return-node";
 export const TutorialHelloWorld = {
 	title: 'Hello World!',
 	description: (
-		<p>
-			In this tutorial we will be writing the iconic Hello World program. This will be used to illustrate the basic syntax of the Backstabber programming language.<br/>
-			A Hello World program is a simple program that simply outputs "Hello World!" when executed.
-		</p>
+		<React.Fragment>
+			<p>
+				In this tutorial we will be writing the iconic Hello World program. This will be used to illustrate the basic syntax of the Backstabber programming language.
+			</p>
+			<p>
+				A Hello World program is a simple program that simply outputs "Hello World!" when executed.
+				<br/>
+				<img
+					src="res/img/tutorial-hello-world-complete.png"
+				/>
+			</p>
+		</React.Fragment>
 	),
 	tests: [
 		{
@@ -22,7 +30,7 @@ export const TutorialHelloWorld = {
 		},
 		{
 			task: 'Set StringNode prop to \"Hello World!\"',
-			hint: 'Click on the StringNode dragged on to the canvas which will trigger a drawer at the bottom of the screen. Enter \"Hello World!\" for the input box named \"string\". Remember to click \"submit\".',
+			hint: 'Click on the created StringNode and use the drawer to set its value to \"Hello World!\" (without quotes).',
 			jest: (bsNodes) => {
 				const target = bsNodes.find((bsNode) => {
 					return (bsNode instanceof StringNode);
